@@ -8,6 +8,8 @@ html {
     --primary-text: #555555;
     --accent-color: #7AC751;
     --bg-color:white;
+    --second-color:#F7F8FA;
+    --border-color:#E3E3E3;
     --pad:13.5rem;
     background-color: var(--bg-color);
 }
@@ -104,4 +106,55 @@ nav *
     list-style: none;
     display: flex;
     gap: 6.5rem;
+}
+.coll_header
+{
+    height: 6.7rem;
+    background-color: var(--second-color);
+    padding-left:var(--pad);
+    padding-right:var(--pad);
+}
+.categories_menu
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--accent-color);
+    color: white;
+    height: 100%;
+    width: 26rem;
+}
+.content
+{
+    display: flex;
+    padding-left:var(--pad);
+    padding-right:var(--pad);
+}
+.categories
+{
+    width: 26rem;
+    font-size: 1.4rem;
+    background-color: var(--second-color);
+}
+ul
+{
+    list-style: none;
+}
+
+.categories li
+{
+    height: 4rem;
+    border-top:var(--border-color) solid 0.8px;
+    display: flex;
+    align-items: center;
+    padding-left: 3rem;
+}
+.moto
+{
+    background-color: aqua;
+    flex: 1;
+    margin-left: 1.1rem;
+    margin-top: 1.2rem;
+    border-radius: 1px;
 }
