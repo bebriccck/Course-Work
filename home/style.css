@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 10px;
+    --primary-text: #555555;
+    --accent-color: #7AC751;
+    --bg-color:white;
+    --pad:13.5rem;
+    background-color: var(--bg-color);
+}
+body {
+    font-family: 'Rubik';
+    color: var(--primary-text);
+    background-color: var(--bg-color);
+}
+p
+{
+    font-size: 1.6rem;
+}
+.first_part
+{
+    height: 5rem;
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    display: flex;
+    justify-content: space-between;
+    padding-left:var(--pad);
+    padding-right:var(--pad);
+}
+button
+{
+    background: none;
+    border: none;
+}
+i
+{
+    color: var(--bg-color);
+    font-size: 2rem;
+}
+.theme_vis
+{
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+}
+.log_lang
+{
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+}
+.lang
+{
+    display: flex;
+    gap: 8px;
+}
+.lang i
+{
+    font-size: 1.2rem;
+}
+hr
+{
+    background-color: var(--bg-color);
+    height: 1.9rem;
+    width: 2.2px;
+    border: none;
+    border-radius: 0.4px;
+}
+a
+{
+    text-decoration: none;
+    color:inherit;
+    font-size: 1.6rem;
+}
+.second_part
+{
+    height: 9.2rem;
+    display: flex;
+    justify-content: space-between;
+    padding-left:var(--pad);
+    padding-right:var(--pad);
+    align-items: center;
+}
+.logo
+{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.logo h4
+{
+    font-size: 2.4rem;
+}
+.nav_b
+{
+    display: flex;
+    gap: 3rem;
+}
+nav *
+{
+    list-style: none;
+    display: flex;
+    gap: 6.5rem;
+}
