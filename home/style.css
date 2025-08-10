@@ -102,11 +102,11 @@ a
     display: flex;
     gap: 3rem;
 }
-nav *
+header nav *
 {
     list-style: none;
     display: flex;
-    gap: 6.5rem;
+    gap: 4.51vw;
 }
 .coll_header
 {
@@ -189,6 +189,8 @@ ul
     padding-top: 5rem;
     padding-left: 3rem;
     box-sizing: border-box;
+    background-repeat: no-repeat; 
+    background-size: cover; 
 }
 .collections
 {
@@ -204,23 +206,26 @@ ul
     width: 46.4vw;
     height: 35.4vw;
     background: url(../img/furniture.svg);
+    
 }
+
 .book
 {
     background: url(../img/book.svg);
-    width: 48.5rem;
-    height: 24.7rem;
+    width: 100%;
+    height: 50%;
 }
 .sofa
 {
     background: url(../img/sofa.svg);
-    width: 48.5rem;
-    height: 24.7rem;
+    width: 100%;
+    height: 50%;
 }
 .un{
     display: flex;
     flex-direction: column;
     gap: 1.7rem;
+    flex: 1;
 }
 .collections h3
 {
@@ -365,4 +370,47 @@ h2
 {
     background: url(../img/2offer.svg);
 }
-
+footer .main
+{
+    padding:0 var(--pad);
+    display: flex;
+    justify-content: space-between;
+}
+.left-part p
+{
+    max-width:31.8rem;
+    margin-top: 3.3rem;
+    margin-bottom: 4rem;
+}
+.icons
+{
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+footer nav
+{
+    list-style: none;
+}
+footer ul
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.right_part h4
+{
+ font-size: 1.8rem;
+ margin-bottom: 1rem;
+}
+footer hr
+{
+    margin-top: 1rem;
+    width: 100vw;
+    height: 1px;
+    background:var(--border-color);
+}
+.copyright p{
+    margin-left: var(--pad);
+    margin-top: 3.3rem;
+}
