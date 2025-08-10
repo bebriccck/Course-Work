@@ -37,7 +37,7 @@ button
     background: none;
     border: none;
 }
-i
+header i
 {
     color: var(--bg-color);
     font-size: 2rem;
@@ -157,4 +157,85 @@ ul
     margin-left: 1.1rem;
     margin-top: 1.2rem;
     border-radius: 1px;
+}
+.advantages
+{
+    margin-top: 6.5rem;
+    display: flex;
+    justify-content: space-between;
+    margin-left: var(--pad);
+    margin-right: var(--pad);
+}
+.adv
+{
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+.adv h4
+{
+    font-size: 2rem;
+}
+.adv p
+{
+    font-size: 1.4rem;
+}
+.furniture,.book,.sofa
+{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 5rem;
+    padding-left: 3rem;
+    box-sizing: border-box;
+}
+.collections
+{
+    margin-top: 7rem;
+    display:flex;
+    margin-left: var(--pad);
+    margin-right: var(--pad);
+    gap: 1.9rem;
+}
+.furniture
+{
+    width: 46.4vw;
+    height: 35.4vw;
+    background: url(../img/furniture.svg);
+}
+.book
+{
+    background: url(../img/book.svg);
+    width: 48.5rem;
+    height: 24.7rem;
+}
+.sofa
+{
+    background: url(../img/sofa.svg);
+    width: 48.5rem;
+    height: 24.7rem;
+}
+.un{
+    display: flex;
+    flex-direction: column;
+    gap: 1.7rem;
+}
+.collections h3
+{
+    font-size: 2.2rem;
+}
+.collections h4
+{
+    font-size: 2rem;
+    color:var(--accent-color);
+    font-weight: normal;
+}
+.collections a
+{
+    font-size: 1.6rem;
+    text-decoration: none;
+}
+.bold
+{
+    font-weight: bold;
 }
