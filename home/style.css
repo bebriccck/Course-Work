@@ -10,6 +10,7 @@ html {
     --bg-color:white;
     --second-color:#F7F8FA;
     --border-color:#E3E3E3;
+    --discount-color:#00B7F1;
     --pad:13.5rem;
     background-color: var(--bg-color);
 }
@@ -196,6 +197,7 @@ ul
     margin-left: var(--pad);
     margin-right: var(--pad);
     gap: 1.9rem;
+    font-family: 'Mulish', sans-serif;
 }
 .furniture
 {
@@ -239,3 +241,128 @@ ul
 {
     font-weight: bold;
 }
+.offer_section
+{
+    margin-top: 9.4rem;
+    margin-bottom: 10.6rem;
+}
+h2
+{
+    font-size: 3.6rem;
+    text-align: center;
+    font-family: 'Mulish', sans-serif;
+}
+.offers
+{
+    margin-top: 6rem;
+    display: flex;
+    gap: 3rem;
+    margin-left: var(--pad);
+    margin-right: var(--pad);
+}
+.offer
+{
+    display: flex;
+    flex-direction: column;
+    padding-left: 2.4rem;
+    box-sizing: border-box;
+    flex: 1;
+}
+.discount
+{
+    display: flex;
+    background:var(--discount-color);
+    color: white;
+    font-size: 1.2rem;
+    width: 6.4rem;
+    height:2.3rem;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 5px;
+    margin-left: auto;
+}
+.offer h3
+{
+    margin-top: 5px;
+    max-width: 24rem;
+    font-size: 2.2rem;
+    letter-spacing: 0%;
+    font-family: 'Mulish', sans-serif;
+}
+.offer p
+{
+    max-width: 22.7rem;
+    margin-top: 1.1rem;
+    font-size: 1.2rem;
+}
+.price
+{
+    max-width: 22.7rem;
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    align-items: center;
+}
+.new
+{
+    color: var(--accent-color);
+    font-size: 1.8rem;
+    letter-spacing: 0.5%;
+    line-height: 120%;
+}
+.old
+{
+    color: var(--border-color);
+    font-size: 1.8rem;
+    letter-spacing: 0.5%;
+    line-height: 120%;
+    text-decoration:line-through;
+}
+.price button
+{
+    display: flex;
+    background-color: var(--accent-color);
+    color: white;
+    width: 9.1rem;
+    height: 2.6rem;
+    text-transform: uppercase;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    margin-left: 4rem;
+}
+.time
+{
+    display: flex;
+    gap: 1.8rem;
+    margin-top: 3.1rem;
+    margin-bottom: 3rem;
+}
+.time div
+{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 5px;
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 1.4rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+}
+.time_type
+{
+    font-size: 6px;
+    text-transform: uppercase;
+}
+#first
+{
+    background: url(../img/1offer.svg);
+}
+#second
+{
+    background: url(../img/2offer.svg);
+}
+
