@@ -34,7 +34,12 @@
                 <img src="../img/icon.svg" alt="">
                 <h4>Furniking</h4>
             </div>
-            <nav>
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav_menu">
                 <ul>
                     <li><a href="">HOME</a></li>
                     <li><a href="">SHOP</a></li>
@@ -166,37 +171,43 @@
     <footer>
         <div class="main">
             <div class="left-part">
-                    <div class="logo">
-                        <img src="../img/icon.svg" alt="">
-                        <h4>Furniking</h4>
-                    </div>
-                    <p>Funking is the a popular Ecommerce site. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor</p>
-                    <div class="icons">
-                        <a href=""><img src="../img/facebook.svg" alt=""></a>
-                        <a href=""><img src="../img/twitter.svg" alt=""></a>
-                        <a href=""><img src="../img/instagram.svg" alt=""></a>
-                        <a href=""><img src="../img/pinterest.svg" alt=""></a>
-                    </div>
+                <div class="logo">
+                    <img src="../img/icon.svg" alt="">
+                    <h4>Furniking</h4>
                 </div>
-                <div class="right_part">
-                    <h4>Navigation</h4>
-                    <nav>
-                        <ul>
-                            <li><a href="">Home</a></li>
-                            <li><a href="">Shop</a></li>
-                            <li><a href="">Services</a></li>
-                            <li><a href="">About</a></li>
-                            <li><a href="">Contact Us</a></li>
-                        </ul>
-                    </nav>
+                <p>Funking is the a popular Ecommerce site. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor</p>
+                <div class="icons">
+                    <a href=""><img src="../img/facebook.svg" alt=""></a>
+                    <a href=""><img src="../img/twitter.svg" alt=""></a>
+                    <a href=""><img src="../img/instagram.svg" alt=""></a>
+                    <a href=""><img src="../img/pinterest.svg" alt=""></a>
                 </div>
+            </div>
+            <div class="right_part">
+                <h4>Navigation</h4>
+                <nav>
+                    <ul>
+                        <li><a href="">Home</a></li>
+                        <li><a href="">Shop</a></li>
+                        <li><a href="">Services</a></li>
+                        <li><a href="">About</a></li>
+                        <li><a href="">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
         <hr>
         <div class="copyright">
             <p>© 2024 Funking - All rights reserved.</p>
         </div>
     </footer>
+    <script>
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            document.querySelector('.nav_menu').classList.toggle('active');
+            document.querySelector('.hamburger').classList.toggle('active');
+        });
+    </script>
 </body>
 
 </html>
