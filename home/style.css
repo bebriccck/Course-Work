@@ -26,146 +26,16 @@ p {
     font-size: 1.6rem;
 }
 
-.first_part {
-    height: 5rem;
-    background-color: var(--accent-color);
-    color: var(--bg-color);
-    display: flex;
-    justify-content: space-between;
-    padding-left: var(--pad);
-    padding-right: var(--pad);
-    align-items: center;
-}
-
 button {
     background: none;
     border: none;
     cursor: pointer;
 }
 
-header i {
-    color: var(--bg-color);
-    font-size: 2rem;
-}
-
-.theme_vis {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-}
-
-.log_lang {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-}
-
-.lang {
-    display: flex;
-    gap: 8px;
-}
-
-.lang i {
-    font-size: 1.2rem;
-}
-
-hr {
-    background-color: var(--bg-color);
-    height: 1.9rem;
-    width: 2.2px;
-    border: none;
-    border-radius: 0.4px;
-}
-
 a {
     text-decoration: none;
     color: inherit;
     font-size: 1.6rem;
-}
-
-.second_part {
-    height: 9.2rem;
-    display: flex;
-    justify-content: space-between;
-    padding-left: var(--pad);
-    padding-right: var(--pad);
-    align-items: center;
-}
-
-.logo {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
-.logo h4 {
-    font-size: 2.4rem;
-}
-
-.nav_b {
-    display: flex;
-    gap: 3rem;
-}
-
-header nav ul {
-    list-style: none;
-    display: flex;
-    gap: 4.51vw;
-}
-
-.hamburger {
-    display: none;
-    width: 2.4rem;
-    height: 2.4rem;
-    position: relative;
-    z-index: 1001;
-}
-
-.hamburger span {
-    display: block;
-    width: 100%;
-    height: 0.3rem;
-    background-color: var(--primary-text);
-    position: absolute;
-    left: 0;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.hamburger span:nth-child(1) {
-    top: 0;
-}
-
-.hamburger span:nth-child(2) {
-    top: 0.9rem;
-}
-
-.hamburger span:nth-child(3) {
-    top: 1.8rem;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: translateY(0.9rem) rotate(45deg);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: translateY(-0.9rem) rotate(-45deg);
-}
-
-.nav_menu {
-    display: flex;
-    align-items: center;
-}
-
-.nav_menu ul li {
-    padding: 0.5rem 0;
-}
-
-.nav_menu ul li a:hover {
-    color: var(--accent-color);
 }
 
 .coll_header {
@@ -216,7 +86,6 @@ ul {
     margin-left: 1.1rem;
     margin-top: 1.2rem;
     border-radius: 1px;
-    
 }
 
 .advantages {
@@ -428,147 +297,9 @@ h2 {
     background: url(../img/2offer.svg);
 }
 
-footer .main {
-    padding: 0 var(--pad);
-    display: flex;
-    justify-content: space-between;
-}
-
-.left-part p {
-    max-width: 31.8rem;
-    margin-top: 3.3rem;
-    margin-bottom: 4rem;
-}
-
-.icons {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-}
-
-footer nav {
-    list-style: none;
-}
-
-footer ul {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.right_part h4 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-}
-
-footer hr {
-    margin-top: 1rem;
-    width: 100%;
-    height: 1px;
-    background: var(--border-color);
-}
-
-.copyright p {
-    margin-left: var(--pad);
-    margin-top: 3.3rem;
-}
-
 @media (max-width: 768px) {
     html {
         --pad: 2rem;
-    }
-
-    header {
-        position: relative;
-    }
-
-    .first_part {
-        padding-left: var(--pad);
-        padding-right: var(--pad);
-        flex-wrap: wrap;
-        height: auto;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
-
-    .second_part {
-        height: auto;
-        flex-wrap: wrap;
-        padding: 1rem var(--pad);
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .hamburger {
-        display: block;
-    }
-
-    .hamburger span {
-        background-color: var(--primary-text);
-    }
-
-    .nav_menu {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background-color: var(--bg-color);
-        z-index: 1000;
-        padding: 2rem var(--pad);
-        max-height: 0;
-        overflow: hidden;
-        transform: translateY(-20px);
-        opacity: 0;
-        transition: max-height 0.4s ease-in-out, transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    }
-
-    .nav_menu.active {
-        max-height: 30rem;
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    .nav_menu ul {
-        flex-direction: column;
-        gap: 1.5rem;
-        width: 100%;
-    }
-
-    .nav_menu ul li {
-        padding: 1rem 0;
-        border-bottom: 1px solid var(--border-color);
-        transform: translateX(-20px);
-        opacity: 0;
-        transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    }
-
-    .nav_menu.active ul li {
-        transform: translateX(0);
-        opacity: 1;
-    }
-
-    .nav_menu ul li:nth-child(1) {
-        transition-delay: 0.1s;
-    }
-
-    .nav_menu ul li:nth-child(2) {
-        transition-delay: 0.2s;
-    }
-
-    .nav_menu ul li:nth-child(3) {
-        transition-delay: 0.3s;
-    }
-
-    .nav_menu ul li:nth-child(4) {
-        transition-delay: 0.4s;
-    }
-
-    .nav_menu ul li:nth-child(5) {
-        transition-delay: 0.5s;
-    }
-
-    .nav_menu ul li:hover {
-        background-color: var(--second-color);
     }
 
     .content {
@@ -620,70 +351,12 @@ footer hr {
     .offer {
         width: 100%;
     }
-
-    footer .main {
-        flex-direction: column;
-        gap: 3rem;
-    }
-
-    .left-part p {
-        max-width: 100%;
-    }
 }
 
 @media (max-width: 320px) {
     html {
         font-size: 8px;
         --pad: 1rem;
-    }
-
-    .theme_vis, .log_lang {
-        gap: 1rem;
-    }
-
-    .logo h4 {
-        font-size: 2rem;
-    }
-
-    .logo img {
-        width: 2.4rem;
-    }
-
-    .nav_b {
-        gap: 1.5rem;
-    }
-
-    .nav_b img {
-        width: 2rem;
-    }
-
-    .hamburger {
-        width: 2rem;
-        height: 2rem;
-    }
-
-    .hamburger span {
-        height: 0.2rem;
-    }
-
-    .hamburger span:nth-child(2) {
-        top: 0.7rem;
-    }
-
-    .hamburger span:nth-child(3) {
-        top: 1.4rem;
-    }
-
-    .hamburger.active span:nth-child(1) {
-        transform: translateY(0.7rem) rotate(45deg);
-    }
-
-    .hamburger.active span:nth-child(3) {
-        transform: translateY(-0.7rem) rotate(-45deg);
-    }
-
-    .nav_menu.active {
-        max-height: 25rem;
     }
 
     .categories_menu {

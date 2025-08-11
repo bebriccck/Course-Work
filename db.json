@@ -1,0 +1,42 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "Modern Sofa",
+            "description": "Comfortable modern sofa for living room",
+            "price": 500,
+            "category": "Sofa",
+            "rating": 4.5,
+            "image": "sofa.jpg"
+        },
+        {
+            "id": 2,
+            "name": "Wooden Bookcase",
+            "description": "Stylish geometric bookcase",
+            "price": 300,
+            "category": "Bookcase",
+            "rating": 4.2,
+            "image": "bookcase.jpg"
+        },
+        {
+            "id": 3,
+            "name": "Office Chair",
+            "description": "Ergonomic chair for office use",
+            "price": 150,
+            "category": "Chair",
+            "rating": 4.0,
+            "image": "chair.jpg"
+        },
+        {
+            "id": 4,
+            "name": "Glass Table",
+            "description": "Elegant glass dining table",
+            "price": 400,
+            "category": "Table",
+            "rating": 4.7,
+            "image": "table.jpg"
+        }
+    ],
+    "favorites": [],
+    "cart": []
+}
