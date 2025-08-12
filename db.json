@@ -6,8 +6,7 @@
             "description": "Comfortable modern sofa for living room",
             "price": 500,
             "category": "Sofa",
-            "rating": 4.5,
-            "image": "sofa.jpg"
+            "rating": 4.5
         },
         {
             "id": 2,
@@ -15,8 +14,7 @@
             "description": "Stylish geometric bookcase",
             "price": 300,
             "category": "Bookcase",
-            "rating": 4.2,
-            "image": "bookcase.jpg"
+            "rating": 4.2
         },
         {
             "id": 3,
@@ -24,8 +22,7 @@
             "description": "Ergonomic chair for office use",
             "price": 150,
             "category": "Chair",
-            "rating": 4.0,
-            "image": "chair.jpg"
+            "rating": 4.0
         },
         {
             "id": 4,
@@ -33,8 +30,255 @@
             "description": "Elegant glass dining table",
             "price": 400,
             "category": "Table",
-            "rating": 4.7,
-            "image": "table.jpg"
+            "rating": 4.7
+        },
+        {
+            "id": 5,
+            "name": "Leather Sofa",
+            "description": "Luxurious leather sofa with recliner",
+            "price": 600,
+            "category": "Sofa",
+            "rating": 4.8
+        },
+        {
+            "id": 6,
+            "name": "Velvet Sofa",
+            "description": "Soft velvet sofa for cozy evenings",
+            "price": 450,
+            "category": "Sofa",
+            "rating": 4.3
+        },
+        {
+            "id": 7,
+            "name": "Sectional Sofa",
+            "description": "Spacious sectional sofa for large rooms",
+            "price": 750,
+            "category": "Sofa",
+            "rating": 4.6
+        },
+        {
+            "id": 8,
+            "name": "Gaming Chair",
+            "description": "High-back gaming chair with lumbar support",
+            "price": 200,
+            "category": "Chair",
+            "rating": 4.4
+        },
+        {
+            "id": 9,
+            "name": "Dining Chair",
+            "description": "Wooden dining chair with cushioned seat",
+            "price": 80,
+            "category": "Chair",
+            "rating": 3.9
+        },
+        {
+            "id": 10,
+            "name": "Armchair",
+            "description": "Comfortable armchair for reading",
+            "price": 120,
+            "category": "Chair",
+            "rating": 4.1
+        },
+        {
+            "id": 11,
+            "name": "Coffee Table",
+            "description": "Stylish coffee table with storage",
+            "price": 150,
+            "category": "Table",
+            "rating": 4.2
+        },
+        {
+            "id": 12,
+            "name": "Round Table",
+            "description": "Elegant round table for small spaces",
+            "price": 250,
+            "category": "Table",
+            "rating": 4.5
+        },
+        {
+            "id": 13,
+            "name": "Metal Bookcase",
+            "description": "Durable metal bookcase with shelves",
+            "price": 180,
+            "category": "Bookcase",
+            "rating": 4.0
+        },
+        {
+            "id": 14,
+            "name": "Corner Bookcase",
+            "description": "Space-saving corner bookcase",
+            "price": 220,
+            "category": "Bookcase",
+            "rating": 4.3
+        },
+        {
+            "id": 15,
+            "name": "Tall Bookcase",
+            "description": "Tall bookcase for extensive collections",
+            "price": 280,
+            "category": "Bookcase",
+            "rating": 4.6
+        },
+        {
+            "id": 16,
+            "name": "Wooden Dresser",
+            "description": "Classic wooden dresser for bedrooms",
+            "price": 350,
+            "category": "Furniture",
+            "rating": 4.4
+        },
+        {
+            "id": 17,
+            "name": "Metal Bed Frame",
+            "description": "Sturdy metal bed frame with design",
+            "price": 300,
+            "category": "Furniture",
+            "rating": 4.1
+        },
+        {
+            "id": 18,
+            "name": "Sideboard",
+            "description": "Elegant sideboard for dining areas",
+            "price": 400,
+            "category": "Furniture",
+            "rating": 4.5
+        },
+        {
+            "id": 19,
+            "name": "Nightstand",
+            "description": "Compact nightstand with drawer",
+            "price": 90,
+            "category": "Furniture",
+            "rating": 4.0
+        },
+        {
+            "id": 20,
+            "name": "Crystal Chandelier",
+            "description": "Luxurious crystal chandelier",
+            "price": 500,
+            "category": "Amrature",
+            "rating": 4.7
+        },
+        {
+            "id": 21,
+            "name": "Wall Sconce",
+            "description": "Modern wall sconce for ambiance",
+            "price": 80,
+            "category": "Amrature",
+            "rating": 4.2
+        },
+        {
+            "id": 22,
+            "name": "Pendant Light",
+            "description": "Stylish pendant light for kitchens",
+            "price": 120,
+            "category": "Amrature",
+            "rating": 4.4
+        },
+        {
+            "id": 23,
+            "name": "Floor Lamp",
+            "description": "Adjustable floor lamp for reading",
+            "price": 150,
+            "category": "Amrature",
+            "rating": 4.3
+        },
+        {
+            "id": 24,
+            "name": "Wall Mirror",
+            "description": "Large rectangular wall mirror",
+            "price": 100,
+            "category": "Mirrors",
+            "rating": 4.1
+        },
+        {
+            "id": 25,
+            "name": "Round Mirror",
+            "description": "Elegant round mirror with frame",
+            "price": 80,
+            "category": "Mirrors",
+            "rating": 4.0
+        },
+        {
+            "id": 26,
+            "name": "Full-Length Mirror",
+            "description": "Standing full-length mirror",
+            "price": 150,
+            "category": "Mirrors",
+            "rating": 4.5
+        },
+        {
+            "id": 27,
+            "name": "Decorative Mirror",
+            "description": "Ornate decorative mirror for walls",
+            "price": 120,
+            "category": "Mirrors",
+            "rating": 4.3
+        },
+        {
+            "id": 28,
+            "name": "Wooden Stool",
+            "description": "Simple wooden stool for kitchens",
+            "price": 50,
+            "category": "Stools",
+            "rating": 3.9
+        },
+        {
+            "id": 29,
+            "name": "Bar Stool",
+            "description": "High bar stool with backrest",
+            "price": 70,
+            "category": "Stools",
+            "rating": 4.2
+        },
+        {
+            "id": 30,
+            "name": "Counter Stool",
+            "description": "Modern counter stool with cushion",
+            "price": 90,
+            "category": "Stools",
+            "rating": 4.1
+        },
+        {
+            "id": 31,
+            "name": "Folding Stool",
+            "description": "Portable folding stool for outdoors",
+            "price": 40,
+            "category": "Stools",
+            "rating": 3.8
+        },
+        {
+            "id": 32,
+            "name": "Park Bench",
+            "description": "Classic wooden park bench",
+            "price": 200,
+            "category": "Benches",
+            "rating": 4.4
+        },
+        {
+            "id": 33,
+            "name": "Garden Bench",
+            "description": "Rustic garden bench with metal frame",
+            "price": 180,
+            "category": "Benches",
+            "rating": 4.3
+        },
+        {
+            "id": 34,
+            "name": "Indoor Bench",
+            "description": "Padded indoor bench for entryways",
+            "price": 150,
+            "category": "Benches",
+            "rating": 4.2
+        },
+        {
+            "id": 35,
+            "name": "Storage Bench",
+            "description": "Bench with built-in storage compartment",
+            "price": 220,
+            "category": "Benches",
+            "rating": 4.6
         }
     ],
     "favorites": [],
