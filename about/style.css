@@ -1,0 +1,350 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+    --primary-text: #333333;
+    --accent-color: #7AC751;
+    --bg-color: #ffffff;
+    --second-color: #f8fafc;
+    --border-color: #e5e7eb;
+    --discount-color: #00B7F1;
+    --pad: 13.5rem;
+    background-color: var(--bg-color);
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    color: var(--primary-text);
+    background-color: var(--bg-color);
+    overflow: hidden;
+}
+
+body.unlocked {
+    overflow: auto !important;
+}
+
+.about_section {
+    margin-bottom: 12rem;
+}
+
+.parallax {
+    position: relative;
+    height: 100vh;
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.parallax-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../img/background.png') no-repeat center center;
+    background-size: cover;
+    z-index: 1;
+}
+footer ul
+{
+    list-style: none;
+}
+.parallax-foreground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../img/furniture-foreground.png') no-repeat center center;
+    background-size: cover;
+    z-index: 2;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.1s linear, opacity 0.3s ease;
+}
+
+.parallax-content {
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    color: white;
+    z-index: 3;
+    padding: 2rem;
+    max-width: 60rem;
+    transform: translateY(50%);
+    opacity: 0;
+    transition: transform 0.1s linear, opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.parallax-content h1 {
+    font-family: 'Mulish', sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.parallax-content p {
+    font-size: 1.8rem;
+    line-height: 1.6;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.about-content {
+    padding: 3rem var(--pad);
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+}
+
+.story, .mission, .services, .team, .testimonials, .why-choose-us {
+    max-width: 80rem;
+    margin: 0 auto;
+}
+
+.story h2, .mission h2, .services h2, .team h2, .testimonials h2, .why-choose-us h2 {
+    font-family: 'Mulish', sans-serif;
+    font-size: 3.6rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--primary-text);
+}
+
+.story p, .mission p, .team p {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: #666;
+}
+
+.services ul, .why-choose-us ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.services li, .why-choose-us li {
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--primary-text);
+}
+
+.services i, .why-choose-us i {
+    color: var(--accent-color);
+    font-size: 2rem;
+}
+
+.team-members {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.team-member {
+    text-align: center;
+    max-width: 25rem;
+}
+
+.team-member img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.team-member h3 {
+    font-family: 'Mulish', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: var(--primary-text);
+}
+
+.team-member p {
+    font-size: 1.4rem;
+    color: #666;
+}
+
+.testimonial-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.testimonial {
+    background-color: var(--second-color);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.testimonial p {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: var(--primary-text);
+    margin-bottom: 1rem;
+}
+
+.testimonial span {
+    font-size: 1.4rem;
+    font-style: italic;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    html {
+        --pad: 2rem;
+    }
+
+    .parallax {
+        height: 80vh;
+    }
+
+    .parallax-content h1 {
+        font-size: 3rem;
+    }
+
+    .parallax-content p {
+        font-size: 1.6rem;
+    }
+
+    .about-content {
+        padding: 2rem var(--pad);
+    }
+
+    .story h2, .mission h2, .services h2, .team h2, .testimonials h2, .why-choose-us h2 {
+        font-size: 3rem;
+    }
+
+    .story p, .mission p, .team p, .services li, .why-choose-us li, .testimonial p {
+        font-size: 1.4rem;
+    }
+
+    .services i, .why-choose-us i {
+        font-size: 1.8rem;
+    }
+
+    .team-member img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .team-member h3 {
+        font-size: 2rem;
+    }
+
+    .team-member p {
+        font-size: 1.3rem;
+    }
+
+    .testimonial span {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 8px;
+        --pad: 1.5rem;
+    }
+
+    .parallax {
+        height: 60vh;
+    }
+
+    .parallax-content h1 {
+        font-size: 2.4rem;
+    }
+
+    .parallax-content p {
+        font-size: 1.4rem;
+    }
+
+    .story h2, .mission h2, .services h2, .team h2, .testimonials h2, .why-choose-us h2 {
+        font-size: 2.8rem;
+    }
+
+    .story p, .mission p, .team p, .services li, .why-choose-us li, .testimonial p {
+        font-size: 1.3rem;
+    }
+
+    .services i, .why-choose-us i {
+        font-size: 1.6rem;
+    }
+
+    .team-member img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .team-member h3 {
+        font-size: 1.8rem;
+    }
+
+    .team-member p {
+        font-size: 1.2rem;
+    }
+
+    .testimonial span {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 320px) {
+    html {
+        font-size: 7px;
+    }
+
+    .parallax {
+        height: 50vh;
+    }
+
+    .parallax-content h1 {
+        font-size: 2rem;
+    }
+
+    .parallax-content p {
+        font-size: 1.2rem;
+    }
+
+    .story h2, .mission h2, .services h2, .team h2, .testimonials h2, .why-choose-us h2 {
+        font-size: 2.4rem;
+    }
+
+    .story p, .mission p, .team p, .services li, .why-choose-us li, .testimonial p {
+        font-size: 1.2rem;
+    }
+
+    .services i, .why-choose-us i {
+        font-size: 1.4rem;
+    }
+
+    .team-member img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .team-member h3 {
+        font-size: 1.6rem;
+    }
+
+    .team-member p {
+        font-size: 1.1rem;
+    }
+
+    .testimonial span {
+        font-size: 1.1rem;
+    }
+}
