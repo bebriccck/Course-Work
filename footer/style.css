@@ -92,3 +92,7 @@ footer hr {
         max-width: 100%;
     }
 }
+footer ul
+{
+    list-style: none;
+}
