@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../header/style.css">
+    <link rel="stylesheet" href="../footer/style.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Registration</title>
+</head>
+<body>
+    <div id="header"></div>
+    <main>
+        <section class="registration">
+            <h2>Registration</h2>
+            <form id="registration-form">
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                    <span class="error-message" id="phone-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="error-message" id="email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate">Date of Birth <span class="required">*</span></label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                    <span class="error-message" id="birthdate-error"></span>
+                </div>
+                <div class="form-group password-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <div class="input-with-button">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" id="generate-password">Generate Password</button>
+                    </div>
+                    <span class="error-message" id="password-error"></span>
+                    <span id="password-attempts"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password-confirm">Confirm Password <span class="required">*</span></label>
+                    <input type="password" id="password-confirm" name="password-confirm" required>
+                    <span class="error-message" id="password-confirm-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <span class="error-message" id="firstName-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <span class="error-message" id="lastName-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="middleName">Middle Name</label>
+                    <input type="text" id="middleName" name="middleName">
+                </div>
+                <div class="form-group">
+                    <label for="nickname">Nickname <span class="required">*</span></label>
+                    <input type="text" id="nickname" name="nickname">
+                    <button type="button" id="regenerate-nickname">Generate New Nickname</button>
+                    <span class="error-message" id="nickname-error"></span>
+                    <span id="nickname-attempts"></span>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="agreement" name="agreement" required disabled>
+                    <label for="agreement">I have read and accept the <a href="#" id="agreement-link">User Agreement</a> <span class="required">*</span></label>
+                    <span class="error-message" id="agreement-error"></span>
+                </div>
+                <div class="form-group">
+                    <p>Already have an account? <a href="../login/index.html">Log In</a></p>
+                </div>
+                <button type="submit" id="submit-button" disabled>Register</button>
+            </form>
+        </section>
+        <div class="modal" id="agreement-modal">
+            <div class="modal-content">
+                <h3>User Agreement</h3>
+                <div class="agreement-text" id="agreement-text">
+                    <p>This user agreement governs the use of our website. Please read it carefully before registering.</p>
+                    <p><strong>1. General Provisions</strong></p>
+                    <p>This agreement is a legally binding contract between you and our company. By registering on the site, you agree to comply with all stated terms.</p>
+                    <p><strong>2. Terms of Use</strong></p>
+                    <p>You are required to provide accurate information during registration and not use the site for illegal purposes.</p>
+                    <p><strong>3. Privacy</strong></p>
+                    <p>We are committed to protecting your personal data in accordance with our privacy policy.</p>
+                    <p><strong>4. Responsibility</strong></p>
+                    <p>You are responsible for any actions performed using your account.</p>
+                    <p><strong>5. Changes to Terms</strong></p>
+                    <p>We reserve the right to modify this agreement. Notifications of changes will be posted on the site.</p>
+                </div>
+                <div class="modal-buttons">
+                    <button id="confirm-agreement" disabled>Confirm</button>
+                    <button id="close-modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div id="footer"></div>
+    <script src="../header/header.js"></script>
+    <script src="../footer/footer.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
