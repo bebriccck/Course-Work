@@ -93,64 +93,122 @@ async function renderProducts(params = {}) {
     const productGrid = document.getElementById('productGrid');
     const noResults = document.getElementById('noResults');
     if (!productGrid || !noResults) return;
-    
+
     if (products.length === 0) {
         noResults.style.display = 'block';
         productGrid.innerHTML = '';
         return;
     }
 
+    const userId = localStorage.getItem('userId');
+    let favoriteItems = [];
+    if (userId) {
+        try {
+            const response = await fetch(`${API_URL}/favorites?userId=${userId}`);
+            favoriteItems = await response.json();
+        } catch (error) {
+            console.error('Error fetching favorites:', error);
+        }
+    }
+
     noResults.style.display = 'none';
-    productGrid.innerHTML = products.map(product => `
-        <div class="product-card">
-            <div class="product-image">
-                <img src="../img/shop/${product.id}.png" alt="${product.name}">
-                <div class="product-actions">
-                    <button class="favorite-btn" data-id="${product.id}">
-                        <i class="fa${product.favorite ? 's' : 'r'} fa-heart"></i>
-                    </button>
-                    <button class="cart-btn" data-id="${product.id}">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
+    productGrid.innerHTML = products.map(product => {
+        const isFavorite = favoriteItems.some(item => item.productId === product.id);
+        const favoriteId = isFavorite ? favoriteItems.find(item => item.productId === product.id).id : '';
+        return `
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="../img/shop/${product.id}.png" alt="${product.name}">
+                    <div class="product-actions">
+                        <button class="favorite-btn${isFavorite ? ' filled' : ''}" data-id="${product.id}" data-favorite-id="${favoriteId}">
+                            <i class="fa${isFavorite ? 's' : 'r'} fa-heart"></i>
+                        </button>
+                        <button class="cart-btn" data-id="${product.id}">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p class="description">${product.description}</p>
+                    <div class="product-meta">
+                        <span class="price">$${product.price}</span>
+                        <span class="rating"><i class="fas fa-star"></i> ${product.rating}</span>
+                    </div>
                 </div>
             </div>
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <p class="description">${product.description}</p>
-                <div class="product-meta">
-                    <span class="price">$${product.price}</span>
-                    <span class="rating"><i class="fas fa-star"></i> ${product.rating}</span>
-                </div>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
-async function addToFavorites(id) {
+async function addToFavorites(productId) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        window.location.href = '../login/index.html';
+        return;
+    }
     try {
-        const response = await fetch(`${API_URL}/favorites`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ productId: id })
-        });
-        if (response.ok) renderProducts(getCurrentParams());
-        else throw new Error('Failed to add to favorites');
+        const responseCheck = await fetch(`${API_URL}/favorites?userId=${userId}&productId=${productId}`);
+        const existingFavorites = await responseCheck.json();
+        if (existingFavorites.length > 0) {
+            // Удаление из избранного
+            const favoriteId = existingFavorites[0].id;
+            const responseDelete = await fetch(`${API_URL}/favorites/${favoriteId}`, {
+                method: 'DELETE'
+            });
+            if (responseDelete.ok) {
+                renderProducts(getCurrentParams());
+                alert('Removed from favorites!');
+            } else {
+                throw new Error('Failed to remove from favorites');
+            }
+        } else {
+            // Добавление в избранное
+            const response = await fetch(`${API_URL}/favorites`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: Number(userId), productId: Number(productId) })
+            });
+            if (response.ok) {
+                renderProducts(getCurrentParams());
+                alert('Added to favorites!');
+            } else {
+                throw new Error('Failed to add to favorites');
+            }
+        }
     } catch (error) {
-        console.error('Error adding to favorites:', error);
+        console.error('Error managing favorites:', error);
+        alert('Failed to manage favorites');
     }
 }
 
-async function addToCart(id) {
+async function addToCart(productId) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        window.location.href = '../login/index.html';
+        return;
+    }
     try {
+        const responseCheck = await fetch(`${API_URL}/cart?userId=${userId}&productId=${productId}`);
+        const existingCartItems = await responseCheck.json();
+        if (existingCartItems.length > 0) {
+            alert('This product is already in your cart!');
+            return;
+        }
+
         const response = await fetch(`${API_URL}/cart`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ productId: id })
+            body: JSON.stringify({ userId: Number(userId), productId: Number(productId) })
         });
-        if (response.ok) alert('Added to cart!');
-        else throw new Error('Failed to add to cart');
+        if (response.ok) {
+            alert('Added to cart!');
+        } else {
+            throw new Error('Failed to add to cart');
+        }
     } catch (error) {
         console.error('Error adding to cart:', error);
+        alert('Failed to add to cart');
     }
 }
 

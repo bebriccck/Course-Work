@@ -281,9 +281,7 @@
       "rating": 4.6
     }
   ],
-  "favorites": [
-    {}
-  ],
+  "favorites": [],
   "users": [
     {
       "phone": "+375297776666",
@@ -298,7 +296,22 @@
       "id": 1
     }
   ],
-  "cart": [
-    {}
+  "cart": [],
+  "orders": [
+    {
+      "userId": 1,
+      "date": "2025-08-20T18:20:25.390Z",
+      "items": [
+        {
+          "productId": 2,
+          "quantity": 1
+        },
+        {
+          "productId": 1,
+          "quantity": 1
+        }
+      ],
+      "id": 1
+    }
   ]
 }

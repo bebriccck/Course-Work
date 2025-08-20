@@ -298,6 +298,10 @@ body {
     transition: all 0.3s ease;
 }
 
+.favorite-btn.filled i {
+    color: #ff4444;
+}
+
 .favorite-btn:hover {
     color: #ff4444;
 }
@@ -409,6 +413,12 @@ body {
     font-weight: 500;
 }
 
+#noResults {
+    font-size: 1.6rem;
+    text-align: center;
+    margin-top: 2rem;
+}
+
 @media (min-width: 769px) and (max-width: 1024px) {
     .controls {
         flex-wrap: wrap;
@@ -491,8 +501,20 @@ body {
         width: 100%;
     }
 
+    .search-bar input {
+        font-size: 1.4rem;
+        padding: 0.8rem 3rem 0.8rem 1.2rem;
+    }
+
+    .search-bar i {
+        font-size: 1.4rem;
+        right: 1rem;
+    }
+
     #sortSelect {
         width: 100%;
+        font-size: 1.4rem;
+        padding: 0.8rem;
     }
 
     .categories-filter {
@@ -501,11 +523,24 @@ body {
 
     .categories_menu {
         width: 100%;
-        height: 4.5rem;
+        height: 4rem;
+        font-size: 1.4rem;
+        padding: 0 1.2rem;
     }
 
     .categories_dropdown {
         width: 100%;
+    }
+
+    .categories_dropdown li {
+        font-size: 1.4rem;
+        height: 4rem;
+        padding: 0 1.5rem;
+    }
+
+    .reset-btn {
+        font-size: 1.4rem;
+        height: 4rem;
     }
 
     .range-filter {
@@ -514,13 +549,20 @@ body {
         align-items: flex-start;
     }
 
+    .range-filter label {
+        font-size: 1.4rem;
+    }
+
     .range-filter input {
         width: 100%;
+        font-size: 1.4rem;
+        padding: 0.8rem;
     }
 
     .range-filter button {
         width: 100%;
-        padding: 1rem;
+        font-size: 1.4rem;
+        padding: 0.8rem;
     }
 
     .content {
@@ -562,60 +604,6 @@ body {
         font-size: 2.8rem;
     }
 
-    .controls {
-        padding: 1.5rem var(--pad);
-    }
-
-    .search-bar input {
-        font-size: 1.4rem;
-        padding: 0.8rem 3rem 0.8rem 1.2rem;
-    }
-
-    .search-bar i {
-        font-size: 1.4rem;
-        right: 1rem;
-    }
-
-    #sortSelect {
-        font-size: 1.4rem;
-        padding: 0.8rem;
-    }
-
-    .categories_menu {
-        font-size: 1.4rem;
-        height: 4rem;
-        padding: 0 1.2rem;
-    }
-
-    .categories_dropdown li {
-        font-size: 1.4rem;
-        height: 4rem;
-        padding: 0 1.5rem;
-    }
-
-    .reset-btn {
-        font-size: 1.4rem;
-        height: 4rem;
-    }
-
-    .range-filter label {
-        font-size: 1.4rem;
-    }
-
-    .range-filter input {
-        font-size: 1.4rem;
-        padding: 0.8rem;
-    }
-
-    .range-filter button {
-        font-size: 1.4rem;
-        padding: 0.8rem;
-    }
-
-    #productGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
     .product-image img {
         height: 14rem;
     }
@@ -630,6 +618,10 @@ body {
 
     .price, .rating {
         font-size: 1.4rem;
+    }
+
+    #productGrid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .pagination button {
