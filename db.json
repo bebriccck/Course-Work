@@ -281,7 +281,13 @@
       "rating": 4.6
     }
   ],
-  "favorites": [],
+  "favorites": [
+    {
+      "userId": 1,
+      "productId": 2,
+      "id": 1
+    }
+  ],
   "users": [
     {
       "phone": "+375297776666",
