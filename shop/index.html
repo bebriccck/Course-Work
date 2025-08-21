@@ -53,6 +53,7 @@
                     <input type="number" id="maxPrice" placeholder="Max">
                     <button id="applyRange">Apply</button>
                 </div>
+                <button id="addProductBtn" style="display: none;" class="add-btn">Add Product</button>
             </div>
             <div class="content">
                 <div class="products">
@@ -73,6 +74,33 @@
         </section>
     </main>
     <div id="footer"></div>
+
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Add Product</h3>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" id="price" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <input type="text" id="category" required>
+                </div>
+                <button type="submit">Save</button>
+                <button type="button" id="cancelModal">Cancel</button>
+            </form>
+        </div>
+    </div>
+
     <script src="../header/header.js"></script>
     <script src="../footer/footer.js"></script>
     <script src="script.js"></script>

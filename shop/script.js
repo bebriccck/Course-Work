@@ -4,6 +4,30 @@ let currentPage = 1;
 let totalItems = 0;
 let selectedCategories = new Set(['']);
 
+function getCurrentParams() {
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const minPrice = document.getElementById('minPrice');
+    const maxPrice = document.getElementById('maxPrice');
+
+    const params = {};
+    if (searchInput && searchInput.value) {
+        params.q = searchInput.value;
+    }
+    if (sortSelect && sortSelect.value) {
+        const [sortBy, sortOrder] = sortSelect.value.split(',');
+        params._sort = sortBy;
+        params._order = sortOrder;
+    }
+    if (minPrice && minPrice.value) {
+        params['price_gte'] = minPrice.value;
+    }
+    if (maxPrice && maxPrice.value) {
+        params['price_lte'] = maxPrice.value;
+    }
+    return params;
+}
+
 async function fetchProducts(params = {}) {
     const query = new URLSearchParams({
         _page: currentPage,
@@ -101,6 +125,7 @@ async function renderProducts(params = {}) {
     }
 
     const userId = localStorage.getItem('userId');
+    const role = localStorage.getItem('role');
     let favoriteItems = [];
     if (userId) {
         try {
@@ -115,6 +140,17 @@ async function renderProducts(params = {}) {
     productGrid.innerHTML = products.map(product => {
         const isFavorite = favoriteItems.some(item => item.productId === product.id);
         const favoriteId = isFavorite ? favoriteItems.find(item => item.productId === product.id).id : '';
+        let adminActions = '';
+        if (role === 'admin') {
+            adminActions = `
+                <button class="edit-btn" data-id="${product.id}">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="delete-btn" data-id="${product.id}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+        }
         return `
             <div class="product-card">
                 <div class="product-image">
@@ -126,6 +162,7 @@ async function renderProducts(params = {}) {
                         <button class="cart-btn" data-id="${product.id}">
                             <i class="fas fa-shopping-cart"></i>
                         </button>
+                        ${adminActions}
                     </div>
                 </div>
                 <div class="product-info">
@@ -151,7 +188,6 @@ async function addToFavorites(productId) {
         const responseCheck = await fetch(`${API_URL}/favorites?userId=${userId}&productId=${productId}`);
         const existingFavorites = await responseCheck.json();
         if (existingFavorites.length > 0) {
-            // Удаление из избранного
             const favoriteId = existingFavorites[0].id;
             const responseDelete = await fetch(`${API_URL}/favorites/${favoriteId}`, {
                 method: 'DELETE'
@@ -163,7 +199,6 @@ async function addToFavorites(productId) {
                 throw new Error('Failed to remove from favorites');
             }
         } else {
-            // Добавление в избранное
             const response = await fetch(`${API_URL}/favorites`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -199,7 +234,7 @@ async function addToCart(productId) {
         const response = await fetch(`${API_URL}/cart`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId: Number(userId), productId: Number(productId) })
+            body: JSON.stringify({ userId: Number(userId), productId: Number(productId), quantity: 1 })
         });
         if (response.ok) {
             alert('Added to cart!');
@@ -212,28 +247,130 @@ async function addToCart(productId) {
     }
 }
 
-function getCurrentParams() {
-    const search = document.getElementById('searchInput').value;
-    const [sort, order] = document.getElementById('sortSelect').value.split(',');
-    const minPrice = document.getElementById('minPrice').value;
-    const maxPrice = document.getElementById('maxPrice').value;
+async function addProduct() {
+    document.getElementById('modalTitle').textContent = 'Add Product';
+    document.getElementById('name').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('price').value = '';
+    document.getElementById('category').value = '';
+    document.getElementById('productForm').dataset.id = '';
+    document.getElementById('productModal').style.display = 'flex';
+}
 
-    const params = {};
-    if (search) params.q = search;
-    if (sort) {
-        params._sort = sort;
-        params._order = order;
+async function editProduct(productId) {
+    try {
+        const response = await fetch(`${API_URL}/products/${productId}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const product = await response.json();
+        document.getElementById('modalTitle').textContent = 'Edit Product';
+        document.getElementById('name').value = product.name;
+        document.getElementById('description').value = product.description;
+        document.getElementById('price').value = product.price;
+        document.getElementById('category').value = product.category;
+        document.getElementById('productForm').dataset.id = productId;
+        document.getElementById('productModal').style.display = 'flex';
+    } catch (error) {
+        console.error('Error fetching product for edit:', error);
+        alert('Failed to load product data');
     }
-    if (minPrice) params.price_gte = minPrice;
-    if (maxPrice) params.price_lte = maxPrice;
+}
 
-    return params;
+async function deleteProduct(productId) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    try {
+
+        const reviewsResponse = await fetch(`${API_URL}/reviews?productId=${productId}`);
+        if (!reviewsResponse.ok) throw new Error('Failed to fetch reviews');
+        const reviews = await reviewsResponse.json();
+        for (const review of reviews) {
+            const deleteReviewResponse = await fetch(`${API_URL}/reviews/${review.id}`, {
+                method: 'DELETE'
+            });
+            if (!deleteReviewResponse.ok) throw new Error(`Failed to delete review ${review.id}`);
+        }
+
+        const productResponse = await fetch(`${API_URL}/products/${productId}`, {
+            method: 'DELETE'
+        });
+        if (productResponse.ok) {
+            alert('Product and associated reviews deleted successfully!');
+            renderProducts(getCurrentParams());
+        } else {
+            throw new Error('Failed to delete product');
+        }
+    } catch (error) {
+        console.error('Error deleting product or reviews:', error);
+        alert('Failed to delete product or reviews');
+    }
+}
+
+async function saveProduct(e) {
+    e.preventDefault();
+    const form = e.target;
+    const id = form.dataset.id;
+    const name = document.getElementById('name').value;
+    const description = document.getElementById('description').value;
+    const price = Number(document.getElementById('price').value);
+    const category = document.getElementById('category').value;
+
+    const productData = { name, description, price, category };
+    if (!id) {
+        productData.rating = 0; 
+    }
+
+    try {
+        let response;
+        if (id) {
+
+            response = await fetch(`${API_URL}/products/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
+            });
+        } else {
+            // Add new product
+            response = await fetch(`${API_URL}/products`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
+            });
+        }
+        if (response.ok) {
+            alert(id ? 'Product updated successfully!' : 'Product added successfully!');
+            renderProducts(getCurrentParams());
+            closeModal();
+        } else {
+            throw new Error(id ? 'Failed to update product' : 'Failed to add product');
+        }
+    } catch (error) {
+        console.error('Error saving product:', error);
+        alert('Failed to save product');
+    }
+}
+
+function closeModal() {
+    document.getElementById('productModal').style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        window.location.href = '../login/index.html';
+        return;
+    }
+
     fetchCategories().then(() => {
         renderProducts();
     }).catch(error => console.error('Error on DOM load:', error));
+
+    const role = localStorage.getItem('role');
+    if (role === 'admin') {
+        document.getElementById('addProductBtn').style.display = 'block';
+    }
+
+    document.getElementById('addProductBtn').addEventListener('click', addProduct);
+    document.getElementById('productForm').addEventListener('submit', saveProduct);
+    document.getElementById('cancelModal').addEventListener('click', closeModal);
 
     const categoriesMenu = document.querySelector('.categories_menu');
     const categoriesDropdown = document.querySelector('.categories_dropdown');
@@ -357,10 +494,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.closest('.favorite-btn')) {
                 const id = e.target.closest('.favorite-btn').dataset.id;
                 addToFavorites(id);
-            }
-            if (e.target.closest('.cart-btn')) {
+            } else if (e.target.closest('.cart-btn')) {
                 const id = e.target.closest('.cart-btn').dataset.id;
                 addToCart(id);
+            } else if (e.target.closest('.edit-btn')) {
+                const id = e.target.closest('.edit-btn').dataset.id;
+                editProduct(id);
+            } else if (e.target.closest('.delete-btn')) {
+                const id = e.target.closest('.delete-btn').dataset.id;
+                deleteProduct(id);
+            } else if (e.target.closest('.product-card')) {
+                const id = e.target.closest('.product-card').querySelector('.cart-btn').dataset.id;
+                window.location.href = `../product/index.html?id=${id}`;
             }
         });
     }

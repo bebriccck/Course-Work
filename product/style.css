@@ -1,0 +1,463 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+    --primary-text: #555555;
+    --accent-color: #7AC751;
+    --bg-color: white;
+    --second-color: #F7F8FA;
+    --border-color: #E3E3E3;
+    background-color: var(--bg-color);
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    color: var(--primary-text);
+    background-color: var(--bg-color);
+}
+
+.product_section {
+    margin-bottom: 10.6rem;
+}
+
+.content {
+    padding: 3rem var(--pad);
+}
+
+.product-details {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.product-image img {
+    width: 100%;
+    max-width: 40rem;
+    height: auto;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-info h1 {
+    font-family: 'Mulish', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.description {
+    font-size: 1.6rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.product-meta {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.price {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.rating {
+    font-size: 1.6rem;
+    color: #f4b400;
+}
+
+.rating i {
+    margin-right: 0.3rem;
+}
+
+.category {
+    font-size: 1.4rem;
+    color: var(--primary-text);
+    margin-bottom: 2rem;
+}
+
+.product-actions {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.cart-btn, .favorite-btn {
+    padding: 1rem 2rem;
+    border-radius: 2px;
+    border: 1px solid var(--border-color);
+    background-color: var(--accent-color);
+    color: white;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.favorite-btn {
+    background-color: white;
+    color: var(--primary-text);
+}
+
+.favorite-btn.filled i {
+    color: #ff4444;
+}
+
+.cart-btn:hover {
+    background-color: #6ab346;
+}
+
+.favorite-btn:hover i {
+    color: #ff4444;
+}
+
+.reviews-section {
+    margin-top: 4rem;
+}
+
+.reviews-section h2 {
+    font-family: 'Mulish', sans-serif;
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+}
+
+.review-item {
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.review-item .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.review-item .review-header .user {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.review-item .review-header .date {
+    font-size: 1.4rem;
+    color: #666;
+}
+
+.review-item .review-rating {
+    font-size: 1.5rem;
+    color: #f4b400;
+    margin-bottom: 1rem;
+}
+
+.review-item .review-rating i {
+    margin-right: 0.3rem;
+}
+
+.review-item .review-text {
+    font-size: 1.5rem;
+    color: var(--primary-text);
+}
+
+.review-item .review-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.review-item .review-actions button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 2px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.review-item .review-actions .edit-btn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+}
+
+.review-item .review-actions .edit-btn:hover {
+    background-color: #6ab346;
+}
+
+.review-item .review-actions .delete-btn {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+}
+
+.review-item .review-actions .delete-btn:hover {
+    background-color: #e03e3e;
+}
+
+.review-form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.review-form h3 {
+    font-family: 'Mulish', sans-serif;
+    font-size: 2rem;
+}
+
+.rating-select {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+}
+
+.rating-select span {
+    font-weight: 500;
+}
+
+.rating-select i {
+    color: #f4b400;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.rating-select i.fas {
+    color: #f4b400;
+}
+
+.rating-select i:hover,
+.rating-select i.active {
+    color: #e0a800;
+}
+
+.review-form textarea {
+    width: 100%;
+    max-width: 50rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+    font-size: 1.5rem;
+    resize: vertical;
+}
+
+.review-form textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.review-form .form-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.review-form button {
+    width: fit-content;
+    padding: 1rem 2rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 2px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.review-form button:hover:not(:disabled) {
+    background-color: #6ab346;
+}
+
+.review-form button:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+}
+
+.review-form .cancel-btn {
+    background-color: #ff4444;
+}
+
+.review-form .cancel-btn:hover {
+    background-color: #e03e3e;
+}
+
+#reviewMessage {
+    font-size: 1.6rem;
+    color: var(--primary-text);
+}
+
+@media (max-width: 768px) {
+    html {
+        --pad: 2rem;
+    }
+
+    .content {
+        padding: 2rem var(--pad);
+    }
+
+    .product-details {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .product-image img {
+        max-width: 100%;
+        height: 30rem;
+    }
+
+    .product-info h1 {
+        font-size: 2.8rem;
+    }
+
+    .description {
+        font-size: 1.4rem;
+    }
+
+    .price {
+        font-size: 1.8rem;
+    }
+
+    .rating, .category {
+        font-size: 1.3rem;
+    }
+
+    .cart-btn, .favorite-btn {
+        font-size: 1.4rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .reviews-section h2 {
+        font-size: 2.2rem;
+    }
+
+    .review-form h3 {
+        font-size: 1.8rem;
+    }
+
+    .rating-select {
+        font-size: 1.4rem;
+    }
+
+    .rating-select i {
+        font-size: 1.4rem;
+    }
+
+    .review-form textarea {
+        font-size: 1.4rem;
+    }
+
+    .review-form button {
+        font-size: 1.4rem;
+    }
+
+    .review-item .review-header .user, .review-item .review-text, .review-item .review-rating {
+        font-size: 1.4rem;
+    }
+
+    .review-item .review-header .date {
+        font-size: 1.3rem;
+    }
+
+    .review-item .review-actions button {
+        font-size: 1.3rem;
+        padding: 0.7rem 1.2rem;
+    }
+
+    #reviewMessage {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 8px;
+        --pad: 1.5rem;
+    }
+
+    .product-info h1 {
+        font-size: 2.6rem;
+    }
+
+    .product-image img {
+        height: 25rem;
+    }
+
+    .description {
+        font-size: 1.3rem;
+    }
+
+    .price, .rating, .category {
+        font-size: 1.2rem;
+    }
+
+    .cart-btn, .favorite-btn {
+        font-size: 1.3rem;
+    }
+
+    .reviews-section h2 {
+        font-size: 2rem;
+    }
+
+    .review-item .review-header .user, .review-item .review-text, .review-item .review-rating {
+        font-size: 1.3rem;
+    }
+
+    .review-item .review-header .date {
+        font-size: 1.2rem;
+    }
+
+    .review-item .review-actions button {
+        font-size: 1.2rem;
+        padding: 0.6rem 1rem;
+    }
+
+    .review-form h3 {
+        font-size: 1.6rem;
+    }
+
+    .rating-select {
+        font-size: 1.3rem;
+    }
+
+    .rating-select i {
+        font-size: 1.3rem;
+    }
+
+    .review-form textarea {
+        font-size: 1.3rem;
+    }
+
+    .review-form button {
+        font-size: 1.3rem;
+    }
+
+    #reviewMessage {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 320px) {
+    html {
+        font-size: 7px;
+    }
+
+    .product-info h1 {
+        font-size: 2.4rem;
+    }
+
+    .product-image img {
+        height: 20rem;
+    }
+}

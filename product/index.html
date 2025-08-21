@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../header/style.css">
+    <link rel="stylesheet" href="../footer/style.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Product</title>
+</head>
+<body>
+    <div id="header"></div>
+    <main>
+        <section class="product_section">
+            <div class="content">
+                <div class="product-details">
+                    <div class="product-image">
+                        <img id="productImage" src="" alt="Product">
+                    </div>
+                    <div class="product-info">
+                        <h1 id="productName"></h1>
+                        <p class="description" id="productDescription"></p>
+                        <div class="product-meta">
+                            <span class="price" id="productPrice"></span>
+                            <span class="rating" id="productRating"><i class="fas fa-star"></i> </span>
+                        </div>
+                        <p class="category" id="productCategory"></p>
+                        <div class="product-actions">
+                            <button class="cart-btn" id="cartBtn"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                            <button class="favorite-btn" id="favoriteBtn"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="reviews-section">
+                    <h2>Reviews</h2>
+                    <div id="reviewsList"></div>
+                    <div class="review-form" id="reviewForm">
+                        <h3>Write a Review</h3>
+                        <div class="rating-select" id="ratingSelect">
+                            <span>Rating:</span>
+                            <i class="far fa-star" data-value="1"></i>
+                            <i class="far fa-star" data-value="2"></i>
+                            <i class="far fa-star" data-value="3"></i>
+                            <i class="far fa-star" data-value="4"></i>
+                            <i class="far fa-star" data-value="5"></i>
+                        </div>
+                        <textarea id="reviewText" placeholder="Your review (minimum 10 characters)" rows="4"></textarea>
+                        <div class="form-actions">
+                            <button id="submitReviewBtn" disabled>Submit Review</button>
+                        </div>
+                    </div>
+                    <p id="reviewMessage" style="display: none;"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="footer"></div>
+    <script src="../header/header.js"></script>
+    <script src="../footer/footer.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

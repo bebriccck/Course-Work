@@ -6,7 +6,7 @@
       "description": "Comfortable modern sofa for living room",
       "price": 500,
       "category": "Sofa",
-      "rating": 4.5
+      "rating": 0
     },
     {
       "id": 2,
@@ -14,7 +14,7 @@
       "description": "Stylish geometric bookcase",
       "price": 300,
       "category": "Bookcase",
-      "rating": 4.2
+      "rating": 0
     },
     {
       "id": 3,
@@ -22,7 +22,7 @@
       "description": "Ergonomic chair for office use",
       "price": 150,
       "category": "Chair",
-      "rating": 4
+      "rating": 0
     },
     {
       "id": 4,
@@ -30,7 +30,7 @@
       "description": "Elegant glass dining table",
       "price": 400,
       "category": "Table",
-      "rating": 4.7
+      "rating": 0
     },
     {
       "id": 5,
@@ -38,7 +38,7 @@
       "description": "Luxurious leather sofa with recliner",
       "price": 600,
       "category": "Sofa",
-      "rating": 4.8
+      "rating": 0
     },
     {
       "id": 6,
@@ -46,7 +46,7 @@
       "description": "Soft velvet sofa for cozy evenings",
       "price": 450,
       "category": "Sofa",
-      "rating": 4.3
+      "rating": 0
     },
     {
       "id": 7,
@@ -54,7 +54,7 @@
       "description": "Spacious sectional sofa for large rooms",
       "price": 750,
       "category": "Sofa",
-      "rating": 4.6
+      "rating": 0
     },
     {
       "id": 8,
@@ -62,7 +62,7 @@
       "description": "High-back gaming chair with lumbar support",
       "price": 200,
       "category": "Chair",
-      "rating": 4.4
+      "rating": 0
     },
     {
       "id": 9,
@@ -70,7 +70,7 @@
       "description": "Wooden dining chair with cushioned seat",
       "price": 80,
       "category": "Chair",
-      "rating": 3.9
+      "rating": 0
     },
     {
       "id": 10,
@@ -78,7 +78,7 @@
       "description": "Comfortable armchair for reading",
       "price": 120,
       "category": "Chair",
-      "rating": 4.1
+      "rating": 0
     },
     {
       "id": 11,
@@ -86,7 +86,7 @@
       "description": "Stylish coffee table with storage",
       "price": 150,
       "category": "Table",
-      "rating": 4.2
+      "rating": 0
     },
     {
       "id": 12,
@@ -94,7 +94,7 @@
       "description": "Elegant round table for small spaces",
       "price": 250,
       "category": "Table",
-      "rating": 4.5
+      "rating": 0
     },
     {
       "id": 13,
@@ -102,7 +102,7 @@
       "description": "Durable metal bookcase with shelves",
       "price": 180,
       "category": "Bookcase",
-      "rating": 4
+      "rating": 0
     },
     {
       "id": 14,
@@ -110,7 +110,7 @@
       "description": "Space-saving corner bookcase",
       "price": 220,
       "category": "Bookcase",
-      "rating": 4.3
+      "rating": 0
     },
     {
       "id": 15,
@@ -118,7 +118,7 @@
       "description": "Tall bookcase for extensive collections",
       "price": 280,
       "category": "Bookcase",
-      "rating": 4.6
+      "rating": 0
     },
     {
       "id": 16,
@@ -126,7 +126,7 @@
       "description": "Classic wooden dresser for bedrooms",
       "price": 350,
       "category": "Furniture",
-      "rating": 4.4
+      "rating": 0
     },
     {
       "id": 17,
@@ -134,7 +134,7 @@
       "description": "Sturdy metal bed frame with design",
       "price": 300,
       "category": "Furniture",
-      "rating": 4.1
+      "rating": 0
     },
     {
       "id": 18,
@@ -142,7 +142,7 @@
       "description": "Elegant sideboard for dining areas",
       "price": 400,
       "category": "Furniture",
-      "rating": 4.5
+      "rating": 0
     },
     {
       "id": 19,
@@ -150,7 +150,7 @@
       "description": "Compact nightstand with drawer",
       "price": 90,
       "category": "Furniture",
-      "rating": 4
+      "rating": 0
     },
     {
       "id": 20,
@@ -158,7 +158,7 @@
       "description": "Luxurious crystal chandelier",
       "price": 500,
       "category": "Amrature",
-      "rating": 4.7
+      "rating": 0
     },
     {
       "id": 21,
@@ -166,7 +166,7 @@
       "description": "Modern wall sconce for ambiance",
       "price": 80,
       "category": "Amrature",
-      "rating": 4.2
+      "rating": 0
     },
     {
       "id": 22,
@@ -174,7 +174,7 @@
       "description": "Stylish pendant light for kitchens",
       "price": 120,
       "category": "Amrature",
-      "rating": 4.4
+      "rating": 0
     },
     {
       "id": 23,
@@ -182,7 +182,7 @@
       "description": "Adjustable floor lamp for reading",
       "price": 150,
       "category": "Amrature",
-      "rating": 4.3
+      "rating": 0
     },
     {
       "id": 24,
@@ -190,7 +190,7 @@
       "description": "Large rectangular wall mirror",
       "price": 100,
       "category": "Mirrors",
-      "rating": 4.1
+      "rating": 0
     },
     {
       "id": 25,
@@ -198,7 +198,7 @@
       "description": "Elegant round mirror with frame",
       "price": 80,
       "category": "Mirrors",
-      "rating": 4
+      "rating": 0
     },
     {
       "id": 26,
@@ -206,7 +206,7 @@
       "description": "Standing full-length mirror",
       "price": 150,
       "category": "Mirrors",
-      "rating": 4.5
+      "rating": 0
     },
     {
       "id": 27,
@@ -214,7 +214,7 @@
       "description": "Ornate decorative mirror for walls",
       "price": 120,
       "category": "Mirrors",
-      "rating": 4.3
+      "rating": 0
     },
     {
       "id": 28,
@@ -222,7 +222,7 @@
       "description": "Simple wooden stool for kitchens",
       "price": 50,
       "category": "Stools",
-      "rating": 3.9
+      "rating": 0
     },
     {
       "id": 29,
@@ -230,7 +230,7 @@
       "description": "High bar stool with backrest",
       "price": 70,
       "category": "Stools",
-      "rating": 4.2
+      "rating": 0
     },
     {
       "id": 30,
@@ -238,7 +238,7 @@
       "description": "Modern counter stool with cushion",
       "price": 90,
       "category": "Stools",
-      "rating": 4.1
+      "rating": 0
     },
     {
       "id": 31,
@@ -246,7 +246,7 @@
       "description": "Portable folding stool for outdoors",
       "price": 40,
       "category": "Stools",
-      "rating": 3.8
+      "rating": 0
     },
     {
       "id": 32,
@@ -254,7 +254,7 @@
       "description": "Classic wooden park bench",
       "price": 200,
       "category": "Benches",
-      "rating": 4.4
+      "rating": 0
     },
     {
       "id": 33,
@@ -262,7 +262,7 @@
       "description": "Rustic garden bench with metal frame",
       "price": 180,
       "category": "Benches",
-      "rating": 4.3
+      "rating": 0
     },
     {
       "id": 34,
@@ -270,7 +270,7 @@
       "description": "Padded indoor bench for entryways",
       "price": 150,
       "category": "Benches",
-      "rating": 4.2
+      "rating": 0
     },
     {
       "id": 35,
@@ -278,7 +278,14 @@
       "description": "Bench with built-in storage compartment",
       "price": 220,
       "category": "Benches",
-      "rating": 4.6
+      "rating": 0
+    },
+    {
+      "name": "мплриодлрилпгш",
+      "description": "мприрто",
+      "price": 20,
+      "category": "игдлргд",
+      "id": 36
     }
   ],
   "favorites": [
@@ -298,7 +305,7 @@
       "lastName": "Hxtenovich",
       "middleName": "",
       "nickname": "HxtHx854Light",
-      "role": "customer",
+      "role": "admin",
       "id": 1
     }
   ],
@@ -319,5 +326,6 @@
       ],
       "id": 1
     }
-  ]
+  ],
+  "reviews": []
 }
