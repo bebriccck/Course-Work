@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../header/style.css">
+    <link rel="stylesheet" href="../footer/style.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Profile</title>
+</head>
+<body>
+    <div id="header"></div>
+    <main>
+        <section class="profile">
+            <h2>Profile</h2>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                    <span class="error-message" id="phone-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                    <span class="error-message" id="email-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate">Date of Birth <span class="required">*</span></label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                    <span class="error-message" id="birthdate-error"></span>
+                </div>
+                <div class="form-group password-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <div class="input-with-button">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" id="generate-password">Generate Password</button>
+                    </div>
+                    <span class="error-message" id="password-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <span class="error-message" id="firstName-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <span class="error-message" id="lastName-error"></span>
+                </div>
+                <div class="form-group">
+                    <label for="middleName">Middle Name</label>
+                    <input type="text" id="middleName" name="middleName">
+                </div>
+                <div class="form-group">
+                    <label for="nickname">Nickname <span class="required">*</span></label>
+                    <input type="text" id="nickname" name="nickname">
+                    <button type="button" id="regenerate-nickname">Generate New Nickname</button>
+                    <span class="error-message" id="nickname-error"></span>
+                    <span id="nickname-attempts"></span>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" id="submit-button">Save Changes</button>
+                    <button type="button" id="logout-button">Log Out</button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <div id="footer"></div>
+    <script src="../header/header.js"></script>
+    <script src="../footer/footer.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
