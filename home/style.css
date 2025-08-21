@@ -421,3 +421,11 @@ h2 {
         font-size: 1.2rem;
     }
 }
+html.dark-theme {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2C2C2C;
+    --border-color: #444444;
+    --accent-color: #68B738;
+    --discount-color: #00A0D6;
+}

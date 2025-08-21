@@ -16,6 +16,15 @@ html {
     background-color: var(--bg-color);
 }
 
+html.dark-theme {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2C2C2C;
+    --border-color: #444444;
+    --accent-color: #68B738;
+    --discount-color: #00A0D6;
+}
+
 body {
     font-family: 'Rubik', sans-serif;
     color: var(--primary-text);
@@ -49,6 +58,10 @@ form {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+.dark-theme form {
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); /* Светлая тень для тёмной темы */
+}
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -77,17 +90,18 @@ form {
     font-size: 1.5rem;
     font-family: 'Rubik', sans-serif;
     background-color: var(--bg-color);
+    color: var(--primary-text);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-group input:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(122, 199, 81, 0.1);
+    box-shadow: 0 0 0 3px rgba(104, 183, 56, 0.1); /* Адаптировано для тёмной темы */
 }
 
 .form-group input[readonly] {
-    background-color: #f0f0f0;
+    background-color: var(--second-color);
 }
 
 .error-message {
@@ -164,6 +178,10 @@ form {
 #submit-button:hover:not(:disabled) {
     background-color: #6ab346;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme #submit-button:hover:not(:disabled) {
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); /* Светлая тень для тёмной темы */
 }
 
 #submit-button:disabled {

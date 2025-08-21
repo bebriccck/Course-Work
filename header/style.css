@@ -15,7 +15,12 @@ html {
     --pad: 13.5rem;
     background-color: var(--bg-color);
 }
-
+:where(html.dark-theme) {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2A2A2A;
+    --border-color: #444444;
+}
 body {
     font-family: 'Rubik', sans-serif;
     color: var(--primary-text);
@@ -311,4 +316,12 @@ header nav ul {
     .nav_menu.active {
         max-height: 25rem;
     }
+}
+html.dark-theme {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2C2C2C;
+    --border-color: #444444;
+    --accent-color: #68B738;
+    --discount-color: #00A0D6;
 }

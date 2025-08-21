@@ -16,6 +16,15 @@ html {
     background-color: var(--bg-color);
 }
 
+html.dark-theme {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2C2C2C;
+    --border-color: #444444;
+    --accent-color: #68B738;
+    --discount-color: #00A0D6;
+}
+
 body {
     font-family: 'Rubik', sans-serif;
     color: var(--primary-text);
@@ -70,6 +79,8 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 2px;
     font-size: 1.5rem;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
     transition: all 0.3s ease;
 }
 
@@ -92,7 +103,8 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 2px;
     font-size: 1.5rem;
-    background-color: white;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
     transition: all 0.3s ease;
     width: 18rem;
     max-width: 100%;
@@ -132,7 +144,7 @@ body {
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: var(--second-color);
+    background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: 2px;
     width: 100%;
@@ -151,6 +163,7 @@ body {
     justify-content: space-between;
     padding: 0 2rem;
     font-size: 1.5rem;
+    color: var(--primary-text);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -184,10 +197,19 @@ body {
 
 .reset-btn i {
     margin-right: 0.8rem;
+    color: var(--accent-color);
+}
+
+.dark-theme .reset-btn i {
+    color: var(--accent-color);
 }
 
 .reset-btn:hover {
     background-color: var(--accent-color);
+    color: white;
+}
+
+.reset-btn:hover i {
     color: white;
 }
 
@@ -202,6 +224,7 @@ body {
     font-size: 1.5rem;
     font-weight: 500;
     white-space: nowrap;
+    color: var(--primary-text);
 }
 
 .range-filter input {
@@ -210,6 +233,8 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 2px;
     font-size: 1.5rem;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
     transition: all 0.3s ease;
 }
 
@@ -250,6 +275,7 @@ body {
 
 .content {
     padding: 3rem var(--pad);
+    background-color: var(--bg-color);
 }
 
 .products {
@@ -264,7 +290,7 @@ body {
 }
 
 .product-card {
-    background-color: white;
+    background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     border-radius: 2px;
     overflow: hidden;
@@ -304,12 +330,13 @@ body {
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 2px;
-    background-color: rgba(255,255,255,0.9);
+    background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.6rem;
+    color: var(--primary-text);
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -344,12 +371,14 @@ body {
 .product-info h3 {
     font-family: 'Mulish', sans-serif;
     font-size: 1.6rem;
+    color: var(--primary-text);
     margin-bottom: 1rem;
 }
 
 .description {
     font-size: 1.2rem;
-    color: #666;
+    color: var(--primary-text);
+    opacity: 0.8;
     margin-bottom: 1rem;
     line-height: 1.4;
 }
@@ -368,11 +397,10 @@ body {
 
 .rating {
     font-size: 1.2rem;
-    color: #f4b400;
 }
 
 .rating i {
-    margin-right: 0.3rem;
+    color: #f4b400;
 }
 
 .pagination {
@@ -437,12 +465,14 @@ body {
 .pagination #pageInfo {
     font-size: 1.6rem;
     font-weight: 500;
+    color: var(--primary-text);
 }
 
 #noResults {
     font-size: 1.6rem;
     text-align: center;
     margin-top: 2rem;
+    color: var(--primary-text);
 }
 
 .modal {
@@ -465,11 +495,13 @@ body {
     max-width: 50rem;
     width: 90%;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-color);
 }
 
 .modal-content h3 {
     font-family: 'Mulish', sans-serif;
     font-size: 2.4rem;
+    color: var(--primary-text);
     margin-bottom: 2rem;
 }
 
@@ -482,6 +514,7 @@ body {
 .form-group label {
     font-size: 1.6rem;
     font-weight: 500;
+    color: var(--primary-text);
 }
 
 .form-group input, .form-group textarea {
@@ -490,6 +523,8 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 2px;
     font-size: 1.5rem;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
     transition: all 0.3s ease;
 }
 
@@ -552,6 +587,18 @@ body {
         font-size: 1.4rem;
     }
 
+    .search-sort {
+        min-width: 100%;
+    }
+
+    .range-filter {
+        min-width: 100%;
+    }
+
+    #productGrid {
+        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    }
+
     #productForm button {
         font-size: 1.5rem;
     }
@@ -587,5 +634,9 @@ body {
 
     .modal-content h3 {
         font-size: 1.8rem;
+    }
+
+    #productGrid {
+        grid-template-columns: 1fr;
     }
 }

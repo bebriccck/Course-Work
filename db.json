@@ -6,7 +6,7 @@
       "description": "Comfortable modern sofa for living room",
       "price": 500,
       "category": "Sofa",
-      "rating": 0
+      "rating": 4
     },
     {
       "id": 2,
@@ -300,9 +300,28 @@
       "nickname": "HxtHx854Light",
       "role": "admin",
       "id": 1
+    },
+    {
+      "phone": "+375295315741",
+      "email": "dcmlove2@gmail.com",
+      "birthdate": "2009-08-12",
+      "password": "CoM@2CPU?18?wF",
+      "firstName": "hljubn uh",
+      "lastName": "jlnub uj",
+      "middleName": "",
+      "nickname": "hljj980hh",
+      "role": "customer",
+      "id": 2
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "userId": 1,
+      "productId": 1,
+      "quantity": 1,
+      "id": 1
+    }
+  ],
   "orders": [
     {
       "userId": 1,
@@ -318,7 +337,27 @@
         }
       ],
       "id": 1
+    },
+    {
+      "userId": 2,
+      "date": "2025-08-21T09:40:47.458Z",
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 1
+        }
+      ],
+      "id": 2
     }
   ],
-  "reviews": []
+  "reviews": [
+    {
+      "userId": 2,
+      "productId": 1,
+      "text": "vfgjhukjikn bhgbujiojknb hkuijok;mjhbjiko",
+      "rating": 4,
+      "date": "2025-08-21T09:40:58.651Z",
+      "id": 1
+    }
+  ]
 }

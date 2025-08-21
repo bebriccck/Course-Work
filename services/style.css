@@ -16,6 +16,15 @@ html {
     background-color: var(--bg-color);
 }
 
+html.dark-theme {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2C2C2C;
+    --border-color: #444444;
+    --accent-color: #68B738;
+    --discount-color: #00A0D6;
+}
+
 body {
     font-family: 'Rubik', sans-serif;
     color: var(--primary-text);
@@ -34,7 +43,7 @@ button {
 
 a {
     text-decoration: none;
-    color: inherit;
+    color: var(--primary-text);
     font-size: 1.6rem;
 }
 
@@ -43,12 +52,14 @@ a {
     margin-bottom: 10rem;
     padding-left: var(--pad);
     padding-right: var(--pad);
+    background-color: var(--bg-color);
 }
 
 h2 {
     font-size: 3.6rem;
     text-align: center;
     font-family: 'Mulish', sans-serif;
+    color: var(--primary-text);
 }
 
 .services {
@@ -77,6 +88,10 @@ h2 {
     max-width: 60rem;
 }
 
+.dark-theme .service_content {
+    background: rgba(26, 26, 26, 0.85); /* #1A1A1A с прозрачностью для тёмной темы */
+}
+
 .service.odd .service_content {
     align-self: flex-start;
 }
@@ -88,12 +103,14 @@ h2 {
 .service h3 {
     font-size: 2.8rem;
     font-family: 'Mulish', sans-serif;
+    color: var(--primary-text);
 }
 
 .service p {
     margin-top: 1.5rem;
     font-size: 1.8rem;
     line-height: 1.5;
+    color: var(--primary-text);
 }
 
 .service button {
@@ -109,10 +126,16 @@ h2 {
     margin-top: 2.5rem;
     font-size: 1.6rem;
     gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.service button:hover {
+    background-color: #6ab346;
 }
 
 .service button i {
     font-size: 1.4rem;
+    color: white;
 }
 
 #design_consultation {
