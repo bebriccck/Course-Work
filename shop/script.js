@@ -68,6 +68,19 @@ async function fetchCategories() {
             li.innerHTML = `${category} <i class="fas fa-check" style="display: none;"></i>`;
             categoryList.appendChild(li);
         });
+
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedCategory = urlParams.get('category');
+        if (selectedCategory) {
+            selectedCategories.clear();
+            selectedCategories.add(selectedCategory);
+            const selectedLi = categoryList.querySelector(`[data-category="${selectedCategory}"]`);
+            if (selectedLi) {
+                selectedLi.querySelector('i').style.display = 'block';
+                document.querySelector('[data-category=""] i').style.display = 'none';
+            }
+        }
     } catch (error) {
         console.error('Error fetching categories:', error);
     }
@@ -278,7 +291,6 @@ async function editProduct(productId) {
 async function deleteProduct(productId) {
     if (!confirm('Are you sure you want to delete this product?')) return;
     try {
-
         const reviewsResponse = await fetch(`${API_URL}/reviews?productId=${productId}`);
         if (!reviewsResponse.ok) throw new Error('Failed to fetch reviews');
         const reviews = await reviewsResponse.json();
@@ -315,20 +327,18 @@ async function saveProduct(e) {
 
     const productData = { name, description, price, category };
     if (!id) {
-        productData.rating = 0; 
+        productData.rating = 0;
     }
 
     try {
         let response;
         if (id) {
-
             response = await fetch(`${API_URL}/products/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
             });
         } else {
-            // Add new product
             response = await fetch(`${API_URL}/products`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -360,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchCategories().then(() => {
-        renderProducts();
+        renderProducts(getCurrentParams());
     }).catch(error => console.error('Error on DOM load:', error));
 
     const role = localStorage.getItem('role');

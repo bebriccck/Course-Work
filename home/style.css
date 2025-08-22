@@ -12,8 +12,19 @@ html {
     --second-color: #F7F8FA;
     --border-color: #E3E3E3;
     --discount-color: #00B7F1;
+    --slider:#e0f7fa;
     --pad: 13.5rem;
     background-color: var(--bg-color);
+}
+
+html.dark-theme {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2C2C2C;
+    --border-color: #444444;
+    --accent-color: #68B738;
+    --discount-color: #00A0D6;
+    --slider:#4c4d4e;
 }
 
 body {
@@ -78,14 +89,134 @@ ul {
     display: flex;
     align-items: center;
     padding-left: 3rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.moto {
-    background-color: #e0f7fa;
+.categories li:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.categories li.active {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: 500;
+}
+
+.moto-slider {
+    background-color:var(--slider);
     flex: 1;
     margin-left: 1.1rem;
     margin-top: 1.2rem;
     border-radius: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    display: flex;
+    width: 100%;
+    flex-shrink: 0;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide-content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.slide-left {
+    flex: 1;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.slide-left h2 {
+    font-family: 'Mulish', sans-serif;
+    font-size: 3.6rem;
+    font-weight: 700;
+    color: var(--primary-text);
+    max-width: 30rem;
+}
+
+.slide-left h3 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--primary-text);
+}
+
+.slide-left .price {
+    font-family: 'Rubik', sans-serif;
+    font-size: 2rem;
+    color: var(--accent-color);
+}
+
+.slide-left button {
+    background-color: var(--accent-color);
+    color: white;
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    border-radius: 2px;
+    width: fit-content;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.slide-left button:hover {
+    background-color: #5ba339;
+}
+
+html.dark-theme .slide-left button:hover {
+    background-color: #4f8c2f;
+}
+
+.slide-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide-right img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.slider-indicators {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+}
+
+.indicator {
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+    background-color: var(--accent-color);
 }
 
 .advantages {
@@ -310,13 +441,50 @@ h2 {
         width: 100%;
     }
 
-    .moto {
-        flex: none;
+    .moto-slider {
         margin-left: 0;
         margin-top: 2rem;
-        height: 20rem;
-        background-color: #e0f7fa;
-        width: 100%;
+        height: 50rem;
+    }
+
+    .slide-content {
+        flex-direction: column;
+    }
+
+    .slide-left {
+        padding: 2rem;
+        align-items: center;
+        text-align: center;
+    }
+
+    .slide-left h2 {
+        font-size: 2.8rem;
+        max-width: 100%;
+    }
+
+    .slide-left h3 {
+        font-size: 2rem;
+    }
+
+    .slide-left .price {
+        font-size: 1.8rem;
+    }
+
+    .slide-left button {
+        font-size: 1.4rem;
+        padding: 0.8rem 1.6rem;
+    }
+
+    .slide-right {
+        padding: 2rem;
+    }
+
+    .slide-right img {
+        max-height: 20rem;
+    }
+
+    .slider-indicators {
+        bottom: 1rem;
     }
 
     .advantages {
@@ -367,11 +535,34 @@ h2 {
         padding-left: 1.5rem;
     }
 
-    .moto {
-        display: block;
-        height: 15rem;
-        background-color: #e0f7fa;
-        width: 100%;
+    .moto-slider {
+        height: 40rem;
+    }
+
+    .slide-left h2 {
+        font-size: 2.2rem;
+    }
+
+    .slide-left h3 {
+        font-size: 1.8rem;
+    }
+
+    .slide-left .price {
+        font-size: 1.6rem;
+    }
+
+    .slide-left button {
+        font-size: 1.2rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    .slide-right img {
+        max-height: 15rem;
+    }
+
+    .indicator {
+        width: 1rem;
+        height: 1rem;
     }
 
     .furniture, .book, .sofa {
@@ -420,12 +611,4 @@ h2 {
         height: 3.5rem;
         font-size: 1.2rem;
     }
-}
-html.dark-theme {
-    --primary-text: #E0E0E0;
-    --bg-color: #1A1A1A;
-    --second-color: #2C2C2C;
-    --border-color: #444444;
-    --accent-color: #68B738;
-    --discount-color: #00A0D6;
 }
