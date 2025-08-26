@@ -4,7 +4,14 @@ async function fetchProduct(productId) {
     try {
         const response = await fetch(`${API_URL}/products/${productId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json();
+        const product = await response.json();
+        const reviewsResponse = await fetch(`${API_URL}/reviews?productId=${productId}`);
+        if (!reviewsResponse.ok) throw new Error(`HTTP error! status: ${reviewsResponse.status}`);
+        const reviews = await reviewsResponse.json();
+        const rating = reviews.length > 0
+            ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
+            : 0;
+        return { ...product, rating };
     } catch (error) {
         console.error('Error fetching product:', error);
         return null;
@@ -118,25 +125,6 @@ async function toggleFavorite(productId, favoriteBtn) {
     }
 }
 
-async function updateProductRating(productId) {
-    try {
-        const response = await fetch(`${API_URL}/reviews?productId=${productId}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const reviews = await response.json();
-        const avgRating = reviews.length > 0
-            ? Number((reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1))
-            : 0;
-        const updateResponse = await fetch(`${API_URL}/products/${productId}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ rating: avgRating })
-        });
-        if (!updateResponse.ok) throw new Error('Failed to update product rating');
-    } catch (error) {
-        console.error('Error updating product rating:', error);
-    }
-}
-
 async function submitReview(productId, text, rating) {
     const userId = localStorage.getItem('userId');
     try {
@@ -152,7 +140,6 @@ async function submitReview(productId, text, rating) {
             })
         });
         if (!response.ok) throw new Error('Failed to submit review');
-        await updateProductRating(productId);
         alert('Review submitted successfully!');
         renderProductPage();
     } catch (error) {
@@ -173,8 +160,6 @@ async function editReview(reviewId, text, rating) {
             })
         });
         if (!response.ok) throw new Error('Failed to edit review');
-        const review = await response.json();
-        await updateProductRating(review.productId);
         alert('Review updated successfully!');
         renderProductPage();
     } catch (error) {
@@ -189,7 +174,6 @@ async function deleteReview(reviewId, productId) {
             method: 'DELETE'
         });
         if (!response.ok) throw new Error('Failed to delete review');
-        await updateProductRating(productId);
         alert('Review deleted successfully!');
         renderProductPage();
     } catch (error) {
@@ -223,7 +207,32 @@ async function renderProductPage() {
     document.getElementById('productImage').alt = product.name || 'Product';
     document.getElementById('productName').textContent = product.name || 'Unknown Product';
     document.getElementById('productDescription').textContent = product.description || '';
-    document.getElementById('productPrice').textContent = `$${product.price?.toFixed(2) || '0.00'}`;
+
+    const currentDate = new Date();
+    const discountEndDate = product.discountEndDate ? new Date(product.discountEndDate) : null;
+    const isDiscountValid = product.discount > 0 && product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
+    let priceDisplay = `<span class="price">$${product.price?.toFixed(2) || '0.00'}</span>`;
+    let discountEndDateDisplay = '';
+    if (isDiscountValid) {
+        const discountedPrice = (product.price * (100 - product.discount) / 100).toFixed(2);
+        priceDisplay = `
+            <div class="prices">
+                <span class="new-price">$${discountedPrice}</span>
+                <span class="old-price">$${product.price.toFixed(2)}</span>
+            </div>
+            <span class="discount-label">${product.discount}% OFF</span>
+        `;
+        if (discountEndDate) {
+            discountEndDateDisplay = `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            })}`;
+        }
+    }
+    document.getElementById('productPrice').innerHTML = priceDisplay;
+    document.getElementById('discountEndDate').textContent = discountEndDateDisplay;
+
     document.getElementById('productRating').innerHTML = `<i class="fas fa-star"></i> ${product.rating || '0'}`;
     document.getElementById('productCategory').textContent = `Category: ${product.category || 'N/A'}`;
 

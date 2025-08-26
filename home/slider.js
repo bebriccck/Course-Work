@@ -12,13 +12,36 @@ async function fetchProducts() {
 }
 
 function createSlide(product) {
+    const currentDate = new Date();
+    const discountEndDate = product.discountEndDate ? new Date(product.discountEndDate) : null;
+    const isDiscountValid = product.discount > 0 && product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
+    let priceDisplay = `<p class="price">$${product.price.toFixed(2)}</p>`;
+    let discountEndDateDisplay = '';
+    if (isDiscountValid) {
+        const discountedPrice = (product.price * (100 - product.discount) / 100).toFixed(2);
+        priceDisplay = `
+            <div class="price-container">
+                <p class="new-price">$${discountedPrice}</p>
+                <p class="old-price">$${product.price.toFixed(2)}</p>
+                <p class="discount-label">${product.discount}% OFF</p>
+            </div>
+        `;
+        if (discountEndDate) {
+            discountEndDateDisplay = `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            })}`;
+        }
+    }
     return `
         <div class="slide">
             <div class="slide-content">
                 <div class="slide-left">
                     <h2>${product.name}</h2>
                     <h3>We Serve Your Dream Furniture</h3>
-                    <p class="price">$${product.price.toFixed(2)}</p>
+                    ${priceDisplay}
+                    <p class="discount-end-date">${discountEndDateDisplay}</p>
                     <button onclick="window.location.href='../product/index.html?id=${product.id}'">Shop Now</button>
                 </div>
                 <div class="slide-right">

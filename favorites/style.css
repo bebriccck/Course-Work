@@ -77,7 +77,7 @@ body {
 }
 
 .dark-theme .product-card:hover {
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* Светлая тень для тёмной темы */
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .product-image {
@@ -89,6 +89,19 @@ body {
     height: 15rem;
     object-fit: cover;
     border-bottom: 1px solid var(--border-color);
+}
+
+.product-image a {
+    display: block;
+}
+
+.product-info h3 a {
+    color: var(--primary-text);
+    text-decoration: none;
+}
+
+.product-info h3 a:hover {
+    color: var(--accent-color);
 }
 
 .product-actions {
@@ -159,12 +172,51 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.prices {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
 }
 
 .price {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--accent-color);
+}
+
+.new-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.old-price {
+    font-size: 1.2rem;
+    color: #888888;
+    text-decoration: line-through;
+}
+
+.discount-label {
+    font-size: 1.2rem;
+    color: var(--discount-color);
+    font-weight: 500;
+}
+
+.discount-end-date {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 400;
 }
 
 .rating {
@@ -200,8 +252,16 @@ body {
         font-size: 1.3rem;
     }
 
-    .price {
+    .price, .new-price {
         font-size: 1.6rem;
+    }
+
+    .old-price, .discount-label {
+        font-size: 1.3rem;
+    }
+
+    .discount-end-date {
+        font-size: 1.2rem;
     }
 
     .rating {
@@ -233,6 +293,10 @@ body {
     .product-image img {
         height: 16rem;
     }
+
+    .discount-end-date {
+        font-size: 1.1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -261,8 +325,20 @@ body {
         font-size: 1.2rem;
     }
 
-    .price, .rating {
+    .price, .new-price {
         font-size: 1.4rem;
+    }
+
+    .old-price, .discount-label {
+        font-size: 1.1rem;
+    }
+
+    .discount-end-date {
+        font-size: 1rem;
+    }
+
+    .rating {
+        font-size: 1.2rem;
     }
 
     .favorite-btn, .cart-btn {
@@ -301,8 +377,20 @@ body {
         font-size: 1.1rem;
     }
 
-    .price, .rating {
+    .price, .new-price {
         font-size: 1.2rem;
+    }
+
+    .old-price, .discount-label {
+        font-size: 1rem;
+    }
+
+    .discount-end-date {
+        font-size: 0.9rem;
+    }
+
+    .rating {
+        font-size: 1.1rem;
     }
 }
 

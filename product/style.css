@@ -11,7 +11,18 @@ html {
     --bg-color: white;
     --second-color: #F7F8FA;
     --border-color: #E3E3E3;
+    --discount-color: #00B7F1;
+    --pad: 13.5rem;
     background-color: var(--bg-color);
+}
+
+html.dark-theme {
+    --primary-text: #E0E0E0;
+    --bg-color: #1A1A1A;
+    --second-color: #2C2C2C;
+    --border-color: #444444;
+    --accent-color: #68B738;
+    --discount-color: #00A0D6;
 }
 
 body {
@@ -64,12 +75,51 @@ body {
     display: flex;
     gap: 2rem;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.prices {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
 }
 
 .price {
     font-size: 2rem;
     font-weight: 600;
     color: var(--accent-color);
+}
+
+.new-price {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.old-price {
+    font-size: 1.6rem;
+    color: #888888;
+    text-decoration: line-through;
+}
+
+.discount-label {
+    font-size: 1.6rem;
+    color: var(--discount-color);
+    font-weight: 500;
+}
+
+.discount-end-date {
+    font-size: 1.4rem;
+    color: #666;
+    font-weight: 400;
 }
 
 .rating {
@@ -325,8 +375,16 @@ body {
         font-size: 1.4rem;
     }
 
-    .price {
+    .price, .new-price {
         font-size: 1.8rem;
+    }
+
+    .old-price, .discount-label {
+        font-size: 1.4rem;
+    }
+
+    .discount-end-date {
+        font-size: 1.3rem;
     }
 
     .rating, .category {
@@ -398,7 +456,19 @@ body {
         font-size: 1.3rem;
     }
 
-    .price, .rating, .category {
+    .price, .new-price {
+        font-size: 1.6rem;
+    }
+
+    .old-price, .discount-label {
+        font-size: 1.3rem;
+    }
+
+    .discount-end-date {
+        font-size: 1.2rem;
+    }
+
+    .rating, .category {
         font-size: 1.2rem;
     }
 

@@ -387,12 +387,45 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.prices {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
 }
 
 .price {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--accent-color);
+}
+
+.old-price {
+    color: #888888;
+    text-decoration: line-through;
+    font-size: 1.2rem;
+}
+
+.new-price {
+    color: var(--accent-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.discount-label {
+    font-size: 1.2rem;
+    color: var(--discount-color);
+    font-weight: 500;
 }
 
 .rating {
@@ -511,6 +544,12 @@ body {
     gap: 1.5rem;
 }
 
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 .form-group label {
     font-size: 1.6rem;
     font-weight: 500;
@@ -536,6 +575,10 @@ body {
 .form-group textarea {
     resize: vertical;
     min-height: 10rem;
+}
+
+.form-group input[type="date"] {
+    padding: 0.8rem;
 }
 
 #productForm button {
@@ -599,6 +642,11 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     }
 
+    .form-group input[type="date"] {
+        font-size: 1.4rem;
+        padding: 0.8rem;
+    }
+
     #productForm button {
         font-size: 1.5rem;
     }
@@ -620,6 +668,11 @@ body {
 
     .form-group input, .form-group textarea {
         font-size: 1.3rem;
+    }
+
+    .form-group input[type="date"] {
+        font-size: 1.3rem;
+        padding: 0.7rem;
     }
 
     #productForm button {

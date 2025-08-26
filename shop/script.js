@@ -69,7 +69,6 @@ async function fetchCategories() {
             categoryList.appendChild(li);
         });
 
-
         const urlParams = new URLSearchParams(window.location.search);
         const selectedCategory = urlParams.get('category');
         if (selectedCategory) {
@@ -164,6 +163,20 @@ async function renderProducts(params = {}) {
                 </button>
             `;
         }
+        const currentDate = new Date();
+        const discountEndDate = product.discountEndDate ? new Date(product.discountEndDate) : null;
+        const isDiscountValid = product.discount > 0 && product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
+        let priceDisplay = `<span class="price">$${product.price.toFixed(2)}</span>`;
+        if (isDiscountValid) {
+            const discountedPrice = (product.price * (100 - product.discount) / 100).toFixed(2);
+            priceDisplay = `
+                <div class="prices">
+                    <span class="new-price">$${discountedPrice}</span>
+                    <span class="old-price">$${product.price.toFixed(2)}</span>
+                </div>
+                <span class="discount-label">${product.discount}% OFF</span>
+            `;
+        }
         return `
             <div class="product-card">
                 <div class="product-image">
@@ -182,7 +195,7 @@ async function renderProducts(params = {}) {
                     <h3>${product.name}</h3>
                     <p class="description">${product.description}</p>
                     <div class="product-meta">
-                        <span class="price">$${product.price}</span>
+                        <div class="price-container">${priceDisplay}</div>
                         <span class="rating"><i class="fas fa-star"></i> ${product.rating}</span>
                     </div>
                 </div>
@@ -265,6 +278,8 @@ async function addProduct() {
     document.getElementById('name').value = '';
     document.getElementById('description').value = '';
     document.getElementById('price').value = '';
+    document.getElementById('discount').value = '';
+    document.getElementById('discountEndDate').value = '';
     document.getElementById('category').value = '';
     document.getElementById('productForm').dataset.id = '';
     document.getElementById('productModal').style.display = 'flex';
@@ -279,6 +294,8 @@ async function editProduct(productId) {
         document.getElementById('name').value = product.name;
         document.getElementById('description').value = product.description;
         document.getElementById('price').value = product.price;
+        document.getElementById('discount').value = product.discount || '';
+        document.getElementById('discountEndDate').value = product.discountEndDate ? product.discountEndDate.split('T')[0] : '';
         document.getElementById('category').value = product.category;
         document.getElementById('productForm').dataset.id = productId;
         document.getElementById('productModal').style.display = 'flex';
@@ -323,9 +340,16 @@ async function saveProduct(e) {
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
     const price = Number(document.getElementById('price').value);
+    const discount = Number(document.getElementById('discount').value) || 0;
+    const discountEndDate = document.getElementById('discountEndDate').value;
     const category = document.getElementById('category').value;
 
-    const productData = { name, description, price, category };
+    const productData = { name, description, price, discount, category };
+    if (discountEndDate) {
+        productData.discountEndDate = new Date(discountEndDate).toISOString();
+    } else {
+        productData.discountEndDate = null;
+    }
     if (!id) {
         productData.rating = 0;
     }

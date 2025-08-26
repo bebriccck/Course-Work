@@ -64,13 +64,22 @@ async function checkout(userId) {
             return;
         }
 
+        const currentDate = new Date();
         const order = {
             userId: Number(userId),
             date: new Date().toISOString(),
-            items: cartItems.map(item => ({
-                productId: item.productId,
-                quantity: item.quantity || 1
-            }))
+            items: cartItems.map(item => {
+                const discountEndDate = item.product.discountEndDate ? new Date(item.product.discountEndDate) : null;
+                const isDiscountValid = item.product.discount > 0 && item.product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
+                const effectivePrice = isDiscountValid
+                    ? (item.product.price * (100 - item.product.discount) / 100).toFixed(2)
+                    : item.product.price.toFixed(2);
+                return {
+                    productId: item.productId,
+                    quantity: item.quantity || 1,
+                    price: effectivePrice
+                };
+            })
         };
 
         const orderResponse = await fetch(`${API_URL}/orders`, {
@@ -129,25 +138,60 @@ async function renderCart() {
 
     let totalPrice = 0;
     let totalItemsCount = 0;
+    const currentDate = new Date();
 
     cartItems.forEach(item => {
         const quantity = item.quantity || 1;
         totalItemsCount += quantity;
+        const discountEndDate = item.product.discountEndDate ? new Date(item.product.discountEndDate) : null;
+        const isDiscountValid = item.product.discount > 0 && item.product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
+        const effectivePrice = isDiscountValid
+            ? (item.product.price * (100 - item.product.discount) / 100)
+            : item.product.price;
+        totalPrice += effectivePrice * quantity;
     });
 
     totalItemsElement.textContent = `Total items: ${totalItemsCount}`;
+    totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
 
     cartItemsContainer.innerHTML = cartItems.map(item => {
         const quantity = item.quantity || 1;
-        const itemPrice = item.product.price * quantity;
-        totalPrice += itemPrice;
+        const discountEndDate = item.product.discountEndDate ? new Date(item.product.discountEndDate) : null;
+        const isDiscountValid = item.product.discount > 0 && item.product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
+        const effectivePrice = isDiscountValid
+            ? (item.product.price * (100 - item.product.discount) / 100).toFixed(2)
+            : item.product.price.toFixed(2);
+        const itemTotal = (effectivePrice * quantity).toFixed(2);
+        let priceDisplay = `<span class="price">$${effectivePrice} x ${quantity} = $${itemTotal}</span>`;
+        let discountEndDateDisplay = '';
+        if (isDiscountValid) {
+            priceDisplay = `
+                <div class="price-container">
+                    <div class="prices">
+                        <span class="new-price">$${effectivePrice}</span>
+                        <span class="old-price">$${item.product.price.toFixed(2)}</span>
+                    </div>
+                    <span class="item-total">x ${quantity} = $${itemTotal}</span>
+                </div>
+            `;
+            if (discountEndDate) {
+                discountEndDateDisplay = `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                })}`;
+            }
+        }
         return `
             <div class="cart-item">
-                <img src="../img/shop/${item.productId}.png" alt="${item.product.name || 'Product'}">
+                <a href="../product/index.html?id=${item.productId}">
+                    <img src="../img/shop/${item.productId}.png" alt="${item.product.name || 'Product'}">
+                </a>
                 <div class="cart-item-info">
-                    <h3>${item.product.name || 'Unknown Product'}</h3>
+                    <h3><a href="../product/index.html?id=${item.productId}">${item.product.name || 'Unknown Product'}</a></h3>
                     <p class="description">${item.product.description || ''}</p>
-                    <p class="price">$${item.product.price.toFixed(2)} x ${quantity} = $${itemPrice.toFixed(2)}</p>
+                    ${priceDisplay}
+                    <p class="discount-end-date">${discountEndDateDisplay}</p>
                 </div>
                 <div class="cart-item-controls">
                     <input type="number" min="1" value="${quantity}" data-id="${item.id}">
@@ -158,8 +202,6 @@ async function renderCart() {
             </div>
         `;
     }).join('');
-
-    totalPriceElement.textContent = `$${totalPrice.toFixed(2)}`;
 
     document.querySelectorAll('.cart-item-controls input').forEach(input => {
         input.addEventListener('change', (e) => {

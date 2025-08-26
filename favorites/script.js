@@ -9,15 +9,30 @@ async function fetchFavoriteItems(userId) {
         const favoriteItems = await response.json();
         const productIds = favoriteItems.map(item => item.productId);
         if (productIds.length === 0) return [];
+
         const productsResponse = await fetch(`${API_URL}/products?id_in=${productIds.join(',')}`);
         if (!productsResponse.ok) {
             throw new Error(`HTTP error! status: ${productsResponse.status}`);
         }
         const products = await productsResponse.json();
-        return favoriteItems.map(favoriteItem => ({
-            ...favoriteItem,
-            product: products.find(p => p.id === favoriteItem.productId) || {}
-        }));
+
+        const reviewsResponse = await fetch(`${API_URL}/reviews?productId_in=${productIds.join(',')}`);
+        if (!reviewsResponse.ok) {
+            throw new Error(`HTTP error! status: ${reviewsResponse.status}`);
+        }
+        const reviews = await reviewsResponse.json();
+
+        return favoriteItems.map(favoriteItem => {
+            const product = products.find(p => p.id === favoriteItem.productId) || {};
+            const productReviews = reviews.filter(r => r.productId === favoriteItem.productId);
+            const rating = productReviews.length > 0 
+                ? (productReviews.reduce((sum, review) => sum + review.rating, 0) / productReviews.length).toFixed(1)
+                : 0;
+            return {
+                ...favoriteItem,
+                product: { ...product, rating }
+            };
+        });
     } catch (error) {
         console.error('Error fetching favorite items:', error);
         return [];
@@ -91,29 +106,59 @@ async function renderFavorites() {
 
     noFavorites.style.display = 'none';
 
-    productGrid.innerHTML = favoriteItems.map(item => `
-        <div class="product-card">
-            <div class="product-image">
-                <img src="../img/shop/${item.productId}.png" alt="${item.product.name || 'Product'}">
-                <div class="product-actions">
-                    <button class="favorite-btn filled" data-favorite-id="${item.id}">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                    <button class="cart-btn" data-id="${item.productId}">
-                        <i class="fas fa-shopping-cart"></i>
-                    </button>
+    productGrid.innerHTML = favoriteItems.map(item => {
+        const currentDate = new Date();
+        const discountEndDate = item.product.discountEndDate ? new Date(item.product.discountEndDate) : null;
+        const isDiscountValid = item.product.discount > 0 && item.product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
+        let priceDisplay = `<span class="price">$${item.product.price?.toFixed(2) || '0.00'}</span>`;
+        let discountEndDateDisplay = '';
+        if (isDiscountValid) {
+            const discountedPrice = (item.product.price * (100 - item.product.discount) / 100).toFixed(2);
+            priceDisplay = `
+                <div class="prices">
+                    <span class="new-price">$${discountedPrice}</span>
+                    <span class="old-price">$${item.product.price.toFixed(2)}</span>
+                </div>
+                <span class="discount-label">${item.product.discount}% OFF</span>
+            `;
+            if (discountEndDate) {
+                discountEndDateDisplay = `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                })}`;
+            }
+        }
+        const ratingDisplay = item.product.rating !== undefined && item.product.rating > 0 
+            ? `<i class="fas fa-star"></i> ${item.product.rating}` 
+            : '<i class="fas fa-star"></i> 0';
+        return `
+            <div class="product-card">
+                <div class="product-image">
+                    <a href="../product/index.html?id=${item.productId}">
+                        <img src="../img/shop/${item.productId}.png" alt="${item.product.name || 'Product'}">
+                    </a>
+                    <div class="product-actions">
+                        <button class="favorite-btn filled" data-favorite-id="${item.id}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <button class="cart-btn" data-id="${item.productId}">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h3><a href="../product/index.html?id=${item.productId}">${item.product.name || 'Unknown Product'}</a></h3>
+                    <p class="description">${item.product.description || ''}</p>
+                    <div class="product-meta">
+                        <div class="price-container">${priceDisplay}</div>
+                        <p class="discount-end-date">${discountEndDateDisplay}</p>
+                        <span class="rating">${ratingDisplay}</span>
+                    </div>
                 </div>
             </div>
-            <div class="product-info">
-                <h3>${item.product.name || 'Unknown Product'}</h3>
-                <p class="description">${item.product.description || ''}</p>
-                <div class="product-meta">
-                    <span class="price">$${item.product.price?.toFixed(2) || '0.00'}</span>
-                    <span class="rating"><i class="fas fa-star"></i> ${item.product.rating || 'N/A'}</span>
-                </div>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
     document.querySelectorAll('.favorite-btn').forEach(button => {
         button.addEventListener('click', (e) => {
