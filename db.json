@@ -454,5 +454,17 @@
       "productId": 19,
       "id": 2
     }
+  ],
+  "requests": [
+    {
+      "id": 1,
+      "userId": 1,
+      "category": "design_consultation"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "category": "custom_furniture"
+    }
   ]
 }
