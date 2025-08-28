@@ -28,7 +28,6 @@ if (window.i18nInitialized) {
   }
 
   async function initTranslations(pageName) {
-
     const pageTranslations = await loadTranslations(pageName);
     applyTranslations(pageTranslations);
 
@@ -57,6 +56,11 @@ if (window.i18nInitialized) {
     const langDisplay = document.querySelector('.lang p');
     if (langDisplay) {
       langDisplay.textContent = lang === 'en' ? 'English (USD)' : 'Русский (RUB)';
+    }
+
+    // Обновление товаров на странице shop при смене языка
+    if (pageName === 'shop' && typeof window.renderProducts === 'function' && typeof window.getCurrentParams === 'function') {
+      window.renderProducts(window.getCurrentParams());
     }
   }
 

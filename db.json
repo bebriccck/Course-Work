@@ -510,6 +510,18 @@
       "productId": 1,
       "quantity": 1,
       "id": 1
+    },
+    {
+      "userId": 1,
+      "productId": 10,
+      "quantity": 1,
+      "id": 2
+    },
+    {
+      "userId": 2,
+      "productId": 10,
+      "quantity": 2,
+      "id": 3
     }
   ],
   "orders": [

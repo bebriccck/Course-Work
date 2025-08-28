@@ -1,11 +1,10 @@
 const API_URL = 'http://localhost:3000';
 const ITEMS_PER_PAGE = 12;
-const EXCHANGE_RATE = 80; // 1 USD = 80 RUB
+const EXCHANGE_RATE = 80; 
 let currentPage = 1;
 let totalItems = 0;
 let selectedCategories = new Set(['']);
-
-function getCurrentParams() {
+window.getCurrentParams = function getCurrentParams() {
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
     const minPrice = document.getElementById('minPrice');
@@ -28,7 +27,7 @@ function getCurrentParams() {
         params['price_lte'] = lang === 'ru' ? Number(maxPrice.value) / EXCHANGE_RATE : maxPrice.value;
     }
     return params;
-}
+};
 
 async function fetchProducts(params = {}) {
     const query = new URLSearchParams({
@@ -65,10 +64,16 @@ async function fetchCategories() {
         const lang = localStorage.getItem('lang') || 'en';
         const categories = new Set(products.map(p => lang === 'ru' ? p.ru_category : p.category));
         const categoryList = document.getElementById('categoryList');
+        categoryList.innerHTML = ''; 
+        const allCategoryLi = document.createElement('li');
+        allCategoryLi.dataset.category = '';
+        allCategoryLi.setAttribute('data-i18n', 'category_all');
+        allCategoryLi.innerHTML = `<i class="fas fa-check" style="display: ${selectedCategories.has('') ? 'block' : 'none'};"></i>`;
+        categoryList.appendChild(allCategoryLi);
         categories.forEach(category => {
             const li = document.createElement('li');
             li.dataset.category = category;
-            li.innerHTML = `${category} <i class="fas fa-check" style="display: none;"></i>`;
+            li.innerHTML = `${category} <i class="fas fa-check" style="display: ${selectedCategories.has(category) ? 'block' : 'none'};"></i>`;
             categoryList.appendChild(li);
         });
 
@@ -83,6 +88,10 @@ async function fetchCategories() {
                 document.querySelector('[data-category=""] i').style.display = 'none';
             }
         }
+
+
+        const translations = await loadTranslations('shop', lang);
+        applyTranslations(translations, categoryList);
     } catch (error) {
         console.error('Error fetching categories:', error);
     }
@@ -117,7 +126,7 @@ function updatePagination() {
         }
         pageButton.addEventListener('click', () => {
             currentPage = i;
-            renderProducts(getCurrentParams());
+            window.renderProducts(window.getCurrentParams());
         });
         pageNumbersContainer.appendChild(pageButton);
     }
@@ -128,7 +137,7 @@ function updatePagination() {
     document.getElementById('lastPage').disabled = currentPage === totalPages;
 }
 
-async function renderProducts(params = {}) {
+window.renderProducts = async function renderProducts(params = {}) {
     const products = await fetchProducts(params);
     const productGrid = document.getElementById('productGrid');
     const noResults = document.getElementById('noResults');
@@ -211,7 +220,7 @@ async function renderProducts(params = {}) {
             </div>
         `;
     }).join('');
-}
+};
 
 async function addToFavorites(productId) {
     const userId = localStorage.getItem('userId');
@@ -229,7 +238,7 @@ async function addToFavorites(productId) {
                 method: 'DELETE'
             });
             if (responseDelete.ok) {
-                renderProducts(getCurrentParams());
+                window.renderProducts(window.getCurrentParams());
                 alert(lang === 'ru' ? 'Удалено из избранного!' : 'Removed from favorites!');
             } else {
                 throw new Error('Failed to remove from favorites');
@@ -241,7 +250,7 @@ async function addToFavorites(productId) {
                 body: JSON.stringify({ userId: Number(userId), productId: Number(productId) })
             });
             if (response.ok) {
-                renderProducts(getCurrentParams());
+                window.renderProducts(window.getCurrentParams());
                 alert(lang === 'ru' ? 'Добавлено в избранное!' : 'Added to favorites!');
             } else {
                 throw new Error('Failed to add to favorites');
@@ -343,7 +352,7 @@ async function deleteProduct(productId) {
         });
         if (productResponse.ok) {
             alert(lang === 'ru' ? 'Товар и связанные отзывы успешно удалены!' : 'Product and associated reviews deleted successfully!');
-            renderProducts(getCurrentParams());
+            window.renderProducts(window.getCurrentParams());
         } else {
             throw new Error('Failed to delete product');
         }
@@ -395,7 +404,7 @@ async function saveProduct(e) {
         }
         if (response.ok) {
             alert(id ? (lang === 'ru' ? 'Товар успешно обновлен!' : 'Product updated successfully!') : (lang === 'ru' ? 'Товар успешно добавлен!' : 'Product added successfully!'));
-            renderProducts(getCurrentParams());
+            window.renderProducts(window.getCurrentParams());
             closeModal();
         } else {
             throw new Error(id ? 'Failed to update product' : 'Failed to add product');
@@ -418,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchCategories().then(() => {
-        renderProducts(getCurrentParams());
+        window.renderProducts(window.getCurrentParams());
     }).catch(error => console.error('Error on DOM load:', error));
 
     const role = localStorage.getItem('role');
@@ -464,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 currentPage = 1;
-                renderProducts(getCurrentParams());
+                window.renderProducts(window.getCurrentParams());
             }
         });
     }
@@ -477,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('#categoryList i').forEach(icon => icon.style.display = 'none');
             document.querySelector('[data-category=""] i').style.display = 'block';
             currentPage = 1;
-            renderProducts(getCurrentParams());
+            window.renderProducts(window.getCurrentParams());
         });
     }
 
@@ -485,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchInput) {
         searchInput.addEventListener('input', () => {
             currentPage = 1;
-            renderProducts(getCurrentParams());
+            window.renderProducts(window.getCurrentParams());
         });
     }
 
@@ -493,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sortSelect) {
         sortSelect.addEventListener('change', () => {
             currentPage = 1;
-            renderProducts(getCurrentParams());
+            window.renderProducts(window.getCurrentParams());
         });
     }
 
@@ -501,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (applyRange) {
         applyRange.addEventListener('click', () => {
             currentPage = 1;
-            renderProducts(getCurrentParams());
+            window.renderProducts(window.getCurrentParams());
         });
     }
 
@@ -510,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
         firstPage.addEventListener('click', () => {
             if (currentPage !== 1) {
                 currentPage = 1;
-                renderProducts(getCurrentParams());
+                window.renderProducts(window.getCurrentParams());
             }
         });
     }
@@ -520,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
         prevPage.addEventListener('click', () => {
             if (currentPage > 1) {
                 currentPage--;
-                renderProducts(getCurrentParams());
+                window.renderProducts(window.getCurrentParams());
             }
         });
     }
@@ -530,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextPage.addEventListener('click', () => {
             if (currentPage < Math.ceil(totalItems / ITEMS_PER_PAGE)) {
                 currentPage++;
-                renderProducts(getCurrentParams());
+                window.renderProducts(window.getCurrentParams());
             }
         });
     }
@@ -541,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
             if (currentPage !== totalPages) {
                 currentPage = totalPages;
-                renderProducts(getCurrentParams());
+                window.renderProducts(window.getCurrentParams());
             }
         });
     }
