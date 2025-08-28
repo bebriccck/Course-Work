@@ -1,0 +1,17 @@
+{
+  "login_title": "Вход",
+  "phone_or_email": "Телефон или Email",
+  "phone_or_email_placeholder": "Введите телефон (+375 XX XXX-XX-XX) или email",
+  "password": "Пароль",
+  "no_account": "Нет аккаунта?",
+  "register_link": "Зарегистрироваться",
+  "login_button": "Войти",
+  "login_error": "",
+  "password_error": "",
+  "invalid_phone_or_email": "Введите действительный номер телефона (+375 XX XXX-XX-XX) или email",
+  "phone_or_email_not_found": "Телефон или email не найдены",
+  "server_error": "Ошибка сервера",
+  "password_required": "Пароль обязателен",
+  "incorrect_password": "Неверный пароль",
+  "login_successful": "Вход выполнен успешно!"
+}

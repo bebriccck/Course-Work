@@ -17,7 +17,37 @@ function applyTranslations(translations, scope = document) {
     elements.forEach(element => {
         const key = element.getAttribute('data-i18n');
         if (translations[key]) {
-            element.textContent = translations[key];
+
+            const childElements = element.querySelectorAll('[data-i18n]');
+            if (childElements.length > 0) {
+
+                childElements.forEach(child => {
+                    const childKey = child.getAttribute('data-i18n');
+                    if (translations[childKey]) {
+                        child.textContent = translations[childKey];
+                        console.log(`Applied translation for child key: ${childKey} = ${translations[childKey]}`);
+                    }
+                });
+
+                Array.from(element.childNodes).forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE && translations[key]) {
+                        node.textContent = translations[key];
+                        console.log(`Applied translation for parent text node: ${key} = ${translations[key]}`);
+                    }
+                });
+            } else {
+
+                element.textContent = translations[key];
+                console.log(`Applied translation for key: ${key} = ${translations[key]}`);
+            }
+        }
+    });
+    const placeholderElements = scope.querySelectorAll('[data-i18n-placeholder]');
+    placeholderElements.forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        if (translations[key]) {
+            element.placeholder = translations[key];
+            console.log(`Applied placeholder translation for key: ${key} = ${translations[key]}`);
         }
     });
 }
@@ -61,6 +91,16 @@ async function initTranslations(pageName) {
             window.initSpecialOffers();
         }
     }
+    if (pageName === 'login') {
+        console.log('Initializing login form translations');
+        validateForm && validateForm();
+        const registerLink = document.querySelector('a[data-i18n="register_link"]');
+        if (registerLink) {
+            console.log('Register link found:', { href: registerLink.href, text: registerLink.textContent });
+        } else {
+            console.error('Register link not found');
+        }
+    }
 }
 
 async function changeLanguage(lang, pageName) {
@@ -68,25 +108,37 @@ async function changeLanguage(lang, pageName) {
     langCurrent = lang;
     localStorage.setItem('lang', lang);
 
-    if (pageName === 'services') {
-        console.log('Attempting to reload page for services to apply language change');
+    if (pageName === 'services' || pageName === 'login') {
+        console.log('Attempting to reload page for', pageName, 'to apply language change');
         try {
             window.location.reload();
         } catch (error) {
             console.error('Reload failed:', error);
             const pageTranslations = await loadTranslations(pageName);
             applyTranslations(pageTranslations);
-            if (typeof window.renderCategories === 'function') {
-                console.log('Fallback: Rendering categories');
-                window.renderCategories();
+            if (pageName === 'services') {
+                if (typeof window.renderCategories === 'function') {
+                    console.log('Fallback: Rendering categories');
+                    window.renderCategories();
+                }
+                if (typeof window.initSlider === 'function') {
+                    console.log('Fallback: Initializing slider');
+                    window.initSlider();
+                }
+                if (typeof window.initSpecialOffers === 'function') {
+                    console.log('Fallback: Initializing special offers');
+                    window.initSpecialOffers();
+                }
             }
-            if (typeof window.initSlider === 'function') {
-                console.log('Fallback: Initializing slider');
-                window.initSlider();
-            }
-            if (typeof window.initSpecialOffers === 'function') {
-                console.log('Fallback: Initializing special offers');
-                window.initSpecialOffers();
+            if (pageName === 'login') {
+                console.log('Fallback: Initializing login form translations');
+                validateForm && validateForm();
+                const registerLink = document.querySelector('a[data-i18n="register_link"]');
+                if (registerLink) {
+                    console.log('Register link found after fallback:', { href: registerLink.href, text: registerLink.textContent });
+                } else {
+                    console.error('Register link not found after fallback');
+                }
             }
         }
         return;
@@ -175,6 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let pageName = pathParts[pathParts.length - 1].replace('.html', '');
     if (!pageName || pageName === 'index' || pathParts.includes('home')) {
         pageName = 'services';
+    } else if (pathParts.includes('login')) {
+        pageName = 'login';
     }
     console.log('Detected pageName:', pageName);
     initTranslations(pageName);

@@ -9,39 +9,41 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Log In</title>
+    <title data-i18n="login_title">Log In</title>
 </head>
 <body>
     <div id="preloader">
         <div class="spinner"></div>
     </div>
-<div id="header"></div>
+    <div id="header"></div>
     <main>
         <section class="login">
-            <h2>Log In</h2>
+            <h2 data-i18n="login_title">Log In</h2>
             <form id="login-form">
                 <div class="form-group">
-                    <label for="login-input">Phone or Email <span class="required">*</span></label>
-                    <input type="text" id="login-input" name="login-input" placeholder="Enter phone (+375 XX XXX-XX-XX) or email" required>
-                    <span class="error-message" id="login-error"></span>
+                    <label for="login-input" data-i18n="phone_or_email">Phone or Email <span class="required">*</span></label>
+                    <input type="text" id="login-input" name="login-input" placeholder="Enter phone (+375 XX XXX-XX-XX) or email" data-i18n-placeholder="phone_or_email_placeholder" required>
+                    <span class="error-message" id="login-error" data-i18n="login_error"></span>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password <span class="required">*</span></label>
+                    <label for="password" data-i18n="password">Password <span class="required">*</span></label>
                     <input type="password" id="password" name="password" required>
-                    <span class="error-message" id="password-error"></span>
+                    <span class="error-message" id="password-error" data-i18n="password_error"></span>
                 </div>
                 <div class="form-group">
-                    <p>Don't have an account? <a href="../registration/index.html">Register</a></p>
+                    <p data-i18n="no_account">Don't have an account? <a href="../registration/index.html" data-i18n="register_link">Register</a></p>
                 </div>
-                <button type="submit" id="submit-button" disabled>Log In</button>
+                <button type="submit" id="submit-button" data-i18n="login_button" disabled>Log In</button>
             </form>
         </section>
     </main>
     <div id="footer"></div>
+    <script src="../header/i18n.js"></script>
     <script src="../preloader/script.js"></script>
-<script src="../header/header.js"></script>
+    <script src="../header/header.js"></script>
     <script src="../header/theme.js"></script>
     <script src="../footer/footer.js"></script>
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

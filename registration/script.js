@@ -5,6 +5,11 @@ const commonPasswords = [
 ];
 const suffixes = ['Star', 'Light', 'Glow', 'Spark', 'Flame'];
 
+const touched = {
+    phone: false, email: false, birthdate: false, password: false,
+    passwordConfirm: false, firstName: false, lastName: false, nickname: false, agreement: false
+};
+
 const form = document.getElementById('registration-form');
 const phoneInput = document.getElementById('phone');
 const emailInput = document.getElementById('email');
@@ -27,6 +32,17 @@ const confirmAgreementButton = document.getElementById('confirm-agreement');
 const closeModalButton = document.getElementById('close-modal');
 let nicknameAttempts = 5;
 
+async function loadTranslations(file, lang = localStorage.getItem('lang') || 'en') {
+    try {
+        const response = await fetch(`../translates/${lang}/${file}.json`);
+        if (!response.ok) throw new Error(`Failed to load ${file}.json for ${lang}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Error loading translations:', error);
+        return {};
+    }
+}
+
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -39,8 +55,9 @@ function debounce(func, wait) {
     };
 }
 
-function setInitialAttemptsText() {
-    nicknameAttemptsSpan.textContent = `Осталось попыток генерации ника: ${nicknameAttempts}`;
+async function setInitialAttemptsText() {
+    const translations = await loadTranslations('registration');
+    nicknameAttemptsSpan.textContent = translations.nickname_attempts.replace('{attempts}', nicknameAttempts);
 }
 
 function setMaxBirthdate() {
@@ -92,291 +109,358 @@ async function generateNickname(firstName, lastName) {
     return nickname;
 }
 
-function validatePhoneFormat(phone) {
+async function validatePhoneFormat(phone, translations) {
     const phoneRegex = /^\+375\s?\(?(?:29|33|44|25)\)?\s?\d{3}-?\d{2}-?\d{2}$/;
     if (!phoneRegex.test(phone)) {
-        return { isValid: false, message: 'Телефон должен быть в формате: +375 (XX) XXX-XX-XX' };
+        return { isValid: false, message: translations.phone_invalid_format };
     }
     return { isValid: true, message: '' };
 }
 
-async function validatePhoneExists(phone) {
+async function validatePhoneExists(phone, translations) {
     try {
         const response = await fetch(`${API_URL}/users?phone=${encodeURIComponent(phone)}`);
         const users = await response.json();
         if (users.length > 0) {
-            return { isValid: false, message: 'Этот номер телефона уже зарегистрирован' };
+            return { isValid: false, message: translations.phone_exists };
         }
         return { isValid: true, message: '' };
     } catch (error) {
-        console.error('Ошибка при проверке телефона:', error);
-        return { isValid: false, message: 'Ошибка сервера' };
+        console.error('Error checking phone:', error);
+        return { isValid: false, message: translations.server_error };
     }
 }
 
-function validateEmailFormat(email) {
+async function validateEmailFormat(email, translations) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        return { isValid: false, message: 'Неверный формат email' };
+        return { isValid: false, message: translations.email_invalid_format };
     }
     return { isValid: true, message: '' };
 }
 
-async function validateEmailExists(email) {
+async function validateEmailExists(email, translations) {
     try {
         const response = await fetch(`${API_URL}/users?email=${encodeURIComponent(email)}`);
         const users = await response.json();
         if (users.length > 0) {
-            return { isValid: false, message: 'Этот email уже зарегистрирован' };
+            return { isValid: false, message: translations.email_exists };
         }
         return { isValid: true, message: '' };
     } catch (error) {
-        console.error('Ошибка при проверке email:', error);
-        return { isValid: false, message: 'Ошибка сервера' };
+        console.error('Error checking email:', error);
+        return { isValid: false, message: translations.server_error };
     }
 }
 
-function validateNicknameFormat(nickname) {
+async function validateNicknameFormat(nickname, translations) {
     if (!nickname) {
-        return { isValid: false, message: 'Никнейм обязателен' };
+        return { isValid: false, message: translations.nickname_required };
     }
     return { isValid: true, message: '' };
 }
 
-async function validateNicknameExists(nickname) {
+async function validateNicknameExists(nickname, translations) {
     try {
         const response = await fetch(`${API_URL}/users?nickname=${encodeURIComponent(nickname)}`);
         const users = await response.json();
         if (users.length > 0) {
-            return { isValid: false, message: 'Этот никнейм уже занят' };
+            return { isValid: false, message: translations.nickname_exists };
         }
         return { isValid: true, message: '' };
     } catch (error) {
-        console.error('Ошибка при проверке никнейма:', error);
-        return { isValid: false, message: 'Ошибка сервера' };
+        console.error('Error checking nickname:', error);
+        return { isValid: false, message: translations.server_error };
     }
 }
 
-function validateBirthdate(birthdate) {
+async function validateBirthdate(birthdate, translations) {
     const today = new Date();
     const birth = new Date(birthdate);
     const age = today.getFullYear() - birth.getFullYear();
     const monthDiff = today.getMonth() - birth.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-        return { isValid: age - 1 >= 16, message: 'Вам должно быть не менее 16 лет' };
+        return { isValid: age - 1 >= 16, message: translations.birthdate_too_young };
     }
     return { isValid: age >= 16, message: '' };
 }
 
-function validatePassword(password) {
+async function validatePassword(password, translations) {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
     if (!passwordRegex.test(password)) {
-        return { isValid: false, message: 'Пароль должен быть 8-20 символов, включать заглавные и строчные буквы, цифры и специальные символы' };
+        return { isValid: false, message: translations.password_invalid_format };
     }
     if (commonPasswords.includes(password)) {
-        return { isValid: false, message: 'Пароль слишком распространён' };
+        return { isValid: false, message: translations.password_too_common };
     }
     return { isValid: true, message: '' };
 }
 
 async function validateForm() {
+    if (!form || !phoneInput || !emailInput || !birthdateInput || !passwordInput || !passwordConfirmInput ||
+        !firstNameInput || !lastNameInput || !nicknameInput || !agreementCheckbox || !submitButton) {
+        console.error('Missing DOM elements');
+        setTimeout(validateForm, 100);
+        return;
+    }
+
+    const translations = await loadTranslations('registration');
     let isValid = true;
     document.querySelectorAll('.error-message').forEach(error => {
         error.textContent = '';
     });
 
-    const phoneFormatValidation = validatePhoneFormat(phoneInput.value);
-    if (!phoneFormatValidation.isValid) {
-        document.getElementById('phone-error').textContent = phoneFormatValidation.message;
-        isValid = false;
-    } else {
-        const phoneExistsValidation = await validatePhoneExists(phoneInput.value);
-        if (!phoneExistsValidation.isValid) {
-            document.getElementById('phone-error').textContent = phoneExistsValidation.message;
+    if (touched.phone) {
+        const phoneFormatValidation = await validatePhoneFormat(phoneInput.value, translations);
+        if (!phoneFormatValidation.isValid) {
+            document.getElementById('phone-error').textContent = phoneFormatValidation.message;
+            isValid = false;
+        } else {
+            const phoneExistsValidation = await validatePhoneExists(phoneInput.value, translations);
+            if (!phoneExistsValidation.isValid) {
+                document.getElementById('phone-error').textContent = phoneExistsValidation.message;
+                isValid = false;
+            }
+        }
+    }
+
+    if (touched.email) {
+        const emailFormatValidation = await validateEmailFormat(emailInput.value, translations);
+        if (!emailFormatValidation.isValid) {
+            document.getElementById('email-error').textContent = emailFormatValidation.message;
+            isValid = false;
+        } else {
+            const emailExistsValidation = await validateEmailExists(emailInput.value, translations);
+            if (!emailExistsValidation.isValid) {
+                document.getElementById('email-error').textContent = emailExistsValidation.message;
+                isValid = false;
+            }
+        }
+    }
+
+    if (touched.birthdate) {
+        const birthdateValidation = await validateBirthdate(birthdateInput.value, translations);
+        if (!birthdateValidation.isValid) {
+            document.getElementById('birthdate-error').textContent = birthdateValidation.message;
             isValid = false;
         }
     }
 
-    const emailFormatValidation = validateEmailFormat(emailInput.value);
-    if (!emailFormatValidation.isValid) {
-        document.getElementById('email-error').textContent = emailFormatValidation.message;
-        isValid = false;
-    } else {
-        const emailExistsValidation = await validateEmailExists(emailInput.value);
-        if (!emailExistsValidation.isValid) {
-            document.getElementById('email-error').textContent = emailExistsValidation.message;
+    if (touched.password) {
+        const passwordValidation = await validatePassword(passwordInput.value, translations);
+        if (!passwordValidation.isValid) {
+            document.getElementById('password-error').textContent = passwordValidation.message;
             isValid = false;
         }
     }
 
-    const birthdateValidation = validateBirthdate(birthdateInput.value);
-    if (!birthdateValidation.isValid) {
-        document.getElementById('birthdate-error').textContent = birthdateValidation.message;
+    if (touched.passwordConfirm && passwordInput.value !== passwordConfirmInput.value) {
+        document.getElementById('password-confirm-error').textContent = translations.password_mismatch;
         isValid = false;
     }
 
-    const passwordValidation = validatePassword(passwordInput.value);
-    if (!passwordValidation.isValid) {
-        document.getElementById('password-error').textContent = passwordValidation.message;
-        isValid = false;
-    }
-    if (passwordInput.value !== passwordConfirmInput.value) {
-        document.getElementById('password-confirm-error').textContent = 'Пароли не совпадают';
+    if (touched.firstName && !firstNameInput.value.trim()) {
+        document.getElementById('firstName-error').textContent = translations.firstName_required;
         isValid = false;
     }
 
-    if (!firstNameInput.value.trim()) {
-        document.getElementById('firstName-error').textContent = 'Имя обязательно';
+    if (touched.lastName && !lastNameInput.value.trim()) {
+        document.getElementById('lastName-error').textContent = translations.lastName_required;
         isValid = false;
     }
 
-    if (!lastNameInput.value.trim()) {
-        document.getElementById('lastName-error').textContent = 'Фамилия обязательна';
-        isValid = false;
-    }
-
-    const nicknameFormatValidation = validateNicknameFormat(nicknameInput.value);
-    if (!nicknameFormatValidation.isValid) {
-        document.getElementById('nickname-error').textContent = nicknameFormatValidation.message;
-        isValid = false;
-    } else {
-        const nicknameExistsValidation = await validateNicknameExists(nicknameInput.value);
-        if (!nicknameExistsValidation.isValid) {
-            document.getElementById('nickname-error').textContent = nicknameExistsValidation.message;
+    if (touched.nickname) {
+        const nicknameFormatValidation = await validateNicknameFormat(nicknameInput.value, translations);
+        if (!nicknameFormatValidation.isValid) {
+            document.getElementById('nickname-error').textContent = nicknameFormatValidation.message;
             isValid = false;
+        } else {
+            const nicknameExistsValidation = await validateNicknameExists(nicknameInput.value, translations);
+            if (!nicknameExistsValidation.isValid) {
+                document.getElementById('nickname-error').textContent = nicknameExistsValidation.message;
+                isValid = false;
+            }
         }
     }
 
-    if (!agreementCheckbox.checked) {
-        document.getElementById('agreement-error').textContent = 'Вы должны принять пользовательское соглашение';
+    if (touched.agreement && !agreementCheckbox.checked) {
+        document.getElementById('agreement-error').textContent = translations.agreement_required;
         isValid = false;
     }
 
-    submitButton.disabled = !isValid;
+    submitButton.disabled = !isValid || !phoneInput.value || !emailInput.value || !birthdateInput.value ||
+                           !passwordInput.value || !passwordConfirmInput.value || !firstNameInput.value ||
+                           !lastNameInput.value || !nicknameInput.value || !agreementCheckbox.checked;
+
+    console.log('Applying translations for registration form');
+    window.applyTranslations && window.applyTranslations(await loadTranslations('registration'), document);
 }
 
 const debouncedValidateForm = debounce(validateForm, 500);
 
-agreementText.addEventListener('scroll', () => {
-    if (agreementText.scrollTop + agreementText.clientHeight >= agreementText.scrollHeight - 5) {
-        confirmAgreementButton.disabled = false;
+async function initRegistrationForm() {
+    if (!form || !phoneInput || !emailInput || !birthdateInput || !passwordInput || !passwordConfirmInput ||
+        !firstNameInput || !lastNameInput || !nicknameInput || !agreementCheckbox || !submitButton ||
+        !generatePasswordButton || !regenerateNicknameButton || !agreementLink || !modal ||
+        !agreementText || !confirmAgreementButton || !closeModalButton) {
+        console.error('Missing DOM elements');
+        setTimeout(initRegistrationForm, 100);
+        return;
     }
-});
 
-agreementLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'flex';
-});
+    agreementText.addEventListener('scroll', () => {
+        if (agreementText.scrollTop + agreementText.clientHeight >= agreementText.scrollHeight - 5) {
+            confirmAgreementButton.disabled = false;
+        }
+    });
 
-closeModalButton.addEventListener('click', () => {
-    modal.style.display = 'none';
-    confirmAgreementButton.disabled = true;
-});
-
-confirmAgreementButton.addEventListener('click', () => {
-    if (!confirmAgreementButton.disabled) {
-        agreementCheckbox.disabled = false;
-        agreementCheckbox.checked = true;
-        modal.style.display = 'none';
-        debouncedValidateForm();
-    }
-});
-
-agreementCheckbox.addEventListener('click', (e) => {
-    if (agreementCheckbox.disabled) {
+    agreementLink.addEventListener('click', (e) => {
         e.preventDefault();
-    }
-});
+        modal.style.display = 'flex';
+    });
 
-form.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', debouncedValidateForm);
-});
+    closeModalButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+        confirmAgreementButton.disabled = true;
+    });
 
-generatePasswordButton.addEventListener('click', () => {
-    const password = generatePassword();
-    passwordInput.value = password;
-    passwordConfirmInput.value = password;
-    debouncedValidateForm();
-});
-
-regenerateNicknameButton.addEventListener('click', async () => {
-    if (nicknameAttempts > 0 && firstNameInput.value && lastNameInput.value) {
-        const nickname = await generateNickname(firstNameInput.value, lastNameInput.value);
-        nicknameInput.value = nickname;
-        nicknameAttempts--;
-        nicknameAttemptsSpan.textContent = `Осталось попыток генерации ника: ${nicknameAttempts}`;
-        if (nicknameAttempts === 0) {
-            regenerateNicknameButton.disabled = true;
-            nicknameInput.readOnly = false;
+    confirmAgreementButton.addEventListener('click', () => {
+        if (!confirmAgreementButton.disabled) {
+            agreementCheckbox.disabled = false;
+            agreementCheckbox.checked = true;
+            touched.agreement = true;
+            modal.style.display = 'none';
+            debouncedValidateForm();
         }
-        debouncedValidateForm();
-    }
-});
+    });
 
-firstNameInput.addEventListener('input', async () => {
-    if (firstNameInput.value && lastNameInput.value && nicknameAttempts > 0 && !nicknameInput.value) {
-        const nickname = await generateNickname(firstNameInput.value, lastNameInput.value);
-        nicknameInput.value = nickname;
-        debouncedValidateForm();
-    }
-});
-
-lastNameInput.addEventListener('input', async () => {
-    if (firstNameInput.value && lastNameInput.value && nicknameAttempts > 0 && !nicknameInput.value) {
-        const nickname = await generateNickname(firstNameInput.value, lastNameInput.value);
-        nicknameInput.value = nickname;
-        debouncedValidateForm();
-    }
-});
-
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    if (!submitButton.disabled) {
-        const isValid = await validateForm();
-        if (!isValid) {
-            submitButton.disabled = true;
-            return;
+    agreementCheckbox.addEventListener('click', (e) => {
+        if (agreementCheckbox.disabled) {
+            e.preventDefault();
+        } else {
+            touched.agreement = true;
+            debouncedValidateForm();
         }
+    });
 
-        const user = {
-            phone: phoneInput.value,
-            email: emailInput.value,
-            birthdate: birthdateInput.value,
-            password: passwordInput.value,
-            firstName: firstNameInput.value,
-            lastName: lastNameInput.value,
-            middleName: middleNameInput.value || '',
-            nickname: nicknameInput.value,
-            role: 'customer'
-        };
+    form.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', () => {
+            touched[input.id] = true;
+            debouncedValidateForm();
+        });
+        input.addEventListener('blur', () => {
+            touched[input.id] = true;
+            debouncedValidateForm();
+        });
+    });
 
-        try {
-            const response = await fetch(`${API_URL}/users`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user)
-            });
+    generatePasswordButton.addEventListener('click', () => {
+        const password = generatePassword();
+        passwordInput.value = password;
+        passwordConfirmInput.value = password;
+        touched.password = true;
+        touched.passwordConfirm = true;
+        debouncedValidateForm();
+    });
 
-            if (response.ok) {
-                alert('Регистрация успешна!');
-                form.reset();
-                nicknameAttempts = 5;
-                nicknameAttemptsSpan.textContent = `Осталось попыток генерации ника: ${nicknameAttempts}`;
-                regenerateNicknameButton.disabled = false;
-                agreementCheckbox.disabled = true;
-                nicknameInput.readOnly = true;
-                setMaxBirthdate();
-                window.location.href = '../login/index.html';
-            } else {
-                alert('Ошибка регистрации');
+    regenerateNicknameButton.addEventListener('click', async () => {
+        if (nicknameAttempts > 0 && firstNameInput.value && lastNameInput.value) {
+            const nickname = await generateNickname(firstNameInput.value, lastNameInput.value);
+            nicknameInput.value = nickname;
+            nicknameAttempts--;
+            const translations = await loadTranslations('registration');
+            nicknameAttemptsSpan.textContent = translations.nickname_attempts.replace('{attempts}', nicknameAttempts);
+            if (nicknameAttempts === 0) {
+                regenerateNicknameButton.disabled = true;
+                nicknameInput.readOnly = false;
             }
-        } catch (error) {
-            console.error('Ошибка сервера:', error);
-            alert('Ошибка сервера');
+            touched.nickname = true;
+            debouncedValidateForm();
         }
-    }
-});
+    });
 
-setInitialAttemptsText();
-setMaxBirthdate();
-nicknameInput.readOnly = true;
+    firstNameInput.addEventListener('input', async () => {
+        touched.firstName = true;
+        if (firstNameInput.value && lastNameInput.value && nicknameAttempts > 0 && !nicknameInput.value) {
+            const nickname = await generateNickname(firstNameInput.value, lastNameInput.value);
+            nicknameInput.value = nickname;
+            touched.nickname = true;
+            debouncedValidateForm();
+        }
+        debouncedValidateForm();
+    });
+
+    lastNameInput.addEventListener('input', async () => {
+        touched.lastName = true;
+        if (firstNameInput.value && lastNameInput.value && nicknameAttempts > 0 && !nicknameInput.value) {
+            const nickname = await generateNickname(firstNameInput.value, lastNameInput.value);
+            nicknameInput.value = nickname;
+            touched.nickname = true;
+            debouncedValidateForm();
+        }
+        debouncedValidateForm();
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!submitButton.disabled) {
+            await validateForm();
+            if (submitButton.disabled) return;
+
+            const user = {
+                phone: phoneInput.value,
+                email: emailInput.value,
+                birthdate: birthdateInput.value,
+                password: passwordInput.value,
+                firstName: firstNameInput.value,
+                lastName: lastNameInput.value,
+                middleName: middleNameInput.value || '',
+                nickname: nicknameInput.value,
+                role: 'customer'
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(user)
+                });
+
+                const translations = await loadTranslations('registration');
+                if (response.ok) {
+                    alert(translations.success_message);
+                    form.reset();
+                    nicknameAttempts = 5;
+                    nicknameAttemptsSpan.textContent = translations.nickname_attempts.replace('{attempts}', nicknameAttempts);
+                    regenerateNicknameButton.disabled = false;
+                    agreementCheckbox.disabled = true;
+                    nicknameInput.readOnly = true;
+                    setMaxBirthdate();
+                    Object.keys(touched).forEach(key => touched[key] = false);
+                    window.location.href = '../login/index.html';
+                } else {
+                    alert(translations.error_message);
+                }
+            } catch (error) {
+                console.error('Server error:', error);
+                const translations = await loadTranslations('registration');
+                alert(translations.server_error);
+            }
+        }
+    });
+
+    const lang = localStorage.getItem('lang') || 'en';
+    console.log('Applying initial translations for registration form');
+    window.applyTranslations && window.applyTranslations(await loadTranslations('registration', lang), document);
+    submitButton.disabled = true;
+    setInitialAttemptsText();
+    setMaxBirthdate();
+    nicknameInput.readOnly = true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded: Initializing registration form');
+    (async () => {
+        await initRegistrationForm();
+    })();
+});

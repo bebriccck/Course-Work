@@ -1,0 +1,17 @@
+{
+  "login_title": "Log In",
+  "phone_or_email": "Phone or Email",
+  "phone_or_email_placeholder": "Enter phone (+375 XX XXX-XX-XX) or email",
+  "password": "Password",
+  "no_account": "Don't have an account?",
+  "register_link": "Register",
+  "login_button": "Log In",
+  "login_error": "",
+  "password_error": "",
+  "invalid_phone_or_email": "Enter a valid Belarus phone number (+375 XX XXX-XX-XX) or email",
+  "phone_or_email_not_found": "Phone or email not found",
+  "server_error": "Server error",
+  "password_required": "Password is required",
+  "incorrect_password": "Incorrect password",
+  "login_successful": "Login successful!"
+}
