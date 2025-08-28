@@ -3,5 +3,6 @@
   "cart_empty": "Your cart is empty.",
   "total_items": "Total items: 0",
   "total_price": "Total: ",
-  "checkout": "Checkout"
+  "checkout": "Checkout",
+  "discount_end_date": "Discount valid until: "
 }

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Cart</title>
+    <title data-i18n="cart.title">Cart</title>
 </head>
 <body>
     <div id="preloader">
@@ -19,23 +19,24 @@
     <main>
         <section class="cart_section">
             <div class="coll_header">
-                <h1>Cart</h1>
+                <h1 data-i18n="cart.header">Cart</h1>
             </div>
             <div class="content">
                 <div class="cart-items" id="cartItems"></div>
                 <div id="noItems" style="display: none;">
-                    <p>Your cart is empty.</p>
+                    <p data-i18n="cart.noItems">Your cart is empty.</p>
                 </div>
                 <div class="cart-total">
-                    <h3 id="totalItems">Total items: 0</h3>
-                    <h3>Total: <span id="totalPrice">$0.00</span></h3>
-                    <button id="checkoutBtn" disabled>Checkout</button>
+                    <h3 data-i18n="cart.totalItems" id="totalItems">Total items: 0</h3>
+                    <h3 data-i18n="cart.total">Total: <span id="totalPrice">$0.00</span></h3>
+                    <button id="checkoutBtn" disabled data-i18n="cart.checkout">Checkout</button>
                 </div>
             </div>
         </section>
     </main>
     <div id="footer"></div>
     <script src="../preloader/script.js"></script>
+    <script src="../header/i18n.js"></script>
     <script src="../header/header.js"></script>
     <script src="../header/theme.js"></script>
     <script src="../footer/footer.js"></script>

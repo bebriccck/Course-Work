@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Favorites</title>
+    <title data-i18n="favorites_title">Favorites</title>
 </head>
 <body>
     <div id="preloader">
@@ -19,17 +19,18 @@
     <main>
         <section class="favorites_section">
             <div class="coll_header">
-                <h1>Favorites</h1>
+                <h1 data-i18n="favorites_title">Favorites</h1>
             </div>
             <div class="content">
                 <div class="product-grid" id="productGrid"></div>
                 <div id="noFavorites" style="display: none;">
-                    <p>Your favorites list is empty.</p>
+                    <p data-i18n="favorites_empty">Your favorites list is empty.</p>
                 </div>
             </div>
         </section>
     </main>
     <div id="footer"></div>
+    <script src="../header/i18n.js"></script>
     <script src="../preloader/script.js"></script>
     <script src="../header/header.js"></script>
     <script src="../header/theme.js"></script>

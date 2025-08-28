@@ -1,4 +1,5 @@
 const API_URL = 'http://localhost:3000';
+const EXCHANGE_RATE = 80;
 
 async function fetchFavoriteItems(userId) {
     try {
@@ -7,7 +8,8 @@ async function fetchFavoriteItems(userId) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const favoriteItems = await response.json();
-        const productIds = favoriteItems.map(item => item.productId);
+        console.log('Favorite items:', favoriteItems);
+        const productIds = favoriteItems.map(item => item.productId).filter(id => id);
         if (productIds.length === 0) return [];
 
         const productsResponse = await fetch(`${API_URL}/products?id_in=${productIds.join(',')}`);
@@ -15,6 +17,7 @@ async function fetchFavoriteItems(userId) {
             throw new Error(`HTTP error! status: ${productsResponse.status}`);
         }
         const products = await productsResponse.json();
+        console.log('Products:', products);
 
         const reviewsResponse = await fetch(`${API_URL}/reviews?productId_in=${productIds.join(',')}`);
         if (!reviewsResponse.ok) {
@@ -32,7 +35,7 @@ async function fetchFavoriteItems(userId) {
                 ...favoriteItem,
                 product: { ...product, rating }
             };
-        });
+        }).filter(item => item.product && item.product.id);
     } catch (error) {
         console.error('Error fetching favorite items:', error);
         return [];
@@ -47,11 +50,11 @@ async function removeFromFavorites(favoriteId) {
         if (!response.ok) {
             throw new Error('Failed to remove from favorites');
         }
-        renderFavorites();
-        alert('Removed from favorites!');
+        window.renderFavorites();
+        alert(localStorage.getItem('lang') === 'ru' ? 'Удалено из избранного!' : 'Removed from favorites!');
     } catch (error) {
         console.error('Error removing from favorites:', error);
-        alert('Failed to remove from favorites');
+        alert(localStorage.getItem('lang') === 'ru' ? 'Ошибка удаления из избранного' : 'Failed to remove from favorites');
     }
 }
 
@@ -65,7 +68,7 @@ async function addToCart(productId) {
         const responseCheck = await fetch(`${API_URL}/cart?userId=${userId}&productId=${productId}`);
         const existingCartItems = await responseCheck.json();
         if (existingCartItems.length > 0) {
-            alert('This product is already in your cart!');
+            alert(localStorage.getItem('lang') === 'ru' ? 'Этот товар уже в корзине!' : 'This product is already in your cart!');
             return;
         }
 
@@ -75,32 +78,41 @@ async function addToCart(productId) {
             body: JSON.stringify({ userId: Number(userId), productId: Number(productId), quantity: 1 })
         });
         if (response.ok) {
-            alert('Added to cart!');
+            alert(localStorage.getItem('lang') === 'ru' ? 'Добавлено в корзину!' : 'Added to cart!');
         } else {
             throw new Error('Failed to add to cart');
         }
     } catch (error) {
         console.error('Error adding to cart:', error);
-        alert('Failed to add to cart');
+        alert(localStorage.getItem('lang') === 'ru' ? 'Ошибка добавления в корзину' : 'Failed to add to cart');
     }
 }
 
-async function renderFavorites() {
+window.renderFavorites = async function renderFavorites() {
     const userId = localStorage.getItem('userId');
     if (!userId) {
         window.location.href = '../login/index.html';
         return;
     }
 
-    const favoriteItems = await fetchFavoriteItems(userId);
+    const lang = localStorage.getItem('lang') || 'en';
     const productGrid = document.getElementById('productGrid');
     const noFavorites = document.getElementById('noFavorites');
 
-    if (!productGrid || !noFavorites) return;
+    if (!productGrid) console.error('Missing DOM element: productGrid');
+    if (!noFavorites) console.error('Missing DOM element: noFavorites');
 
+    if (!productGrid || !noFavorites) {
+        console.error('One or more required DOM elements are missing, retrying in 100ms');
+        setTimeout(window.renderFavorites, 100);
+        return;
+    }
+
+    const favoriteItems = await fetchFavoriteItems(userId);
     if (favoriteItems.length === 0) {
         noFavorites.style.display = 'block';
         productGrid.innerHTML = '';
+        window.applyTranslations && window.applyTranslations(await window.loadTranslations('favorites', lang), document);
         return;
     }
 
@@ -110,25 +122,31 @@ async function renderFavorites() {
         const currentDate = new Date();
         const discountEndDate = item.product.discountEndDate ? new Date(item.product.discountEndDate) : null;
         const isDiscountValid = item.product.discount > 0 && item.product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
-        let priceDisplay = `<span class="price">$${item.product.price?.toFixed(2) || '0.00'}</span>`;
+        const effectivePrice = isDiscountValid
+            ? item.product.price * (100 - item.product.discount) / 100
+            : item.product.price;
+        const displayPrice = lang === 'ru' ? (effectivePrice * EXCHANGE_RATE).toFixed(2) : effectivePrice.toFixed(2);
+        let priceDisplay = `<span class="price">${lang === 'ru' ? '₽' : '$'}${displayPrice}</span>`;
         let discountEndDateDisplay = '';
         if (isDiscountValid) {
-            const discountedPrice = (item.product.price * (100 - item.product.discount) / 100).toFixed(2);
+            const originalPrice = lang === 'ru' ? (item.product.price * EXCHANGE_RATE).toFixed(2) : item.product.price.toFixed(2);
             priceDisplay = `
                 <div class="prices">
-                    <span class="new-price">$${discountedPrice}</span>
-                    <span class="old-price">$${item.product.price.toFixed(2)}</span>
+                    <span class="new-price">${lang === 'ru' ? '₽' : '$'}${displayPrice}</span>
+                    <span class="old-price">${lang === 'ru' ? '₽' : '$'}${originalPrice}</span>
                 </div>
-                <span class="discount-label">${item.product.discount}% OFF</span>
+                <span class="discount-label">${item.product.discount}% ${lang === 'ru' ? 'СКИДКА' : 'OFF'}</span>
             `;
             if (discountEndDate) {
-                discountEndDateDisplay = `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                })}`;
+                discountEndDateDisplay = `<span data-i18n="discount_end_date">${
+                    lang === 'ru'
+                        ? `Скидка до: ${discountEndDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' })}`
+                        : `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`
+                }</span>`;
             }
         }
+        const name = lang === 'ru' ? item.product.ru_name || item.product.name : item.product.name;
+        const description = lang === 'ru' ? item.product.ru_description || item.product.description : item.product.description;
         const ratingDisplay = item.product.rating !== undefined && item.product.rating > 0 
             ? `<i class="fas fa-star"></i> ${item.product.rating}` 
             : '<i class="fas fa-star"></i> 0';
@@ -136,7 +154,7 @@ async function renderFavorites() {
             <div class="product-card">
                 <div class="product-image">
                     <a href="../product/index.html?id=${item.productId}">
-                        <img src="../img/shop/${item.productId}.png" alt="${item.product.name || 'Product'}">
+                        <img src="../img/shop/${item.productId}.png" alt="${name || 'Product'}">
                     </a>
                     <div class="product-actions">
                         <button class="favorite-btn filled" data-favorite-id="${item.id}">
@@ -148,8 +166,8 @@ async function renderFavorites() {
                     </div>
                 </div>
                 <div class="product-info">
-                    <h3><a href="../product/index.html?id=${item.productId}">${item.product.name || 'Unknown Product'}</a></h3>
-                    <p class="description">${item.product.description || ''}</p>
+                    <h3><a href="../product/index.html?id=${item.productId}">${name || 'Unknown Product'}</a></h3>
+                    <p class="description">${description || ''}</p>
                     <div class="product-meta">
                         <div class="price-container">${priceDisplay}</div>
                         <p class="discount-end-date">${discountEndDateDisplay}</p>
@@ -173,6 +191,8 @@ async function renderFavorites() {
             addToCart(productId);
         });
     });
+
+    window.applyTranslations && window.applyTranslations(await window.loadTranslations('favorites', lang), document);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -182,5 +202,5 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    renderFavorites();
+    window.renderFavorites();
 });

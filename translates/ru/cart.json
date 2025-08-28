@@ -3,5 +3,6 @@
   "cart_empty": "Ваша корзина пуста.",
   "total_items": "Всего товаров: 0",
   "total_price": "Итого: ",
-  "checkout": "Оформить заказ"
+  "checkout": "Оформить заказ",
+  "discount_end_date": "Скидка до: "
 }
