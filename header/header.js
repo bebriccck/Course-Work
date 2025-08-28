@@ -2,7 +2,14 @@ fetch('../header/index.html')
     .then(response => response.text())
     .then(data => {
         document.getElementById('header').innerHTML = data;
-        const script = document.createElement('script');
-        script.src = '../header/burger.js';
-        document.body.appendChild(script);
+        const scripts = [
+            '../header/burger.js',
+            '../header/theme.js',
+            '../header/i18n.js'
+        ];
+        scripts.forEach(src => {
+            const script = document.createElement('script');
+            script.src = src;
+            document.body.appendChild(script);
+        });
     });

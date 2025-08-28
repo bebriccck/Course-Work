@@ -325,3 +325,7 @@ html.dark-theme {
     --accent-color: #68B738;
     --discount-color: #00A0D6;
 }
+.lang-dropdown p {
+    background-color: var(--second-color);
+    color: var(--accent-color);
+}

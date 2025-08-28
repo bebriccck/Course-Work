@@ -1,0 +1,23 @@
+{
+  "all_collections": "ВСЕ КОЛЛЕКЦИИ",
+  "smart_gift_card": "Умная подарочная карта",
+  "smart_gift_card_desc": "Купите на $1000, чтобы получить карту",
+  "free_shipping": "Бесплатная доставка",
+  "free_shipping_desc": "Купите на $1000, чтобы получить карту",
+  "quick_payment": "Быстрая оплата",
+  "quick_payment_desc": "100% безопасная оплата",
+  "support": "Поддержка 24/7",
+  "support_desc": "Быстрая поддержка",
+  "modern_furniture": "Современные мебельные коллекции",
+  "starting_from": "Начиная от <span class=\"bold\">$500</span>",
+  "read_more": "Подробнее",
+  "geometric_bookcase": "Геометрический книжный шкаф",
+  "bookcase_discount": "Скидка до 20%",
+  "minimal_sofa": "Минималистичные диваны",
+  "sofa_discount": "Скидка до 40%",
+  "special_offer": "СПЕЦИАЛЬНОЕ ПРЕДЛОЖЕНИЕ",
+  "add_offer": "Добавить предложение",
+  "modal_title": "Добавить специальное предложение",
+  "save_offer": "Сохранить",
+  "cancel_offer": "Отмена"
+}
