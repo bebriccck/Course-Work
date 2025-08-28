@@ -1,0 +1,14 @@
+{
+  "title": "Контакты",
+  "header_title": "Контакты",
+  "address_title": "Наш адрес",
+  "address_text": "Беларусь, Могилев, бульвар Ленина, 5",
+  "phone_title": "Телефон",
+  "phone_text": "+375 22 223-00-07",
+  "email_title": "Электронная почта",
+  "email_text": "info@example.com",
+  "hours_title": "Часы работы",
+  "hours_mon_fri": "Пн - Пт: 9:00 - 18:00",
+  "hours_sat": "Сб: 10:00 - 16:00",
+  "hours_sun": "Вс: Закрыто"
+}

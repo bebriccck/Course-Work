@@ -3,9 +3,12 @@
     {
       "id": 1,
       "name": "Modern Sofa",
+      "ru_name": "Современный диван",
       "description": "Comfortable modern sofa for living room",
+      "ru_description": "Удобный современный диван для гостиной",
       "price": 500,
       "category": "Sofa",
+      "ru_category": "Диван",
       "rating": 4,
       "discount": 10,
       "discountEndDate": "2025-08-30T23:59:59Z"
@@ -13,9 +16,12 @@
     {
       "id": 2,
       "name": "Wooden Bookcase",
+      "ru_name": "Деревянный книжный шкаф",
       "description": "Stylish geometric bookcase",
+      "ru_description": "Стильный геометрический книжный шкаф",
       "price": 300,
       "category": "Bookcase",
+      "ru_category": "Книжный шкаф",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -23,9 +29,12 @@
     {
       "id": 3,
       "name": "Office Chair",
+      "ru_name": "Офисный стул",
       "description": "Ergonomic chair for office use",
+      "ru_description": "Эргономичный стул для офиса",
       "price": 150,
       "category": "Chair",
+      "ru_category": "Стул",
       "rating": 0,
       "discount": 15,
       "discountEndDate": "2025-08-20T23:59:59Z"
@@ -33,9 +42,12 @@
     {
       "id": 4,
       "name": "Glass Table",
+      "ru_name": "Стеклянный стол",
       "description": "Elegant glass dining table",
+      "ru_description": "Элегантный стеклянный обеденный стол",
       "price": 400,
       "category": "Table",
+      "ru_category": "Стол",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -43,9 +55,12 @@
     {
       "id": 5,
       "name": "Leather Sofa",
+      "ru_name": "Кожаный диван",
       "description": "Luxurious leather sofa with recliner",
+      "ru_description": "Роскошный кожаный диван с механизмом раскладывания",
       "price": 600,
       "category": "Sofa",
+      "ru_category": "Диван",
       "rating": 0,
       "discount": 20,
       "discountEndDate": "2026-02-22T00:00:00.000Z"
@@ -53,9 +68,12 @@
     {
       "id": 6,
       "name": "Velvet Sofa",
+      "ru_name": "Бархатный диван",
       "description": "Soft velvet sofa for cozy evenings",
+      "ru_description": "Мягкий бархатный диван для уютных вечеров",
       "price": 450,
       "category": "Sofa",
+      "ru_category": "Диван",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -63,9 +81,12 @@
     {
       "id": 7,
       "name": "Sectional Sofa",
+      "ru_name": "Секционный диван",
       "description": "Spacious sectional sofa for large rooms",
+      "ru_description": "Просторный секционный диван для больших комнат",
       "price": 750,
       "category": "Sofa",
+      "ru_category": "Диван",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -73,9 +94,12 @@
     {
       "id": 8,
       "name": "Gaming Chair",
+      "ru_name": "Игровой стул",
       "description": "High-back gaming chair with lumbar support",
+      "ru_description": "Игровой стул с высокой спинкой и поддержкой поясницы",
       "price": 200,
       "category": "Chair",
+      "ru_category": "Стул",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -83,9 +107,12 @@
     {
       "id": 9,
       "name": "Dining Chair",
+      "ru_name": "Обеденный стул",
       "description": "Wooden dining chair with cushioned seat",
+      "ru_description": "Деревянный обеденный стул с мягким сиденьем",
       "price": 80,
       "category": "Chair",
+      "ru_category": "Стул",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -93,9 +120,12 @@
     {
       "id": 10,
       "name": "Armchair",
+      "ru_name": "Кресло",
       "description": "Comfortable armchair for reading",
+      "ru_description": "Удобное кресло для чтения",
       "price": 120,
       "category": "Chair",
+      "ru_category": "Стул",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -103,9 +133,12 @@
     {
       "id": 11,
       "name": "Coffee Table",
+      "ru_name": "Журнальный столик",
       "description": "Stylish coffee table with storage",
+      "ru_description": "Стильный журнальный столик с местом для хранения",
       "price": 150,
       "category": "Table",
+      "ru_category": "Стол",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -113,9 +146,12 @@
     {
       "id": 12,
       "name": "Round Table",
+      "ru_name": "Круглый стол",
       "description": "Elegant round table for small spaces",
+      "ru_description": "Элегантный круглый стол для небольших помещений",
       "price": 250,
       "category": "Table",
+      "ru_category": "Стол",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -123,9 +159,12 @@
     {
       "id": 13,
       "name": "Metal Bookcase",
+      "ru_name": "Металлический книжный шкаф",
       "description": "Durable metal bookcase with shelves",
+      "ru_description": "Прочный металлический книжный шкаф с полками",
       "price": 180,
       "category": "Bookcase",
+      "ru_category": "Книжный шкаф",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -133,9 +172,12 @@
     {
       "id": 14,
       "name": "Corner Bookcase",
+      "ru_name": "Угловой книжный шкаф",
       "description": "Space-saving corner bookcase",
+      "ru_description": "Компактный угловой книжный шкаф",
       "price": 220,
       "category": "Bookcase",
+      "ru_category": "Книжный шкаф",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -143,9 +185,12 @@
     {
       "id": 15,
       "name": "Tall Bookcase",
+      "ru_name": "Высокий книжный шкаф",
       "description": "Tall bookcase for extensive collections",
+      "ru_description": "Высокий книжный шкаф для больших коллекций",
       "price": 280,
       "category": "Bookcase",
+      "ru_category": "Книжный шкаф",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -153,9 +198,12 @@
     {
       "id": 16,
       "name": "Wooden Dresser",
+      "ru_name": "Деревянный комод",
       "description": "Classic wooden dresser for bedrooms",
+      "ru_description": "Классический деревянный комод для спален",
       "price": 350,
       "category": "Furniture",
+      "ru_category": "Мебель",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -163,9 +211,12 @@
     {
       "id": 17,
       "name": "Metal Bed Frame",
+      "ru_name": "Металлическая рама кровати",
       "description": "Sturdy metal bed frame with design",
+      "ru_description": "Прочная металлическая рама кровати с дизайном",
       "price": 300,
       "category": "Furniture",
+      "ru_category": "Мебель",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -173,9 +224,12 @@
     {
       "id": 18,
       "name": "Sideboard",
+      "ru_name": "Буфет",
       "description": "Elegant sideboard for dining areas",
+      "ru_description": "Элегантный буфет для столовых зон",
       "price": 400,
       "category": "Furniture",
+      "ru_category": "Мебель",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -183,9 +237,12 @@
     {
       "id": 19,
       "name": "Nightstand",
+      "ru_name": "Прикроватная тумба",
       "description": "Compact nightstand with drawer",
+      "ru_description": "Компактная прикроватная тумба с ящиком",
       "price": 90,
       "category": "Furniture",
+      "ru_category": "Мебель",
       "rating": 0,
       "discount": 10,
       "discountEndDate": "2026-02-07T00:00:00.000Z"
@@ -193,9 +250,12 @@
     {
       "id": 20,
       "name": "Crystal Chandelier",
+      "ru_name": "Хрустальная люстра",
       "description": "Luxurious crystal chandelier",
+      "ru_description": "Роскошная хрустальная люстра",
       "price": 500,
       "category": "Amrature",
+      "ru_category": "Освещение",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -203,9 +263,12 @@
     {
       "id": 21,
       "name": "Wall Sconce",
+      "ru_name": "Настенный светильник",
       "description": "Modern wall sconce for ambiance",
+      "ru_description": "Современный настенный светильник для атмосферы",
       "price": 80,
       "category": "Amrature",
+      "ru_category": "Освещение",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -213,9 +276,12 @@
     {
       "id": 22,
       "name": "Pendant Light",
+      "ru_name": "Подвесной светильник",
       "description": "Stylish pendant light for kitchens",
+      "ru_description": "Стильный подвесной светильник для кухонь",
       "price": 120,
       "category": "Amrature",
+      "ru_category": "Освещение",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -223,9 +289,12 @@
     {
       "id": 23,
       "name": "Floor Lamp",
+      "ru_name": "Напольный светильник",
       "description": "Adjustable floor lamp for reading",
+      "ru_description": "Регулируемый напольный светильник для чтения",
       "price": 150,
       "category": "Amrature",
+      "ru_category": "Освещение",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -233,9 +302,12 @@
     {
       "id": 24,
       "name": "Wall Mirror",
+      "ru_name": "Настенное зеркало",
       "description": "Large rectangular wall mirror",
+      "ru_description": "Большое прямоугольное настенное зеркало",
       "price": 100,
       "category": "Mirrors",
+      "ru_category": "Зеркала",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -243,9 +315,12 @@
     {
       "id": 25,
       "name": "Round Mirror",
+      "ru_name": "Круглое зеркало",
       "description": "Elegant round mirror with frame",
+      "ru_description": "Элегантное круглое зеркало с рамой",
       "price": 80,
       "category": "Mirrors",
+      "ru_category": "Зеркала",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -253,9 +328,12 @@
     {
       "id": 26,
       "name": "Full-Length Mirror",
+      "ru_name": "Зеркало в полный рост",
       "description": "Standing full-length mirror",
+      "ru_description": "Стоящее зеркало в полный рост",
       "price": 150,
       "category": "Mirrors",
+      "ru_category": "Зеркала",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -263,9 +341,12 @@
     {
       "id": 27,
       "name": "Decorative Mirror",
+      "ru_name": "Декоративное зеркало",
       "description": "Ornate decorative mirror for walls",
+      "ru_description": "Изысканное декоративное зеркало для стен",
       "price": 120,
       "category": "Mirrors",
+      "ru_category": "Зеркала",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -273,9 +354,12 @@
     {
       "id": 28,
       "name": "Wooden Stool",
+      "ru_name": "Деревянный табурет",
       "description": "Simple wooden stool for kitchens",
+      "ru_description": "Простой деревянный табурет для кухонь",
       "price": 50,
       "category": "Stools",
+      "ru_category": "Табуреты",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -283,9 +367,12 @@
     {
       "id": 29,
       "name": "Bar Stool",
+      "ru_name": "Барный стул",
       "description": "High bar stool with backrest",
+      "ru_description": "Высокий барный стул с спинкой",
       "price": 70,
       "category": "Stools",
+      "ru_category": "Табуреты",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -293,9 +380,12 @@
     {
       "id": 30,
       "name": "Counter Stool",
+      "ru_name": "Стул для стойки",
       "description": "Modern counter stool with cushion",
+      "ru_description": "Современный стул для стойки с подушкой",
       "price": 90,
       "category": "Stools",
+      "ru_category": "Табуреты",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -303,9 +393,12 @@
     {
       "id": 31,
       "name": "Folding Stool",
+      "ru_name": "Складной табурет",
       "description": "Portable folding stool for outdoors",
+      "ru_description": "Портативный складной табурет для улицы",
       "price": 40,
       "category": "Stools",
+      "ru_category": "Табуреты",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -313,9 +406,12 @@
     {
       "id": 32,
       "name": "Park Bench",
+      "ru_name": "Парковая скамья",
       "description": "Classic wooden park bench",
+      "ru_description": "Классическая деревянная парковая скамья",
       "price": 200,
       "category": "Benches",
+      "ru_category": "Скамьи",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -323,9 +419,12 @@
     {
       "id": 33,
       "name": "Garden Bench",
+      "ru_name": "Садовая скамья",
       "description": "Rustic garden bench with metal frame",
+      "ru_description": "Садовая скамья в деревенском стиле с металлической рамой",
       "price": 180,
       "category": "Benches",
+      "ru_category": "Скамьи",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -333,9 +432,12 @@
     {
       "id": 34,
       "name": "Indoor Bench",
+      "ru_name": "Комнатная скамья",
       "description": "Padded indoor bench for entryways",
+      "ru_description": "Мягкая комнатная скамья для прихожих",
       "price": 150,
       "category": "Benches",
+      "ru_category": "Скамьи",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null
@@ -343,9 +445,12 @@
     {
       "id": 35,
       "name": "Storage Bench",
+      "ru_name": "Скамья с местом для хранения",
       "description": "Bench with built-in storage compartment",
+      "ru_description": "Скамья с встроенным отделением для хранения",
       "price": 220,
       "category": "Benches",
+      "ru_category": "Скамьи",
       "rating": 0,
       "discount": 0,
       "discountEndDate": null

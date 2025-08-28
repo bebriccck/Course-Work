@@ -529,6 +529,8 @@ body {
     width: 90%;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     border: 1px solid var(--border-color);
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .modal-content h3 {
@@ -616,6 +618,7 @@ body {
 
     .modal-content {
         padding: 2rem;
+        max-height: 70vh;
     }
 
     .modal-content h3 {
@@ -658,6 +661,10 @@ body {
         --pad: 1.5rem;
     }
 
+    .modal-content {
+        max-height: 60vh;
+    }
+
     .modal-content h3 {
         font-size: 2rem;
     }
@@ -683,6 +690,10 @@ body {
 @media (max-width: 320px) {
     html {
         font-size: 7px;
+    }
+
+    .modal-content {
+        max-height: 55vh;
     }
 
     .modal-content h3 {

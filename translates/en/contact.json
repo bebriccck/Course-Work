@@ -1,0 +1,14 @@
+{
+  "title": "Contacts",
+  "header_title": "Contacts",
+  "address_title": "Our Address",
+  "address_text": "Belarus, Mogilev, Lenin Boulevard, 5",
+  "phone_title": "Phone",
+  "phone_text": "+375 22 223-00-07",
+  "email_title": "Email",
+  "email_text": "info@example.com",
+  "hours_title": "Working Hours",
+  "hours_mon_fri": "Mon - Fri: 9:00 AM - 6:00 PM",
+  "hours_sat": "Sat: 10:00 AM - 4:00 PM",
+  "hours_sun": "Sun: Closed"
+}

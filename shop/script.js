@@ -1,5 +1,6 @@
 const API_URL = 'http://localhost:3000';
 const ITEMS_PER_PAGE = 12;
+const EXCHANGE_RATE = 80; // 1 USD = 80 RUB
 let currentPage = 1;
 let totalItems = 0;
 let selectedCategories = new Set(['']);
@@ -9,6 +10,7 @@ function getCurrentParams() {
     const sortSelect = document.getElementById('sortSelect');
     const minPrice = document.getElementById('minPrice');
     const maxPrice = document.getElementById('maxPrice');
+    const lang = localStorage.getItem('lang') || 'en';
 
     const params = {};
     if (searchInput && searchInput.value) {
@@ -20,10 +22,10 @@ function getCurrentParams() {
         params._order = sortOrder;
     }
     if (minPrice && minPrice.value) {
-        params['price_gte'] = minPrice.value;
+        params['price_gte'] = lang === 'ru' ? Number(minPrice.value) / EXCHANGE_RATE : minPrice.value;
     }
     if (maxPrice && maxPrice.value) {
-        params['price_lte'] = maxPrice.value;
+        params['price_lte'] = lang === 'ru' ? Number(maxPrice.value) / EXCHANGE_RATE : maxPrice.value;
     }
     return params;
 }
@@ -60,7 +62,8 @@ async function fetchCategories() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const products = await response.json();
-        const categories = new Set(products.map(p => p.category));
+        const lang = localStorage.getItem('lang') || 'en';
+        const categories = new Set(products.map(p => lang === 'ru' ? p.ru_category : p.category));
         const categoryList = document.getElementById('categoryList');
         categories.forEach(category => {
             const li = document.createElement('li');
@@ -89,10 +92,11 @@ function updatePagination() {
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
     const pageInfo = document.getElementById('pageInfo');
     const pageNumbersContainer = document.getElementById('pageNumbers');
+    const lang = localStorage.getItem('lang') || 'en';
     if (!pageInfo || !pageNumbersContainer) return;
 
     pageNumbersContainer.innerHTML = '';
-    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    pageInfo.textContent = lang === 'ru' ? `Страница ${currentPage} из ${totalPages}` : `Page ${currentPage} of ${totalPages}`;
 
     if (totalPages <= 0) return;
 
@@ -128,6 +132,7 @@ async function renderProducts(params = {}) {
     const products = await fetchProducts(params);
     const productGrid = document.getElementById('productGrid');
     const noResults = document.getElementById('noResults');
+    const lang = localStorage.getItem('lang') || 'en';
     if (!productGrid || !noResults) return;
 
     if (products.length === 0) {
@@ -166,21 +171,25 @@ async function renderProducts(params = {}) {
         const currentDate = new Date();
         const discountEndDate = product.discountEndDate ? new Date(product.discountEndDate) : null;
         const isDiscountValid = product.discount > 0 && product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
-        let priceDisplay = `<span class="price">$${product.price.toFixed(2)}</span>`;
+        const displayPrice = lang === 'ru' ? (product.price * EXCHANGE_RATE).toFixed(2) : product.price.toFixed(2);
+        const currencySymbol = lang === 'ru' ? '₽' : '$';
+        let priceDisplay = `<span class="price">${currencySymbol}${displayPrice}</span>`;
         if (isDiscountValid) {
-            const discountedPrice = (product.price * (100 - product.discount) / 100).toFixed(2);
+            const discountedPrice = lang === 'ru' ? ((product.price * (100 - product.discount) / 100) * EXCHANGE_RATE).toFixed(2) : (product.price * (100 - product.discount) / 100).toFixed(2);
             priceDisplay = `
                 <div class="prices">
-                    <span class="new-price">$${discountedPrice}</span>
-                    <span class="old-price">$${product.price.toFixed(2)}</span>
+                    <span class="new-price">${currencySymbol}${discountedPrice}</span>
+                    <span class="old-price">${currencySymbol}${displayPrice}</span>
                 </div>
-                <span class="discount-label">${product.discount}% OFF</span>
+                <span class="discount-label">${product.discount}% ${lang === 'ru' ? 'СКИДКА' : 'OFF'}</span>
             `;
         }
+        const name = lang === 'ru' ? product.ru_name : product.name;
+        const description = lang === 'ru' ? product.ru_description : product.description;
         return `
             <div class="product-card">
                 <div class="product-image">
-                    <img src="../img/shop/${product.id}.png" alt="${product.name}">
+                    <img src="../img/shop/${product.id}.png" alt="${name}">
                     <div class="product-actions">
                         <button class="favorite-btn${isFavorite ? ' filled' : ''}" data-id="${product.id}" data-favorite-id="${favoriteId}">
                             <i class="fa${isFavorite ? 's' : 'r'} fa-heart"></i>
@@ -192,8 +201,8 @@ async function renderProducts(params = {}) {
                     </div>
                 </div>
                 <div class="product-info">
-                    <h3>${product.name}</h3>
-                    <p class="description">${product.description}</p>
+                    <h3>${name}</h3>
+                    <p class="description">${description}</p>
                     <div class="product-meta">
                         <div class="price-container">${priceDisplay}</div>
                         <span class="rating"><i class="fas fa-star"></i> ${product.rating}</span>
@@ -206,6 +215,7 @@ async function renderProducts(params = {}) {
 
 async function addToFavorites(productId) {
     const userId = localStorage.getItem('userId');
+    const lang = localStorage.getItem('lang') || 'en';
     if (!userId) {
         window.location.href = '../login/index.html';
         return;
@@ -220,7 +230,7 @@ async function addToFavorites(productId) {
             });
             if (responseDelete.ok) {
                 renderProducts(getCurrentParams());
-                alert('Removed from favorites!');
+                alert(lang === 'ru' ? 'Удалено из избранного!' : 'Removed from favorites!');
             } else {
                 throw new Error('Failed to remove from favorites');
             }
@@ -232,19 +242,20 @@ async function addToFavorites(productId) {
             });
             if (response.ok) {
                 renderProducts(getCurrentParams());
-                alert('Added to favorites!');
+                alert(lang === 'ru' ? 'Добавлено в избранное!' : 'Added to favorites!');
             } else {
                 throw new Error('Failed to add to favorites');
             }
         }
     } catch (error) {
         console.error('Error managing favorites:', error);
-        alert('Failed to manage favorites');
+        alert(lang === 'ru' ? 'Ошибка управления избранным' : 'Failed to manage favorites');
     }
 }
 
 async function addToCart(productId) {
     const userId = localStorage.getItem('userId');
+    const lang = localStorage.getItem('lang') || 'en';
     if (!userId) {
         window.location.href = '../login/index.html';
         return;
@@ -253,7 +264,7 @@ async function addToCart(productId) {
         const responseCheck = await fetch(`${API_URL}/cart?userId=${userId}&productId=${productId}`);
         const existingCartItems = await responseCheck.json();
         if (existingCartItems.length > 0) {
-            alert('This product is already in your cart!');
+            alert(lang === 'ru' ? 'Этот товар уже в корзине!' : 'This product is already in your cart!');
             return;
         }
 
@@ -263,50 +274,59 @@ async function addToCart(productId) {
             body: JSON.stringify({ userId: Number(userId), productId: Number(productId), quantity: 1 })
         });
         if (response.ok) {
-            alert('Added to cart!');
+            alert(lang === 'ru' ? 'Добавлено в корзину!' : 'Added to cart!');
         } else {
             throw new Error('Failed to add to cart');
         }
     } catch (error) {
         console.error('Error adding to cart:', error);
-        alert('Failed to add to cart');
+        alert(lang === 'ru' ? 'Ошибка добавления в корзину' : 'Failed to add to cart');
     }
 }
 
 async function addProduct() {
-    document.getElementById('modalTitle').textContent = 'Add Product';
+    const lang = localStorage.getItem('lang') || 'en';
+    document.getElementById('modalTitle').textContent = lang === 'ru' ? 'Добавить товар' : 'Add Product';
     document.getElementById('name').value = '';
+    document.getElementById('ru_name').value = '';
     document.getElementById('description').value = '';
+    document.getElementById('ru_description').value = '';
     document.getElementById('price').value = '';
     document.getElementById('discount').value = '';
     document.getElementById('discountEndDate').value = '';
     document.getElementById('category').value = '';
+    document.getElementById('ru_category').value = '';
     document.getElementById('productForm').dataset.id = '';
     document.getElementById('productModal').style.display = 'flex';
 }
 
 async function editProduct(productId) {
+    const lang = localStorage.getItem('lang') || 'en';
     try {
         const response = await fetch(`${API_URL}/products/${productId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const product = await response.json();
-        document.getElementById('modalTitle').textContent = 'Edit Product';
+        document.getElementById('modalTitle').textContent = lang === 'ru' ? 'Редактировать товар' : 'Edit Product';
         document.getElementById('name').value = product.name;
+        document.getElementById('ru_name').value = product.ru_name || '';
         document.getElementById('description').value = product.description;
-        document.getElementById('price').value = product.price;
+        document.getElementById('ru_description').value = product.ru_description || '';
+        document.getElementById('price').value = lang === 'ru' ? (product.price * EXCHANGE_RATE).toFixed(2) : product.price;
         document.getElementById('discount').value = product.discount || '';
         document.getElementById('discountEndDate').value = product.discountEndDate ? product.discountEndDate.split('T')[0] : '';
         document.getElementById('category').value = product.category;
+        document.getElementById('ru_category').value = product.ru_category || '';
         document.getElementById('productForm').dataset.id = productId;
         document.getElementById('productModal').style.display = 'flex';
     } catch (error) {
         console.error('Error fetching product for edit:', error);
-        alert('Failed to load product data');
+        alert(lang === 'ru' ? 'Ошибка загрузки данных товара' : 'Failed to load product data');
     }
 }
 
 async function deleteProduct(productId) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
+    const lang = localStorage.getItem('lang') || 'en';
+    if (!confirm(lang === 'ru' ? 'Вы уверены, что хотите удалить этот товар?' : 'Are you sure you want to delete this product?')) return;
     try {
         const reviewsResponse = await fetch(`${API_URL}/reviews?productId=${productId}`);
         if (!reviewsResponse.ok) throw new Error('Failed to fetch reviews');
@@ -322,14 +342,14 @@ async function deleteProduct(productId) {
             method: 'DELETE'
         });
         if (productResponse.ok) {
-            alert('Product and associated reviews deleted successfully!');
+            alert(lang === 'ru' ? 'Товар и связанные отзывы успешно удалены!' : 'Product and associated reviews deleted successfully!');
             renderProducts(getCurrentParams());
         } else {
             throw new Error('Failed to delete product');
         }
     } catch (error) {
         console.error('Error deleting product or reviews:', error);
-        alert('Failed to delete product or reviews');
+        alert(lang === 'ru' ? 'Ошибка удаления товара или отзывов' : 'Failed to delete product or reviews');
     }
 }
 
@@ -337,14 +357,18 @@ async function saveProduct(e) {
     e.preventDefault();
     const form = e.target;
     const id = form.dataset.id;
+    const lang = localStorage.getItem('lang') || 'en';
     const name = document.getElementById('name').value;
+    const ru_name = document.getElementById('ru_name').value;
     const description = document.getElementById('description').value;
-    const price = Number(document.getElementById('price').value);
+    const ru_description = document.getElementById('ru_description').value;
+    const price = lang === 'ru' ? Number(document.getElementById('price').value) / EXCHANGE_RATE : Number(document.getElementById('price').value);
     const discount = Number(document.getElementById('discount').value) || 0;
     const discountEndDate = document.getElementById('discountEndDate').value;
     const category = document.getElementById('category').value;
+    const ru_category = document.getElementById('ru_category').value;
 
-    const productData = { name, description, price, discount, category };
+    const productData = { name, ru_name, description, ru_description, price, discount, category, ru_category };
     if (discountEndDate) {
         productData.discountEndDate = new Date(discountEndDate).toISOString();
     } else {
@@ -370,7 +394,7 @@ async function saveProduct(e) {
             });
         }
         if (response.ok) {
-            alert(id ? 'Product updated successfully!' : 'Product added successfully!');
+            alert(id ? (lang === 'ru' ? 'Товар успешно обновлен!' : 'Product updated successfully!') : (lang === 'ru' ? 'Товар успешно добавлен!' : 'Product added successfully!'));
             renderProducts(getCurrentParams());
             closeModal();
         } else {
@@ -378,7 +402,7 @@ async function saveProduct(e) {
         }
     } catch (error) {
         console.error('Error saving product:', error);
-        alert('Failed to save product');
+        alert(lang === 'ru' ? 'Ошибка сохранения товара' : 'Failed to save product');
     }
 }
 

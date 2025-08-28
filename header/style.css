@@ -328,4 +328,5 @@ html.dark-theme {
 .lang-dropdown p {
     background-color: var(--second-color);
     color: var(--accent-color);
+    z-index: 100000000;
 }

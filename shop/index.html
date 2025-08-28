@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Catalog</title>
+    <title data-i18n="title">Catalog</title>
 </head>
 <body>
     <div id="preloader">
@@ -19,50 +19,50 @@
     <main>
         <section class="catalog_section">
             <div class="coll_header">
-                <h1>Catalog</h1>
+                <h1 data-i18n="header_title">Catalog</h1>
             </div>
             <div class="controls">
                 <div class="search-sort">
                     <div class="search-bar">
-                        <input type="text" id="searchInput" placeholder="Search by name or description...">
+                        <input type="text" id="searchInput" data-i18n="[placeholder]search_placeholder">
                         <i class="fas fa-search"></i>
                     </div>
                     <select id="sortSelect">
-                        <option value="name,asc">Name (A-Z)</option>
-                        <option value="name,desc">Name (Z-A)</option>
-                        <option value="price,asc">Price (Low to High)</option>
-                        <option value="price,desc">Price (High to Low)</option>
-                        <option value="rating,asc">Rating (Low to High)</option>
-                        <option value="rating,desc">Rating (High to Low)</option>
+                        <option value="name,asc" data-i18n="sort_name_asc">Name (A-Z)</option>
+                        <option value="name,desc" data-i18n="sort_name_desc">Name (Z-A)</option>
+                        <option value="price,asc" data-i18n="sort_price_asc">Price (Low to High)</option>
+                        <option value="price,desc" data-i18n="sort_price_desc">Price (High to Low)</option>
+                        <option value="rating,asc" data-i18n="sort_rating_asc">Rating (Low to High)</option>
+                        <option value="rating,desc" data-i18n="sort_rating_desc">Rating (High to Low)</option>
                     </select>
                 </div>
                 <div class="categories-filter">
                     <div class="categories_menu">
                         <img src="../img/menu_1.svg" alt="menu_1">
-                        <p>Categories</p>
+                        <p data-i18n="categories_label">Categories</p>
                     </div>
                     <div class="categories_dropdown" style="display: none;">
                         <ul id="categoryList">
-                            <li data-category="">All <i class="fas fa-check"></i></li>
+                            <li data-category="" data-i18n="category_all">All <i class="fas fa-check"></i></li>
                         </ul>
                         <button id="resetCategories" class="reset-btn">
-                            <i class="fas fa-times"></i> Reset
+                            <i class="fas fa-times"></i> <span data-i18n="reset_button">Reset</span>
                         </button>
                     </div>
                 </div>
                 <div class="range-filter">
-                    <label>Price Range:</label>
-                    <input type="number" id="minPrice" placeholder="Min">
-                    <input type="number" id="maxPrice" placeholder="Max">
-                    <button id="applyRange">Apply</button>
+                    <label data-i18n="price_range_label">Price Range:</label>
+                    <input type="number" id="minPrice" data-i18n="[placeholder]min_price_placeholder">
+                    <input type="number" id="maxPrice" data-i18n="[placeholder]max_price_placeholder">
+                    <button id="applyRange" data-i18n="apply_button">Apply</button>
                 </div>
-                <button id="addProductBtn" style="display: none;" class="add-btn">Add Product</button>
+                <button id="addProductBtn" style="display: none;" class="add-btn" data-i18n="add_product_button">Add Product</button>
             </div>
             <div class="content">
                 <div class="products">
                     <div id="productGrid"></div>
                     <div id="noResults" style="display: none;">
-                        <p>No products found matching your criteria.</p>
+                        <p data-i18n="no_results">No products found matching your criteria.</p>
                     </div>
                     <div class="pagination">
                         <button id="firstPage" disabled><i class="fas fa-angle-double-left"></i></button>
@@ -80,34 +80,40 @@
 
     <div class="modal" id="productModal">
         <div class="modal-content">
-            <h3 id="modalTitle">Add Product</h3>
+            <h3 id="modalTitle" data-i18n="modal_title_add">Add Product</h3>
             <form id="productForm">
                 <div class="form-group">
-                    <label for="name">Name:</label>
+                    <label for="name" data-i18n="form_name_label">Name:</label>
                     <input type="text" id="name" required>
+                    <label for="ru_name" data-i18n="form_ru_name_label">Name (RU):</label>
+                    <input type="text" id="ru_name" required>
                 </div>
                 <div class="form-group">
-                    <label for="description">Description:</label>
+                    <label for="description" data-i18n="form_description_label">Description:</label>
                     <textarea id="description" required></textarea>
+                    <label for="ru_description" data-i18n="form_ru_description_label">Description (RU):</label>
+                    <textarea id="ru_description" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="price">Price:</label>
+                    <label for="price" data-i18n="form_price_label">Price:</label>
                     <input type="number" id="price" min="0" required>
                 </div>
                 <div class="form-group">
-                    <label for="discount">Discount (%):</label>
-                    <input type="number" id="discount" min="0" max="99" placeholder="0-99">
+                    <label for="discount" data-i18n="form_discount_label">Discount (%):</label>
+                    <input type="number" id="discount" min="0" max="99" data-i18n="[placeholder]form_discount_placeholder">
                 </div>
                 <div class="form-group">
-                    <label for="discountEndDate">Discount End Date:</label>
+                    <label for="discountEndDate" data-i18n="form_discount_end_date_label">Discount End Date:</label>
                     <input type="date" id="discountEndDate">
                 </div>
                 <div class="form-group">
-                    <label for="category">Category:</label>
+                    <label for="category" data-i18n="form_category_label">Category:</label>
                     <input type="text" id="category" required>
+                    <label for="ru_category" data-i18n="form_ru_category_label">Category (RU):</label>
+                    <input type="text" id="ru_category" required>
                 </div>
-                <button type="submit">Save</button>
-                <button type="button" id="cancelModal">Cancel</button>
+                <button type="submit" data-i18n="form_save_button">Save</button>
+                <button type="button" id="cancelModal" data-i18n="form_cancel_button">Cancel</button>
             </form>
         </div>
     </div>
@@ -115,6 +121,7 @@
     <script src="../preloader/script.js"></script>
     <script src="../header/header.js"></script>
     <script src="../header/theme.js"></script>
+    <script src="../header/i18n.js"></script>
     <script src="../footer/footer.js"></script>
     <script src="script.js"></script>
 </body>

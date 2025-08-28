@@ -9,37 +9,37 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Contacts</title>
+    <title data-i18n="title">Contacts</title>
 </head>
 <body>
     <div id="preloader">
         <div class="spinner"></div>
     </div>
-<div id="header"></div>
+    <div id="header"></div>
     <main>
         <section class="contacts_section">
             <div class="coll_header">
-                <h1>Contacts</h1>
+                <h1 data-i18n="header_title">Contacts</h1>
             </div>
             <div class="content">
                 <div class="contacts_info">
                     <div class="contact_item">
-                        <h3>Our Address</h3>
-                        <p>Belarus, Mogilev, Lenin Boulevard, 5</p>
+                        <h3 data-i18n="address_title">Our Address</h3>
+                        <p data-i18n="address_text">Belarus, Mogilev, Lenin Boulevard, 5</p>
                     </div>
                     <div class="contact_item">
-                        <h3>Phone</h3>
-                        <p><a href="tel:+1234567890">+375 22 223-00-07</a></p>
+                        <h3 data-i18n="phone_title">Phone</h3>
+                        <p><a href="tel:+1234567890" data-i18n="phone_text">+375 22 223-00-07</a></p>
                     </div>
                     <div class="contact_item">
-                        <h3>Email</h3>
-                        <p><a href="mailto:info@example.com">info@example.com</a></p>
+                        <h3 data-i18n="email_title">Email</h3>
+                        <p><a href="mailto:info@example.com" data-i18n="email_text">info@example.com</a></p>
                     </div>
                     <div class="contact_item">
-                        <h3>Working Hours</h3>
-                        <p>Mon - Fri: 9:00 AM - 6:00 PM</p>
-                        <p>Sat: 10:00 AM - 4:00 PM</p>
-                        <p>Sun: Closed</p>
+                        <h3 data-i18n="hours_title">Working Hours</h3>
+                        <p data-i18n="hours_mon_fri">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                        <p data-i18n="hours_sat">Sat: 10:00 AM - 4:00 PM</p>
+                        <p data-i18n="hours_sun">Sun: Closed</p>
                     </div>
                 </div>
                 <div class="map_container">
@@ -50,8 +50,9 @@
     </main>
     <div id="footer"></div>
     <script src="../preloader/script.js"></script>
-<script src="../header/header.js"></script>
+    <script src="../header/header.js"></script>
     <script src="../header/theme.js"></script>
+    <script src="../header/i18n.js"></script>
     <script src="../footer/footer.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=en_US&apikey=8785d889-6c14-43ae-8ac3-07cde5f1ecbf"></script>
     <script src="script.js"></script>
