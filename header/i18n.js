@@ -1,13 +1,13 @@
-const DEFAULT_LANG = 'en';
-let currentLang = localStorage.getItem('lang') || DEFAULT_LANG;
+const LANG_DEFAULT = 'en';
+let langCurrent = localStorage.getItem('lang') || LANG_DEFAULT;
 
-async function loadTranslations(file, lang = currentLang) {
+async function loadTranslations(file, lang = langCurrent) {
     try {
         const response = await fetch(`../translates/${lang}/${file}.json`);
         if (!response.ok) throw new Error(`Failed to load ${file}.json for ${lang}`);
         return await response.json();
     } catch (error) {
-        console.error(error);
+        console.error('Error loading translations:', error);
         return {};
     }
 }
@@ -23,6 +23,7 @@ function applyTranslations(translations, scope = document) {
 }
 
 async function initTranslations(pageName) {
+    console.log('Initializing translations for page:', pageName);
     const pageTranslations = await loadTranslations(pageName);
     applyTranslations(pageTranslations);
 
@@ -35,19 +36,61 @@ async function initTranslations(pageName) {
     setupLanguageDropdown(pageName);
 
     if (pageName === 'shop' && typeof window.renderProducts === 'function' && typeof window.getCurrentParams === 'function') {
+        console.log('Rendering shop products');
         window.renderProducts(window.getCurrentParams());
     }
     if (pageName === 'cart' && typeof window.renderCart === 'function') {
+        console.log('Rendering cart');
         window.renderCart();
     }
     if (pageName === 'favorites' && typeof window.renderFavorites === 'function') {
+        console.log('Rendering favorites');
         window.renderFavorites();
+    }
+    if (pageName === 'services') {
+        if (typeof window.renderCategories === 'function') {
+            console.log('Rendering categories');
+            window.renderCategories();
+        }
+        if (typeof window.initSlider === 'function') {
+            console.log('Initializing slider');
+            window.initSlider();
+        }
+        if (typeof window.initSpecialOffers === 'function') {
+            console.log('Initializing special offers');
+            window.initSpecialOffers();
+        }
     }
 }
 
 async function changeLanguage(lang, pageName) {
-    currentLang = lang;
+    console.log('Changing language to:', lang, 'for page:', pageName);
+    langCurrent = lang;
     localStorage.setItem('lang', lang);
+
+    if (pageName === 'services') {
+        console.log('Attempting to reload page for services to apply language change');
+        try {
+            window.location.reload();
+        } catch (error) {
+            console.error('Reload failed:', error);
+            const pageTranslations = await loadTranslations(pageName);
+            applyTranslations(pageTranslations);
+            if (typeof window.renderCategories === 'function') {
+                console.log('Fallback: Rendering categories');
+                window.renderCategories();
+            }
+            if (typeof window.initSlider === 'function') {
+                console.log('Fallback: Initializing slider');
+                window.initSlider();
+            }
+            if (typeof window.initSpecialOffers === 'function') {
+                console.log('Fallback: Initializing special offers');
+                window.initSpecialOffers();
+            }
+        }
+        return;
+    }
 
     const pageTranslations = await loadTranslations(pageName);
     applyTranslations(pageTranslations);
@@ -64,12 +107,15 @@ async function changeLanguage(lang, pageName) {
     }
 
     if (pageName === 'shop' && typeof window.renderProducts === 'function' && typeof window.getCurrentParams === 'function') {
+        console.log('Rendering shop products after language change');
         window.renderProducts(window.getCurrentParams());
     }
     if (pageName === 'cart' && typeof window.renderCart === 'function') {
+        console.log('Rendering cart after language change');
         window.renderCart();
     }
     if (pageName === 'favorites' && typeof window.renderFavorites === 'function') {
+        console.log('Rendering favorites after language change');
         window.renderFavorites();
     }
 }
@@ -77,7 +123,10 @@ async function changeLanguage(lang, pageName) {
 function setupLanguageDropdown(pageName) {
     const langButton = document.querySelector('.lang button');
     const langContainer = document.querySelector('.lang');
-    if (!langButton || !langContainer) return;
+    if (!langButton || !langContainer) {
+        console.error('Missing DOM elements: lang button or container');
+        return;
+    }
 
     const dropdown = document.createElement('div');
     dropdown.className = 'lang-dropdown';
@@ -99,6 +148,7 @@ function setupLanguageDropdown(pageName) {
         langOption.style.cursor = 'pointer';
         langOption.style.padding = '0.5rem';
         langOption.addEventListener('click', () => {
+            console.log('Language selected:', lang.code, 'for page:', pageName);
             changeLanguage(lang.code, pageName);
             dropdown.style.display = 'none';
         });
@@ -108,6 +158,7 @@ function setupLanguageDropdown(pageName) {
     langContainer.appendChild(dropdown);
 
     langButton.addEventListener('click', () => {
+        console.log('Language dropdown toggled');
         dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
     });
 
@@ -119,10 +170,12 @@ function setupLanguageDropdown(pageName) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded: Initializing i18n');
     const pathParts = window.location.pathname.split('/');
     let pageName = pathParts[pathParts.length - 1].replace('.html', '');
-    if (!pageName || pageName === 'index') {
-        pageName = pathParts[pathParts.length - 2] || 'services';
+    if (!pageName || pageName === 'index' || pathParts.includes('home')) {
+        pageName = 'services';
     }
+    console.log('Detected pageName:', pageName);
     initTranslations(pageName);
 });

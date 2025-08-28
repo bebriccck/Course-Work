@@ -4,6 +4,7 @@ async function fetchProducts() {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const products = await response.json();
         const shuffled = products.sort(() => 0.5 - Math.random());
+        console.log('Slider products fetched:', shuffled.slice(0, 5));
         return shuffled.slice(0, 5);
     } catch (error) {
         console.error('Error fetching products:', error);
@@ -12,61 +13,75 @@ async function fetchProducts() {
 }
 
 function createSlide(product) {
+    const lang = localStorage.getItem('lang') || 'en';
     const currentDate = new Date();
     const discountEndDate = product.discountEndDate ? new Date(product.discountEndDate) : null;
     const isDiscountValid = product.discount > 0 && product.discount < 100 && (!discountEndDate || currentDate <= discountEndDate);
-    let priceDisplay = `<p class="price">$${product.price.toFixed(2)}</p>`;
+    const effectivePrice = isDiscountValid ? product.price * (100 - product.discount) / 100 : product.price;
+    const displayPrice = lang === 'ru' ? (effectivePrice * EXCHANGE_RATE).toFixed(2) : effectivePrice.toFixed(2);
+    let priceDisplay = `<p class="price">${lang === 'ru' ? '₽' : '$'}${displayPrice}</p>`;
     let discountEndDateDisplay = '';
     if (isDiscountValid) {
-        const discountedPrice = (product.price * (100 - product.discount) / 100).toFixed(2);
+        const originalPrice = lang === 'ru' ? (product.price * EXCHANGE_RATE).toFixed(2) : product.price.toFixed(2);
         priceDisplay = `
             <div class="price-container">
-                <p class="new-price">$${discountedPrice}</p>
-                <p class="old-price">$${product.price.toFixed(2)}</p>
-                <p class="discount-label">${product.discount}% OFF</p>
+                <p class="new-price">${lang === 'ru' ? '₽' : '$'}${displayPrice}</p>
+                <p class="old-price">${lang === 'ru' ? '₽' : '$'}${originalPrice}</p>
+                <p class="discount-label">${product.discount}% ${lang === 'ru' ? 'СКИДКА' : 'OFF'}</p>
             </div>
         `;
         if (discountEndDate) {
-            discountEndDateDisplay = `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            })}`;
+            discountEndDateDisplay = `<span data-i18n="discount_end_date">${
+                lang === 'ru'
+                    ? `Скидка до: ${discountEndDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' })}`
+                    : `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`
+            }</span>`;
         }
     }
+    const name = lang === 'ru' ? product.ru_name || product.name : product.name;
     return `
         <div class="slide">
             <div class="slide-content">
                 <div class="slide-left">
-                    <h2>${product.name}</h2>
-                    <h3>We Serve Your Dream Furniture</h3>
+                    <h2>${name || 'Product'}</h2>
+                    <h3 data-i18n="slider_motto">We Serve Your Dream Furniture</h3>
                     ${priceDisplay}
                     <p class="discount-end-date">${discountEndDateDisplay}</p>
-                    <button onclick="window.location.href='../product/index.html?id=${product.id}'">Shop Now</button>
+                    <button data-i18n="shop_now" onclick="window.location.href='../product/index.html?id=${product.id}'">Shop Now</button>
                 </div>
                 <div class="slide-right">
-                    <img src="../img/shop/${product.id}.png" alt="${product.name}">
+                    <img src="../img/shop/${product.id}.png" alt="${name || 'Product'}">
                 </div>
             </div>
         </div>
     `;
 }
 
-async function initSlider() {
+window.initSlider = async function initSlider() {
     const slidesContainer = document.querySelector('.slides');
     const indicatorsContainer = document.querySelector('.slider-indicators');
-    const products = await fetchProducts();
+    if (!slidesContainer || !indicatorsContainer) {
+        console.error('Missing DOM elements: slides or slider-indicators');
+        setTimeout(window.initSlider, 100);
+        return;
+    }
 
+    const lang = localStorage.getItem('lang') || 'en';
+    const products = await fetchProducts();
     if (products.length === 0) {
-        slidesContainer.innerHTML = '<p>No products available.</p>';
+        console.error('No products available for slider');
+        slidesContainer.innerHTML = `<p data-i18n="no_products">No products available.</p>`;
+        window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
         return;
     }
 
     slidesContainer.innerHTML = products.map(product => createSlide(product)).join('');
-
     indicatorsContainer.innerHTML = products.map((_, index) => `
         <div class="indicator ${index === 0 ? 'active' : ''}" data-index="${index}"></div>
     `).join('');
+
+    console.log('Applying translations for slider');
+    window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
 
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
@@ -100,4 +115,7 @@ async function initSlider() {
     showSlide(currentSlide);
 }
 
-document.addEventListener('DOMContentLoaded', initSlider);
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded: Initializing slider');
+    window.initSlider();
+});

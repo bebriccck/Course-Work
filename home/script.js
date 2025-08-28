@@ -5,22 +5,34 @@ async function fetchCategories() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const products = await response.json();
-        const categories = new Set(products.map(p => p.category));
+        const lang = localStorage.getItem('lang') || 'en';
+        const categories = new Set(products.map(p => lang === 'ru' ? p.ru_category || p.category : p.category));
+        console.log('Categories fetched:', categories);
         return ['All', ...categories];
     } catch (error) {
-        console.error('Ошибка загрузки категорий:', error);
-        return ['All']; 
+        console.error('Error fetching categories:', error);
+        return ['All'];
     }
 }
 
-async function renderCategories() {
+window.renderCategories = async function renderCategories() {
     const categoryList = document.getElementById('categoryList');
-    if (!categoryList) return;
+    if (!categoryList) {
+        console.error('Missing DOM element: categoryList');
+        setTimeout(window.renderCategories, 100);
+        return;
+    }
 
+    const lang = localStorage.getItem('lang') || 'en';
     const categories = await fetchCategories();
-    categoryList.innerHTML = categories.map(category => `
-        <li data-category="${category === 'All' ? '' : category}">${category}</li>
-    `).join('');
+    if (categories.length === 0) {
+        console.error('No categories available');
+        categoryList.innerHTML = '<li data-i18n="category_all" data-category="">All</li>';
+    } else {
+        categoryList.innerHTML = categories.map(category => `
+            <li data-i18n="category_${category.toLowerCase().replace(/\s+/g, '_')}" data-category="${category === 'All' ? '' : category}">${category}</li>
+        `).join('');
+    }
     categoryList.addEventListener('click', (e) => {
         if (e.target.tagName === 'LI') {
             const category = e.target.dataset.category;
@@ -29,8 +41,12 @@ async function renderCategories() {
             window.location.href = category ? `../shop/index.html?category=${encodeURIComponent(category)}` : '../shop/index.html';
         }
     });
+
+    console.log('Applying translations for categories');
+    window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderCategories();
+    console.log('DOMContentLoaded: Initializing categories');
+    window.renderCategories();
 });

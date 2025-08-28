@@ -8,8 +8,8 @@ async function fetchSpecialOffers() {
         const products = await productsResponse.json();
         const currentDate = new Date();
         
-        
         if (specialOffers.length === 0) {
+            console.log('No special offers available');
             return [];
         }
 
@@ -21,6 +21,7 @@ async function fetchSpecialOffers() {
             return { ...offer, product, isDiscountValid };
         }).filter(offer => offer !== null);
 
+        console.log('Special offers fetched:', offers);
         return offers.slice(0, 2);
     } catch (error) {
         console.error('Error fetching special offers:', error);
@@ -30,13 +31,18 @@ async function fetchSpecialOffers() {
 
 function createOffer(offer, index) {
     const { product, isDiscountValid } = offer;
-    const discountedPrice = isDiscountValid ? (product.price * (100 - product.discount) / 100).toFixed(2) : null;
+    const lang = localStorage.getItem('lang') || 'en';
+    const effectivePrice = isDiscountValid ? product.price * (100 - product.discount) / 100 : product.price;
+    const displayPrice = lang === 'ru' ? (effectivePrice * EXCHANGE_RATE).toFixed(2) : effectivePrice.toFixed(2);
+    const originalPrice = lang === 'ru' ? (product.price * EXCHANGE_RATE).toFixed(2) : product.price.toFixed(2);
+    const name = lang === 'ru' ? product.ru_name || product.name : product.name;
+    const description = lang === 'ru' ? product.ru_description || product.description : product.description;
     const timerHtml = isDiscountValid && product.discountEndDate ? `
         <div class="time" data-end-date="${product.discountEndDate}">
-            <div class="days">0 <span class="time_type">days</span></div>
-            <div class="hrs">0 <span class="time_type">hours</span></div>
-            <div class="min">0 <span class="time_type">minutes</span></div>
-            <div class="secs">0 <span class="time_type">seconds</span></div>
+            <div class="days">0 <span class="time_type" data-i18n="days">days</span></div>
+            <div class="hrs">0 <span class="time_type" data-i18n="hours">hours</span></div>
+            <div class="min">0 <span class="time_type" data-i18n="minutes">minutes</span></div>
+            <div class="secs">0 <span class="time_type" data-i18n="seconds">seconds</span></div>
         </div>
     ` : '';
     return `
@@ -54,15 +60,15 @@ function createOffer(offer, index) {
                     ` : ''}
                 </div>
             </div>
-            ${isDiscountValid ? `<div class="discount">${product.discount}% off</div>` : ''}
-            <h3>${product.name}</h3>
-            <p>${product.description}</p>
+            ${isDiscountValid ? `<div class="discount">${product.discount}% ${lang === 'ru' ? 'СКИДКА' : 'off'}</div>` : ''}
+            <h3>${name || 'Product'}</h3>
+            <p>${description || ''}</p>
             <div class="price">
                 ${isDiscountValid ? `
-                    <p class="new">$${discountedPrice}</p>
-                    <p class="old">$${product.price.toFixed(2)}</p>
-                ` : `<p class="new">$${product.price.toFixed(2)}</p>`}
-                <button onclick="window.location.href='../product/index.html?id=${product.id}'">Buy Now</button>
+                    <p class="new">${lang === 'ru' ? '₽' : '$'}${displayPrice}</p>
+                    <p class="old">${lang === 'ru' ? '₽' : '$'}${originalPrice}</p>
+                ` : `<p class="new">${lang === 'ru' ? '₽' : '$'}${displayPrice}</p>`}
+                <button data-i18n="buy_now" onclick="window.location.href='../product/index.html?id=${product.id}'">Buy Now</button>
             </div>
             ${timerHtml}
         </div>
@@ -98,26 +104,36 @@ function updateTimer(offerElement, endDate) {
     const timerInterval = setInterval(update, 1000);
 }
 
-async function initSpecialOffers() {
+window.initSpecialOffers = async function initSpecialOffers() {
     const offersContainer = document.querySelector('.offers');
+    const adminControls = document.getElementById('admin-controls');
+    const modal = document.getElementById('modal');
+    if (!offersContainer || !adminControls || !modal) {
+        console.error('Missing DOM elements: offers, admin-controls, or modal');
+        setTimeout(window.initSpecialOffers, 100);
+        return;
+    }
 
+    const lang = localStorage.getItem('lang') || 'en';
     if (isAdmin()) {
         console.log('Admin detected, showing controls');
-        document.getElementById('admin-controls').style.display = 'block';
+        adminControls.style.display = 'block';
         setupAdminControls();
     } else {
         console.log('Not admin, hiding controls');
     }
 
     const offers = await fetchSpecialOffers();
-
     if (offers.length === 0) {
-        offersContainer.innerHTML = '<p>No special offers available.</p>';
+        console.error('No special offers to display');
+        offersContainer.innerHTML = `<p data-i18n="no_offers">No special offers available.</p>`;
+        window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
         return;
     }
 
     offersContainer.innerHTML = offers.map((offer, index) => createOffer(offer, index)).join('');
-    
+    console.log('Applying translations for special offers');
+    window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
     
     offersContainer.querySelectorAll('.offer-image').forEach(imageDiv => {
         const img = new Image();
@@ -131,7 +147,6 @@ async function initSpecialOffers() {
             };
         };
     });
-    
 
     offersContainer.querySelectorAll('.time').forEach(timeEl => {
         const endDate = timeEl.dataset.endDate;
@@ -162,6 +177,7 @@ async function setupAdminControls() {
             const response = await fetch(`${API_URL}/products`);
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const products = await response.json();
+            const lang = localStorage.getItem('lang') || 'en';
             const currentDate = new Date();
             const discountedProducts = products.filter(p => 
                 p.discount > 0 && p.discount < 100 && 
@@ -169,28 +185,32 @@ async function setupAdminControls() {
             );
             productSelect.innerHTML = discountedProducts.map(product => `
                 <option value="${product.id}" ${product.id === selectedProductId ? 'selected' : ''}>
-                    ${product.name}
+                    ${lang === 'ru' ? product.ru_name || product.name : product.name}
                 </option>
             `).join('');
             if (discountedProducts.length === 0) {
-                productSelect.innerHTML = '<option value="">No products with discount</option>';
+                productSelect.innerHTML = `<option value="" data-i18n="no_products">No products with discount</option>`;
             }
+            console.log('Applying translations for product select');
+            window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
         } catch (error) {
             console.error('Error fetching products:', error);
-            alert('Failed to load products');
+            alert(localStorage.getItem('lang') === 'ru' ? 'Ошибка загрузки продуктов' : 'Failed to load products');
         }
     }
     
     addButton.addEventListener('click', async () => {
         const specialOffers = await fetch(`${API_URL}/specialOffers`).then(res => res.json());
         if (specialOffers.length >= 2) {
-            alert('Maximum 2 special offers allowed.');
+            alert(localStorage.getItem('lang') === 'ru' ? 'Максимум 2 специальных предложения.' : 'Maximum 2 special offers allowed.');
             return;
         }
-        modalTitle.textContent = 'Add Special Offer';
+        modalTitle.setAttribute('data-i18n', 'add_offer_title');
         await populateProductSelect();
         modal.dataset.mode = 'add';
         modal.style.display = 'block';
+        console.log('Applying translations for add offer modal');
+        window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
     });
     
     offersContainer.addEventListener('click', async (e) => {
@@ -198,20 +218,22 @@ async function setupAdminControls() {
             const offerElement = e.target.closest('.offer');
             const offerId = e.target.closest('.edit-btn').dataset.offerId;
             const productId = e.target.closest('.edit-btn').dataset.productId;
-            modalTitle.textContent = 'Edit Special Offer';
+            modalTitle.setAttribute('data-i18n', 'edit_offer_title');
             await populateProductSelect(parseInt(productId));
             modal.dataset.mode = 'edit';
             modal.dataset.offerId = offerId;
             modal.style.display = 'block';
+            console.log('Applying translations for edit offer modal');
+            window.applyTranslations && window.applyTranslations(await window.loadTranslations('home', lang), document);
         } else if (e.target.closest('.delete-btn')) {
             const offerId = e.target.closest('.delete-btn').dataset.offerId;
             if (offerId) {
                 try {
                     await fetch(`${API_URL}/specialOffers/${offerId}`, { method: 'DELETE' });
-                    initSpecialOffers();
+                    window.initSpecialOffers();
                 } catch (error) {
                     console.error('Error deleting offer:', error);
-                    alert('Failed to delete offer');
+                    alert(localStorage.getItem('lang') === 'ru' ? 'Ошибка удаления предложения' : 'Failed to delete offer');
                 }
             }
         }
@@ -220,8 +242,9 @@ async function setupAdminControls() {
     saveButton.addEventListener('click', async () => {
         const mode = modal.dataset.mode;
         const productId = parseInt(productSelect.value);
+        const lang = localStorage.getItem('lang') || 'en';
         if (!productId) {
-            alert('Please select a product');
+            alert(localStorage.getItem('lang') === 'ru' ? 'Пожалуйста, выберите продукт' : 'Please select a product');
             return;
         }
         try {
@@ -233,7 +256,7 @@ async function setupAdminControls() {
                 });
                 if (response.ok) {
                     modal.style.display = 'none';
-                    initSpecialOffers();
+                    window.initSpecialOffers();
                 } else {
                     throw new Error('Failed to add offer');
                 }
@@ -246,14 +269,14 @@ async function setupAdminControls() {
                 });
                 if (response.ok) {
                     modal.style.display = 'none';
-                    initSpecialOffers();
+                    window.initSpecialOffers();
                 } else {
                     throw new Error('Failed to update offer');
                 }
             }
         } catch (error) {
             console.error('Error saving offer:', error);
-            alert('Failed to save offer');
+            alert(localStorage.getItem('lang') === 'ru' ? 'Ошибка сохранения предложения' : 'Failed to save offer');
         }
     });
     
@@ -262,4 +285,7 @@ async function setupAdminControls() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', initSpecialOffers);
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded: Initializing special offers');
+    window.initSpecialOffers();
+});

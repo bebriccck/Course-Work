@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Home</title>
+    <title data-i18n="home_title">Home</title>
 </head>
 <body>
     <div id="preloader">
@@ -21,7 +21,7 @@
             <div class="coll_header">
                 <div class="categories_menu">
                     <img src="../img/menu_1.svg" alt="menu_1">
-                    <p>ALL COLLECTIONS</p>
+                    <p data-i18n="all_collections">ALL COLLECTIONS</p>
                 </div>
             </div>
             <div class="content">
@@ -37,72 +37,73 @@
                 <div class="adv">
                     <img src="../img/gift.svg" alt="gift">
                     <div>
-                        <h4>Smart Gift Card</h4>
-                        <p>Buy $1000 to get card</p>
+                        <h4 data-i18n="smart_gift_card_title">Smart Gift Card</h4>
+                        <p data-i18n="smart_gift_card_desc">Buy $1000 to get card</p>
                     </div>
                 </div>
                 <div class="adv">
-                    <img src="../img/shipping.svg" alt="gift">
+                    <img src="../img/shipping.svg" alt="shipping">
                     <div>
-                        <h4>Free Shipping</h4>
-                        <p>Buy $1000 to get card</p>
+                        <h4 data-i18n="free_shipping_title">Free Shipping</h4>
+                        <p data-i18n="free_shipping_desc">Buy $1000 to get card</p>
                     </div>
                 </div>
                 <div class="adv">
-                    <img src="../img/wallet.svg" alt="gift">
+                    <img src="../img/wallet.svg" alt="wallet">
                     <div>
-                        <h4>Quick Payment</h4>
-                        <p>100% secure payment</p>
+                        <h4 data-i18n="quick_payment_title">Quick Payment</h4>
+                        <p data-i18n="quick_payment_desc">100% secure payment</p>
                     </div>
                 </div>
                 <div class="adv">
-                    <img src="../img/support.svg" alt="gift">
+                    <img src="../img/support.svg" alt="support">
                     <div>
-                        <h4>24/7 Support</h4>
-                        <p>Quick support</p>
+                        <h4 data-i18n="support_title">24/7 Support</h4>
+                        <p data-i18n="support_desc">Quick support</p>
                     </div>
                 </div>
             </div>
         </section>
         <section class="collections">
             <div class="furniture">
-                <h3>Modern Furniture Collections</h3>
-                <h4>Starting from <span class="bold">$500</span></h4>
-                <a href="">Read more <i class="fa-solid fa-arrow-right"></i></a>
+                <h3 data-i18n="furniture_title">Modern Furniture Collections</h3>
+                <h4 data-i18n="furniture_desc">Starting from <span class="bold">$500</span></h4>
+                <a href="" data-i18n="read_more">Read more <i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="un">
                 <div class="book">
-                    <h3>Geometric Bookcase</h3>
-                    <h4>Up to 20% discount</h4>
-                    <a href="">Read more <i class="fa-solid fa-arrow-right"></i></a>
+                    <h3 data-i18n="bookcase_title">Geometric Bookcase</h3>
+                    <h4 data-i18n="bookcase_desc">Up to 20% discount</h4>
+                    <a href="" data-i18n="read_more">Read more <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
                 <div class="sofa">
-                    <h3>Minimal Sofa collections </h3>
-                    <h4>Sale upto 40% discount</h4>
-                    <a href="">Read more <i class="fa-solid fa-arrow-right"></i></a>
+                    <h3 data-i18n="sofa_title">Minimal Sofa collections</h3>
+                    <h4 data-i18n="sofa_desc">Sale up to 40% discount</h4>
+                    <a href="" data-i18n="read_more">Read more <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </section>
         <section class="offer_section">
-            <h2>SPECIAL OFFER</h2>
+            <h2 data-i18n="special_offer_title">SPECIAL OFFER</h2>
             <div id="admin-controls" style="display: none;">
-                <button id="add-offer" class="add-btn">Add Offer</button>
+                <button id="add-offer" class="add-btn" data-i18n="add_offer">Add Offer</button>
             </div>
             <div class="offers"></div>
             <div id="modal" class="modal" style="display: none;">
                 <div class="modal-content">
-                    <h3 id="modal-title">Add Special Offer</h3>
+                    <h3 id="modal-title" data-i18n="add_offer_title">Add Special Offer</h3>
                     <div class="form-group">
-                        <label for="product-select">Product:</label>
+                        <label for="product-select" data-i18n="product_label">Product:</label>
                         <select id="product-select"></select>
                     </div>
-                    <button id="save-offer">Save</button>
-                    <button id="cancel-offer">Cancel</button>
+                    <button id="save-offer" data-i18n="save">Save</button>
+                    <button id="cancel-offer" data-i18n="cancel">Cancel</button>
                 </div>
             </div>
         </section>
     </main>
     <div id="footer"></div>
+    <script src="../header/i18n.js"></script>
     <script src="../preloader/script.js"></script>
     <script src="../header/header.js"></script>
     <script src="../header/theme.js"></script>
