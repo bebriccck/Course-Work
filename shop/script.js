@@ -1,9 +1,11 @@
 const API_URL = 'http://localhost:3000';
 const ITEMS_PER_PAGE = 12;
-const EXCHANGE_RATE = 80; 
+const EXCHANGE_RATE = 80;
 let currentPage = 1;
 let totalItems = 0;
 let selectedCategories = new Set(['']);
+let categoryMap = new Map();
+
 window.getCurrentParams = function getCurrentParams() {
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
@@ -14,10 +16,11 @@ window.getCurrentParams = function getCurrentParams() {
     const params = {};
     if (searchInput && searchInput.value) {
         params.q = searchInput.value;
+        params.lang = lang; 
     }
     if (sortSelect && sortSelect.value) {
         const [sortBy, sortOrder] = sortSelect.value.split(',');
-        params._sort = sortBy;
+        params._sort = sortBy === 'name' && lang === 'ru' ? 'ru_name' : sortBy;
         params._order = sortOrder;
     }
     if (minPrice && minPrice.value) {
@@ -37,17 +40,34 @@ async function fetchProducts(params = {}) {
     });
     if (selectedCategories.size > 0 && !selectedCategories.has('')) {
         query.delete('category');
-        selectedCategories.forEach(category => query.append('category_like', category));
+        const lang = localStorage.getItem('lang') || 'en';
+        selectedCategories.forEach(category => {
+            // Map ru_category to category for API
+            const apiCategory = lang === 'ru' ? categoryMap.get(category) || category : category;
+            query.append('category_like', apiCategory);
+        });
     }
     try {
         const response = await fetch(`${API_URL}/products?${query.toString()}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        totalItems = response.headers.get('X-Total-Count') ? Number(response.headers.get('X-Total-Count')) : data.length;
+        let products = await response.json();
+        totalItems = response.headers.get('X-Total-Count') ? Number(response.headers.get('X-Total-Count')) : products.length;
+
+        // Client-side filtering for search in Russian
+        const lang = params.lang || 'en';
+        if (params.q && lang === 'ru') {
+            const searchTerm = params.q.toLowerCase();
+            products = products.filter(product =>
+                (product.ru_name || product.name).toLowerCase().includes(searchTerm) ||
+                (product.ru_description || product.description).toLowerCase().includes(searchTerm)
+            );
+            totalItems = products.length;
+        }
+
         updatePagination();
-        return data;
+        return products;
     } catch (error) {
         console.error('Error fetching products:', error);
         return [];
@@ -62,9 +82,20 @@ async function fetchCategories() {
         }
         const products = await response.json();
         const lang = localStorage.getItem('lang') || 'en';
-        const categories = new Set(products.map(p => lang === 'ru' ? p.ru_category : p.category));
+        categoryMap.clear();
+        const categories = new Set();
+        products.forEach(p => {
+            const category = lang === 'ru' ? p.ru_category : p.category;
+            if (category) {
+                categories.add(category);
+                if (lang === 'ru' && p.ru_category && p.category) {
+                    categoryMap.set(p.ru_category, p.category);
+                }
+            }
+        });
+
         const categoryList = document.getElementById('categoryList');
-        categoryList.innerHTML = ''; 
+        categoryList.innerHTML = '';
         const allCategoryLi = document.createElement('li');
         allCategoryLi.dataset.category = '';
         allCategoryLi.setAttribute('data-i18n', 'category_all');
@@ -81,14 +112,14 @@ async function fetchCategories() {
         const selectedCategory = urlParams.get('category');
         if (selectedCategory) {
             selectedCategories.clear();
-            selectedCategories.add(selectedCategory);
-            const selectedLi = categoryList.querySelector(`[data-category="${selectedCategory}"]`);
+            const displayCategory = lang === 'ru' ? Array.from(categoryMap.entries()).find(([ru, en]) => en === selectedCategory)?.[0] || selectedCategory : selectedCategory;
+            selectedCategories.add(displayCategory);
+            const selectedLi = categoryList.querySelector(`[data-category="${displayCategory}"]`);
             if (selectedLi) {
                 selectedLi.querySelector('i').style.display = 'block';
                 document.querySelector('[data-category=""] i').style.display = 'none';
             }
         }
-
 
         const translations = await loadTranslations('shop', lang);
         applyTranslations(translations, categoryList);
@@ -147,6 +178,7 @@ window.renderProducts = async function renderProducts(params = {}) {
     if (products.length === 0) {
         noResults.style.display = 'block';
         productGrid.innerHTML = '';
+        await window.reapplyTranslations('shop');
         return;
     }
 
@@ -220,11 +252,13 @@ window.renderProducts = async function renderProducts(params = {}) {
             </div>
         `;
     }).join('');
+    await window.reapplyTranslations('shop');
 };
 
 async function addToFavorites(productId) {
     const userId = localStorage.getItem('userId');
     const lang = localStorage.getItem('lang') || 'en';
+    const translations = await window.loadTranslations('shop');
     if (!userId) {
         window.location.href = '../login/index.html';
         return;
@@ -239,7 +273,7 @@ async function addToFavorites(productId) {
             });
             if (responseDelete.ok) {
                 window.renderProducts(window.getCurrentParams());
-                alert(lang === 'ru' ? 'Удалено из избранного!' : 'Removed from favorites!');
+                alert(translations['favorites_removed'] || (lang === 'ru' ? 'Удалено из избранного!' : 'Removed from favorites!'));
             } else {
                 throw new Error('Failed to remove from favorites');
             }
@@ -251,20 +285,21 @@ async function addToFavorites(productId) {
             });
             if (response.ok) {
                 window.renderProducts(window.getCurrentParams());
-                alert(lang === 'ru' ? 'Добавлено в избранное!' : 'Added to favorites!');
+                alert(translations['favorites_added'] || (lang === 'ru' ? 'Добавлено в избранное!' : 'Added to favorites!'));
             } else {
                 throw new Error('Failed to add to favorites');
             }
         }
     } catch (error) {
         console.error('Error managing favorites:', error);
-        alert(lang === 'ru' ? 'Ошибка управления избранным' : 'Failed to manage favorites');
+        alert(translations['favorites_error'] || (lang === 'ru' ? 'Ошибка управления избранным' : 'Failed to manage favorites'));
     }
 }
 
 async function addToCart(productId) {
     const userId = localStorage.getItem('userId');
     const lang = localStorage.getItem('lang') || 'en';
+    const translations = await window.loadTranslations('shop');
     if (!userId) {
         window.location.href = '../login/index.html';
         return;
@@ -273,7 +308,7 @@ async function addToCart(productId) {
         const responseCheck = await fetch(`${API_URL}/cart?userId=${userId}&productId=${productId}`);
         const existingCartItems = await responseCheck.json();
         if (existingCartItems.length > 0) {
-            alert(lang === 'ru' ? 'Этот товар уже в корзине!' : 'This product is already in your cart!');
+            alert(translations['cart_already_added'] || (lang === 'ru' ? 'Этот товар уже в корзине!' : 'This product is already in your cart!'));
             return;
         }
 
@@ -283,19 +318,20 @@ async function addToCart(productId) {
             body: JSON.stringify({ userId: Number(userId), productId: Number(productId), quantity: 1 })
         });
         if (response.ok) {
-            alert(lang === 'ru' ? 'Добавлено в корзину!' : 'Added to cart!');
+            alert(translations['cart_added'] || (lang === 'ru' ? 'Добавлено в корзину!' : 'Added to cart!'));
         } else {
             throw new Error('Failed to add to cart');
         }
     } catch (error) {
         console.error('Error adding to cart:', error);
-        alert(lang === 'ru' ? 'Ошибка добавления в корзину' : 'Failed to add to cart');
+        alert(translations['cart_error'] || (lang === 'ru' ? 'Ошибка добавления в корзину' : 'Failed to add to cart'));
     }
 }
 
 async function addProduct() {
     const lang = localStorage.getItem('lang') || 'en';
-    document.getElementById('modalTitle').textContent = lang === 'ru' ? 'Добавить товар' : 'Add Product';
+    const translations = await window.loadTranslations('shop');
+    document.getElementById('modalTitle').textContent = translations['modal_title_add'] || (lang === 'ru' ? 'Добавить товар' : 'Add Product');
     document.getElementById('name').value = '';
     document.getElementById('ru_name').value = '';
     document.getElementById('description').value = '';
@@ -311,11 +347,12 @@ async function addProduct() {
 
 async function editProduct(productId) {
     const lang = localStorage.getItem('lang') || 'en';
+    const translations = await window.loadTranslations('shop');
     try {
         const response = await fetch(`${API_URL}/products/${productId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const product = await response.json();
-        document.getElementById('modalTitle').textContent = lang === 'ru' ? 'Редактировать товар' : 'Edit Product';
+        document.getElementById('modalTitle').textContent = translations['modal_title_edit'] || (lang === 'ru' ? 'Редактировать товар' : 'Edit Product');
         document.getElementById('name').value = product.name;
         document.getElementById('ru_name').value = product.ru_name || '';
         document.getElementById('description').value = product.description;
@@ -329,13 +366,14 @@ async function editProduct(productId) {
         document.getElementById('productModal').style.display = 'flex';
     } catch (error) {
         console.error('Error fetching product for edit:', error);
-        alert(lang === 'ru' ? 'Ошибка загрузки данных товара' : 'Failed to load product data');
+        alert(translations['product_load_error'] || (lang === 'ru' ? 'Ошибка загрузки данных товара' : 'Failed to load product data'));
     }
 }
 
 async function deleteProduct(productId) {
     const lang = localStorage.getItem('lang') || 'en';
-    if (!confirm(lang === 'ru' ? 'Вы уверены, что хотите удалить этот товар?' : 'Are you sure you want to delete this product?')) return;
+    const translations = await window.loadTranslations('shop');
+    if (!confirm(translations['confirm_delete'] || (lang === 'ru' ? 'Вы уверены, что хотите удалить этот товар?' : 'Are you sure you want to delete this product?'))) return;
     try {
         const reviewsResponse = await fetch(`${API_URL}/reviews?productId=${productId}`);
         if (!reviewsResponse.ok) throw new Error('Failed to fetch reviews');
@@ -351,14 +389,14 @@ async function deleteProduct(productId) {
             method: 'DELETE'
         });
         if (productResponse.ok) {
-            alert(lang === 'ru' ? 'Товар и связанные отзывы успешно удалены!' : 'Product and associated reviews deleted successfully!');
+            alert(translations['product_deleted'] || (lang === 'ru' ? 'Товар и связанные отзывы успешно удалены!' : 'Product and associated reviews deleted successfully!'));
             window.renderProducts(window.getCurrentParams());
         } else {
             throw new Error('Failed to delete product');
         }
     } catch (error) {
         console.error('Error deleting product or reviews:', error);
-        alert(lang === 'ru' ? 'Ошибка удаления товара или отзывов' : 'Failed to delete product or reviews');
+        alert(translations['product_delete_error'] || (lang === 'ru' ? 'Ошибка удаления товара или отзывов' : 'Failed to delete product or reviews'));
     }
 }
 
@@ -367,6 +405,7 @@ async function saveProduct(e) {
     const form = e.target;
     const id = form.dataset.id;
     const lang = localStorage.getItem('lang') || 'en';
+    const translations = await window.loadTranslations('shop');
     const name = document.getElementById('name').value;
     const ru_name = document.getElementById('ru_name').value;
     const description = document.getElementById('description').value;
@@ -403,7 +442,7 @@ async function saveProduct(e) {
             });
         }
         if (response.ok) {
-            alert(id ? (lang === 'ru' ? 'Товар успешно обновлен!' : 'Product updated successfully!') : (lang === 'ru' ? 'Товар успешно добавлен!' : 'Product added successfully!'));
+            alert(translations[id ? 'product_updated' : 'product_added'] || (id ? (lang === 'ru' ? 'Товар успешно обновлен!' : 'Product updated successfully!') : (lang === 'ru' ? 'Товар успешно добавлен!' : 'Product added successfully!')));
             window.renderProducts(window.getCurrentParams());
             closeModal();
         } else {
@@ -411,7 +450,7 @@ async function saveProduct(e) {
         }
     } catch (error) {
         console.error('Error saving product:', error);
-        alert(lang === 'ru' ? 'Ошибка сохранения товара' : 'Failed to save product');
+        alert(translations['product_save_error'] || (lang === 'ru' ? 'Ошибка сохранения товара' : 'Failed to save product'));
     }
 }
 

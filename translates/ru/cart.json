@@ -1,8 +1,9 @@
 {
-  "cart_title": "Корзина",
-  "cart_empty": "Ваша корзина пуста.",
-  "total_items": "Всего товаров: 0",
-  "total_price": "Итого: ",
-  "checkout": "Оформить заказ",
-  "discount_end_date": "Скидка до: "
+    "cart.title": "Корзина",
+    "cart.header": "Корзина",
+    "cart.noItems": "Ваша корзина пуста.",
+    "cart.totalItems": "Всего товаров: {count}",
+    "cart.total": "Итого: ",
+    "cart.checkout": "Оформить заказ",
+    "discount_end_date": "Скидка до: {date}"
 }

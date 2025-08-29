@@ -17,10 +17,8 @@ function applyTranslations(translations, scope = document) {
     elements.forEach(element => {
         const key = element.getAttribute('data-i18n');
         if (translations[key]) {
-
             const childElements = element.querySelectorAll('[data-i18n]');
             if (childElements.length > 0) {
-
                 childElements.forEach(child => {
                     const childKey = child.getAttribute('data-i18n');
                     if (translations[childKey]) {
@@ -28,17 +26,25 @@ function applyTranslations(translations, scope = document) {
                         console.log(`Applied translation for child key: ${childKey} = ${translations[childKey]}`);
                     }
                 });
-
                 Array.from(element.childNodes).forEach(node => {
                     if (node.nodeType === Node.TEXT_NODE && translations[key]) {
-                        node.textContent = translations[key];
-                        console.log(`Applied translation for parent text node: ${key} = ${translations[key]}`);
+                        let text = translations[key];
+                        if (key === 'cart.totalItems' && text.includes('{count}')) {
+                            const count = scope.querySelector('#totalItems')?.textContent.match(/\d+/)?.[0] || '0';
+                            text = text.replace('{count}', count);
+                        }
+                        node.textContent = text;
+                        console.log(`Applied translation for parent text node: ${key} = ${text}`);
                     }
                 });
             } else {
-
-                element.textContent = translations[key];
-                console.log(`Applied translation for key: ${key} = ${translations[key]}`);
+                let text = translations[key];
+                if (key === 'cart.totalItems' && text.includes('{count}')) {
+                    const count = element.textContent.match(/\d+/)?.[0] || '0';
+                    text = text.replace('{count}', count);
+                }
+                element.textContent = text;
+                console.log(`Applied translation for key: ${key} = ${text}`);
             }
         }
     });
@@ -51,6 +57,12 @@ function applyTranslations(translations, scope = document) {
         }
     });
 }
+
+window.reapplyTranslations = async (pageName) => {
+    console.log('Reapplying translations for page:', pageName);
+    const pageTranslations = await loadTranslations(pageName);
+    applyTranslations(pageTranslations);
+};
 
 async function initTranslations(pageName) {
     console.log('Initializing translations for page:', pageName);
@@ -77,7 +89,7 @@ async function initTranslations(pageName) {
         console.log('Rendering favorites');
         window.renderFavorites();
     }
-    if (pageName === 'services') {
+    if (pageName === 'services' || pageName === 'home') {
         if (typeof window.renderCategories === 'function') {
             console.log('Rendering categories');
             window.renderCategories();
@@ -108,15 +120,33 @@ async function changeLanguage(lang, pageName) {
     langCurrent = lang;
     localStorage.setItem('lang', lang);
 
-    if (pageName === 'services' || pageName === 'login') {
-        console.log('Attempting to reload page for', pageName, 'to apply language change');
+    // Reload the page for shop, cart, product, services, and home
+    if (['shop', 'cart', 'product', 'services', 'home'].includes(pageName)) {
+        console.log('Reloading page for', pageName, 'to apply language change');
         try {
             window.location.reload();
         } catch (error) {
             console.error('Reload failed:', error);
+            // Fallback to dynamic re-rendering if reload fails
             const pageTranslations = await loadTranslations(pageName);
             applyTranslations(pageTranslations);
-            if (pageName === 'services') {
+            const headerTranslations = await loadTranslations('header');
+            applyTranslations(headerTranslations, document.getElementById('header'));
+            const footerTranslations = await loadTranslations('footer');
+            applyTranslations(footerTranslations, document.getElementById('footer'));
+            if (pageName === 'shop' && typeof window.renderProducts === 'function' && typeof window.getCurrentParams === 'function') {
+                console.log('Fallback: Rendering shop products');
+                window.renderProducts(window.getCurrentParams());
+            }
+            if (pageName === 'cart' && typeof window.renderCart === 'function') {
+                console.log('Fallback: Rendering cart');
+                window.renderCart();
+            }
+            if (pageName === 'product' && typeof window.renderProductPage === 'function') {
+                console.log('Fallback: Rendering product page');
+                window.renderProductPage();
+            }
+            if (pageName === 'services' || pageName === 'home') {
                 if (typeof window.renderCategories === 'function') {
                     console.log('Fallback: Rendering categories');
                     window.renderCategories();
@@ -130,20 +160,11 @@ async function changeLanguage(lang, pageName) {
                     window.initSpecialOffers();
                 }
             }
-            if (pageName === 'login') {
-                console.log('Fallback: Initializing login form translations');
-                validateForm && validateForm();
-                const registerLink = document.querySelector('a[data-i18n="register_link"]');
-                if (registerLink) {
-                    console.log('Register link found after fallback:', { href: registerLink.href, text: registerLink.textContent });
-                } else {
-                    console.error('Register link not found after fallback');
-                }
-            }
         }
         return;
     }
 
+    // Dynamic re-rendering for other pages
     const pageTranslations = await loadTranslations(pageName);
     applyTranslations(pageTranslations);
 
@@ -158,17 +179,19 @@ async function changeLanguage(lang, pageName) {
         langDisplay.textContent = lang === 'en' ? 'English (USD)' : 'Русский (RUB)';
     }
 
-    if (pageName === 'shop' && typeof window.renderProducts === 'function' && typeof window.getCurrentParams === 'function') {
-        console.log('Rendering shop products after language change');
-        window.renderProducts(window.getCurrentParams());
-    }
-    if (pageName === 'cart' && typeof window.renderCart === 'function') {
-        console.log('Rendering cart after language change');
-        window.renderCart();
-    }
     if (pageName === 'favorites' && typeof window.renderFavorites === 'function') {
         console.log('Rendering favorites after language change');
         window.renderFavorites();
+    }
+    if (pageName === 'login') {
+        console.log('Initializing login form translations');
+        validateForm && validateForm();
+        const registerLink = document.querySelector('a[data-i18n="register_link"]');
+        if (registerLink) {
+            console.log('Register link found after language change:', { href: registerLink.href, text: registerLink.textContent });
+        } else {
+            console.error('Register link not found after language change');
+        }
     }
 }
 
@@ -177,6 +200,7 @@ function setupLanguageDropdown(pageName) {
     const langContainer = document.querySelector('.lang');
     if (!langButton || !langContainer) {
         console.error('Missing DOM elements: lang button or container');
+        setTimeout(() => setupLanguageDropdown(pageName), 100);
         return;
     }
 
@@ -223,12 +247,15 @@ function setupLanguageDropdown(pageName) {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded: Initializing i18n');
+    console.log('Current pathname:', window.location.pathname);
     const pathParts = window.location.pathname.split('/');
-    let pageName = pathParts[pathParts.length - 1].replace('.html', '');
-    if (!pageName || pageName === 'index' || pathParts.includes('home')) {
-        pageName = 'services';
-    } else if (pathParts.includes('login')) {
-        pageName = 'login';
+    let pageName = pathParts[pathParts.length - 2] || pathParts[pathParts.length - 1].replace('.html', '');
+    if (!pageName || pageName === 'index' || pageName === 'home') {
+        if (pathParts.includes('shop')) pageName = 'shop';
+        else if (pathParts.includes('about')) pageName = 'about';
+        else if (pathParts.includes('contact')) pageName = 'contact';
+        else if (pathParts.includes('cart')) pageName = 'cart';
+        else if (pathParts.includes('product')) pageName = 'product';
     }
     console.log('Detected pageName:', pageName);
     initTranslations(pageName);

@@ -504,7 +504,7 @@
       "firstName": "hljubn uh",
       "lastName": "jlnub uj",
       "middleName": "",
-      "nickname": "hljj980hh",
+      "nickname": "hxten",
       "role": "customer",
       "id": 2
     }
@@ -587,6 +587,11 @@
       "id": 2,
       "userId": 1,
       "category": "custom_furniture"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "category": "design_consultation"
     }
   ]
 }

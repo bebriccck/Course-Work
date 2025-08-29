@@ -1,8 +1,9 @@
 {
-  "cart_title": "Cart",
-  "cart_empty": "Your cart is empty.",
-  "total_items": "Total items: 0",
-  "total_price": "Total: ",
-  "checkout": "Checkout",
-  "discount_end_date": "Discount valid until: "
+    "cart.title": "Cart",
+    "cart.header": "Cart",
+    "cart.noItems": "Your cart is empty.",
+    "cart.totalItems": "Total items: {count}",
+    "cart.total": "Total: ",
+    "cart.checkout": "Checkout",
+    "discount_end_date": "Discount valid until: {date}"
 }

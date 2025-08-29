@@ -9,73 +9,74 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Profile</title>
+    <title data-i18n="title">Profile</title>
 </head>
 <body>
     <div id="preloader">
         <div class="spinner"></div>
     </div>
-<div id="header"></div>
+    <div id="header"></div>
     <main>
         <section class="profile">
-            <h2>Profile</h2>
+            <h2 data-i18n="heading">Profile</h2>
             <form id="profile-form">
                 <div class="form-group">
-                    <label for="phone">Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="phone" name="phone" placeholder="+375 (XX) XXX-XX-XX" required>
+                    <label for="phone" data-i18n="phone_label">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" data-i18n-placeholder="phone_placeholder" placeholder="+375 (XX) XXX-XX-XX" required>
                     <span class="error-message" id="phone-error"></span>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required>
+                    <label for="email" data-i18n="email_label">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" data-i18n-placeholder="email_placeholder" placeholder="example@domain.com" required>
                     <span class="error-message" id="email-error"></span>
                 </div>
                 <div class="form-group">
-                    <label for="birthdate">Date of Birth <span class="required">*</span></label>
+                    <label for="birthdate" data-i18n="birthdate_label">Date of Birth <span class="required">*</span></label>
                     <input type="date" id="birthdate" name="birthdate" required>
                     <span class="error-message" id="birthdate-error"></span>
                 </div>
                 <div class="form-group password-group">
-                    <label for="password">Password <span class="required">*</span></label>
+                    <label for="password" data-i18n="password_label">Password <span class="required">*</span></label>
                     <div class="input-with-button">
                         <input type="password" id="password" name="password" required>
-                        <button type="button" id="generate-password">Generate Password</button>
+                        <button type="button" id="generate-password" data-i18n="generate_password">Generate Password</button>
                     </div>
                     <span class="error-message" id="password-error"></span>
                 </div>
                 <div class="form-group">
-                    <label for="firstName">First Name <span class="required">*</span></label>
+                    <label for="firstName" data-i18n="firstName_label">First Name <span class="required">*</span></label>
                     <input type="text" id="firstName" name="firstName" required>
                     <span class="error-message" id="firstName-error"></span>
                 </div>
                 <div class="form-group">
-                    <label for="lastName">Last Name <span class="required">*</span></label>
+                    <label for="lastName" data-i18n="lastName_label">Last Name <span class="required">*</span></label>
                     <input type="text" id="lastName" name="lastName" required>
                     <span class="error-message" id="lastName-error"></span>
                 </div>
                 <div class="form-group">
-                    <label for="middleName">Middle Name</label>
+                    <label for="middleName" data-i18n="middleName_label">Middle Name</label>
                     <input type="text" id="middleName" name="middleName">
                 </div>
                 <div class="form-group">
-                    <label for="nickname">Nickname <span class="required">*</span></label>
+                    <label for="nickname" data-i18n="nickname_label">Nickname <span class="required">*</span></label>
                     <input type="text" id="nickname" name="nickname">
-                    <button type="button" id="regenerate-nickname">Generate New Nickname</button>
+                    <button type="button" id="regenerate-nickname" data-i18n="regenerate_nickname">Generate New Nickname</button>
                     <span class="error-message" id="nickname-error"></span>
-                    <span id="nickname-attempts"></span>
+                    <span id="nickname-attempts" data-i18n="nickname_attempts">Attempts remaining: 5</span>
                 </div>
                 <div class="form-buttons">
-                    <button type="submit" id="submit-button">Save Changes</button>
-                    <button type="button" id="logout-button">Log Out</button>
+                    <button type="submit" id="submit-button" data-i18n="submit_button">Save Changes</button>
+                    <button type="button" id="logout-button" data-i18n="logout_button">Log Out</button>
                 </div>
             </form>
         </section>
     </main>
     <div id="footer"></div>
     <script src="../preloader/script.js"></script>
-<script src="../header/header.js"></script>
+    <script src="../header/header.js"></script>
     <script src="../header/theme.js"></script>
     <script src="../footer/footer.js"></script>
+    <script src="../header/i18n.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../header/style.css">
     <link rel="stylesheet" href="../footer/style.css">
     <link rel="stylesheet" href="style.css">
-    <title>Product</title>
+    <title data-i18n="product.title">Product</title>
 </head>
 <body>
     <div id="preloader">
@@ -31,32 +31,32 @@
                             <p class="discount-end-date" id="discountEndDate"></p>
                             <span class="rating" id="productRating"><i class="fas fa-star"></i> </span>
                         </div>
-                        <p class="category" id="productCategory"></p>
+                        <p class="category" id="productCategory" data-i18n="product.category"></p>
                         <div class="product-actions">
-                            <button class="cart-btn" id="cartBtn"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
-                            <button class="favorite-btn" id="favoriteBtn"><i class="far fa-heart"></i></button>
+                            <button class="cart-btn" id="cartBtn" data-i18n="product.add_to_cart">Add to Cart</button>
+                            <button class="favorite-btn" id="favoriteBtn" data-i18n="product.add_to_favorites"><i class="far fa-heart"></i></button>
                         </div>
                     </div>
                 </div>
                 <div class="reviews-section">
-                    <h2>Reviews</h2>
+                    <h2 data-i18n="product.reviews">Reviews</h2>
                     <div id="reviewsList"></div>
                     <div class="review-form" id="reviewForm">
-                        <h3>Write a Review</h3>
+                        <h3 data-i18n="product.write_review">Write a Review</h3>
                         <div class="rating-select" id="ratingSelect">
-                            <span>Rating:</span>
+                            <span data-i18n="product.rating_label">Rating:</span>
                             <i class="far fa-star" data-value="1"></i>
                             <i class="far fa-star" data-value="2"></i>
                             <i class="far fa-star" data-value="3"></i>
                             <i class="far fa-star" data-value="4"></i>
                             <i class="far fa-star" data-value="5"></i>
                         </div>
-                        <textarea id="reviewText" placeholder="Your review (minimum 10 characters)" rows="4"></textarea>
+                        <textarea id="reviewText" data-i18n="[placeholder]product.review_placeholder" rows="4"></textarea>
                         <div class="form-actions">
-                            <button id="submitReviewBtn" disabled>Submit Review</button>
+                            <button id="submitReviewBtn" disabled data-i18n="product.submit_review">Submit Review</button>
                         </div>
                     </div>
-                    <p id="reviewMessage" style="display: none;"></p>
+                    <p id="reviewMessage" style="display: none;" data-i18n="product.review_message"></p>
                 </div>
             </div>
         </section>
@@ -64,6 +64,7 @@
     <div id="footer"></div>
     <script src="../preloader/script.js"></script>
     <script src="../header/header.js"></script>
+    <script src="../header/i18n.js"></script>
     <script src="../header/theme.js"></script>
     <script src="../footer/footer.js"></script>
     <script src="script.js"></script>
