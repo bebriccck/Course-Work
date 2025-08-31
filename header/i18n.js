@@ -17,7 +17,7 @@ if (!window.i18nInitialized) {
         }
     }
 
-    window.loadTranslations = loadTranslations; 
+    window.loadTranslations = loadTranslations;
 
     function applyTranslations(translations, scope = document, scopeName = 'document') {
         if (window.translationsApplied[scopeName]) {
@@ -89,7 +89,7 @@ if (!window.i18nInitialized) {
 
     window.reapplyTranslations = async (pageName) => {
         console.log('Reapplying translations for page:', pageName);
-        window.translationsApplied[pageName] = false; 
+        window.translationsApplied[pageName] = false;
         const pageTranslations = await loadTranslations(pageName);
         applyTranslations(pageTranslations, document, pageName);
     };
@@ -253,7 +253,7 @@ if (!window.i18nInitialized) {
             if (pathParts.includes('shop')) pageName = 'shop';
             else if (pathParts.includes('about')) pageName = 'about';
             else if (pathParts.includes('contact')) pageName = 'contact';
-            else if (pathParts.includes('cart')) pageName = 'cart';
+            else if (pathParts.includes('cart')) return; 
             else if (pathParts.includes('product')) pageName = 'product';
             else pageName = 'services';
         }

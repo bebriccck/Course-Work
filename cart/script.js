@@ -42,6 +42,7 @@ async function fetchCartItems(userId) {
 
 async function updateCartItemQuantity(cartId, quantity) {
     try {
+        console.log('Updating quantity for cartId:', cartId, 'to:', quantity);
         const response = await fetch(`${API_URL}/cart/${cartId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -59,6 +60,7 @@ async function updateCartItemQuantity(cartId, quantity) {
 
 async function removeCartItem(cartId) {
     try {
+        console.log('Removing cart item with cartId:', cartId);
         const response = await fetch(`${API_URL}/cart/${cartId}`, {
             method: 'DELETE'
         });
@@ -74,6 +76,7 @@ async function removeCartItem(cartId) {
 
 async function checkout(userId) {
     try {
+        console.log('Initiating checkout for userId:', userId);
         const cartItems = await fetchCartItems(userId);
         if (cartItems.length === 0) {
             alert(localStorage.getItem('lang') === 'ru' ? 'Ваша корзина пуста!' : 'Your cart is empty!');
@@ -98,6 +101,7 @@ async function checkout(userId) {
                 };
             })
         };
+        console.log('Order payload:', order);
 
         const orderResponse = await fetch(`${API_URL}/orders`, {
             method: 'POST',
@@ -127,8 +131,9 @@ async function checkout(userId) {
 
 window.renderCart = async function renderCart() {
     const userId = localStorage.getItem('userId');
-    console.log('User ID:', userId);
+    console.log('Starting renderCart with userId:', userId);
     if (!userId) {
+        console.log('No userId, redirecting to login');
         window.location.href = '../login/index.html';
         return;
     }
@@ -141,20 +146,29 @@ window.renderCart = async function renderCart() {
     const checkoutBtn = document.getElementById('checkoutBtn');
 
     if (!cartItemsContainer || !noItems || !totalPriceElement || !totalItemsElement || !checkoutBtn) {
-        console.error('One or more required DOM elements are missing, retrying in 100ms');
-        setTimeout(window.renderCart, 100);
+        console.error('Missing DOM elements:', {
+            cartItems: !!cartItemsContainer,
+            noItems: !!noItems,
+            totalPrice: !!totalPriceElement,
+            totalItems: !!totalItemsElement,
+            checkoutBtn: !!checkoutBtn
+        });
         return;
     }
 
+    const translations = await window.loadTranslations('cart');
     const cartItems = await fetchCartItems(userId);
+    console.log('Cart items after fetch:', cartItems);
+
     if (cartItems.length === 0) {
+        console.log('No items in cart, displaying noItems message');
         noItems.style.display = 'block';
         cartItemsContainer.innerHTML = '';
         totalPriceElement.textContent = lang === 'ru' ? '₽0.00' : '$0.00';
         totalItemsElement.textContent = lang === 'ru' ? 'Всего товаров: 0' : 'Total items: 0';
         totalItemsElement.setAttribute('data-i18n', 'cart.totalItems');
         checkoutBtn.disabled = true;
-        window.applyTranslations && window.applyTranslations(await window.loadTranslations('cart', lang), document);
+        await window.reapplyTranslations('cart');
         return;
     }
 
@@ -193,9 +207,11 @@ window.renderCart = async function renderCart() {
             `;
             if (discountEndDate) {
                 discountEndDateDisplay = `<span data-i18n="discount_end_date" data-date="${discountEndDate.toISOString()}">${
-                    lang === 'ru'
-                        ? `Скидка до: ${discountEndDate.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' })}`
-                        : `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`
+                    translations['cart.discount_end_date']?.replace('{date}', discountEndDate.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    })) || (lang === 'ru' ? `Скидка до: ${discountEndDate.toLocaleDateString('ru-RU')}` : `Discount valid until: ${discountEndDate.toLocaleDateString('en-GB')}`)
                 }</span>`;
             }
         }
@@ -222,10 +238,10 @@ window.renderCart = async function renderCart() {
         `;
     }).join('');
 
-    totalItemsElement.textContent = lang === 'ru' ? `Всего товаров: ${totalItemsCount}` : `Total items: ${totalItemsCount}`;
+    totalItemsElement.textContent = translations['cart.totalItems']?.replace('{count}', totalItemsCount) || (lang === 'ru' ? `Всего товаров: ${totalItemsCount}` : `Total items: ${totalItemsCount}`);
     totalItemsElement.setAttribute('data-i18n', 'cart.totalItems');
     totalPriceElement.textContent = lang === 'ru' ? `₽${totalPrice.toFixed(2)}` : `$${totalPrice.toFixed(2)}`;
-    window.applyTranslations && window.applyTranslations(await window.loadTranslations('cart', lang), document);
+    await window.reapplyTranslations('cart');
 
     document.querySelectorAll('.cart-item-controls input').forEach(input => {
         input.addEventListener('change', (e) => {
@@ -248,35 +264,45 @@ window.renderCart = async function renderCart() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded fired');
+    console.log('DOMContentLoaded fired in cart.js');
     const userId = localStorage.getItem('userId');
     const userRole = localStorage.getItem('userRole');
     const checkoutBtn = document.getElementById('checkoutBtn');
 
     if (!userId) {
+        console.log('No userId, redirecting to login');
         window.location.href = '../login/index.html';
         return;
     }
 
     if (userRole === 'admin') {
-        checkoutBtn.disabled = true;
-        const warning = document.createElement('p');
-        warning.textContent = localStorage.getItem('lang') === 'ru'
-            ? 'Администратор не может оформить заказ'
-            : 'Administrator cannot place an order';
-        warning.style.color = 'red';
-        warning.style.fontWeight = 'bold';
-        warning.style.marginTop = '1rem';
-        checkoutBtn.parentElement.appendChild(warning);
-
-        checkoutBtn.addEventListener('click', () => {
-            alert(localStorage.getItem('lang') === 'ru'
+        console.log('User is admin, disabling checkout');
+        if (checkoutBtn) {
+            checkoutBtn.disabled = true;
+            const warning = document.createElement('p');
+            warning.textContent = localStorage.getItem('lang') === 'ru'
                 ? 'Администратор не может оформить заказ'
-                : 'Administrator cannot place an order');
-        });
-    } else {
+                : 'Administrator cannot place an order';
+            warning.style.color = 'red';
+            warning.style.fontWeight = 'bold';
+            warning.style.marginTop = '1rem';
+            checkoutBtn.parentElement.appendChild(warning);
+
+            checkoutBtn.addEventListener('click', () => {
+                alert(localStorage.getItem('lang') === 'ru'
+                    ? 'Администратор не может оформить заказ'
+                    : 'Administrator cannot place an order');
+            });
+        }
+    } else if (checkoutBtn) {
         checkoutBtn.addEventListener('click', () => checkout(userId));
     }
 
-    initTranslations('cart');
+    window.initTranslations('cart').then(() => {
+        console.log('Translations initialized, rendering cart');
+        window.renderCart();
+    }).catch(error => {
+        console.error('Failed to initialize translations:', error);
+        window.renderCart(); 
+    });
 });
