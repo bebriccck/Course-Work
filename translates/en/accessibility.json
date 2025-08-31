@@ -1,0 +1,15 @@
+{
+    "accessibility_title": "Accessibility Settings",
+    "font_size_label": "Font Size",
+    "font_normal": "Normal",
+    "font_large": "Large",
+    "font_extra_large": "Extra Large",
+    "color_scheme_label": "Color Scheme",
+    "color_default": "Default",
+    "color_black_green": "Black on Green",
+    "color_beige_brown": "Beige on Brown",
+    "color_blue_darkblue": "Blue on Dark Blue",
+    "hide_images_label": "Hide Images",
+    "save": "Save",
+    "cancel": "Cancel"
+}

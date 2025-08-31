@@ -5,7 +5,8 @@ fetch('../header/index.html')
         const scripts = [
             '../header/burger.js',
             '../header/theme.js',
-            '../header/i18n.js'
+            '../header/i18n.js',
+            '../header/accessibility.js'
         ];
         scripts.forEach(src => {
             const script = document.createElement('script');

@@ -32,5 +32,18 @@
   "minutes": "минуты",
   "seconds": "секунды",
   "discount_end_date": "Скидка до: ",
-  "category_all": "Все"
+  "category_all": "Все",
+  "accessibility_title": "Настройки доступности",
+  "font_size_label": "Размер шрифта",
+  "font_normal": "Обычный",
+  "font_large": "Большой",
+  "font_extra_large": "Очень большой",
+  "color_scheme_label": "Цветовая схема",
+  "color_default": "По умолчанию",
+  "color_black_green": "Черный на зеленом",
+  "color_beige_brown": "Бежевый на коричневом",
+  "color_blue_darkblue": "Синий на темно-синем",
+  "hide_images_label": "Скрыть изображения",
+  "save": "Сохранить",
+  "cancel": "Отмена"
 }
