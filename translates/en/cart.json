@@ -2,8 +2,14 @@
     "cart.title": "Cart",
     "cart.header": "Cart",
     "cart.noItems": "Your cart is empty.",
-    "cart.totalItems": "Total items: {count}",
+    "cart.totalItems": "Total Items: {count}",
     "cart.total": "Total: ",
     "cart.checkout": "Checkout",
+    "cart.empty_cart": "Your cart is empty!",
+    "cart.error_update_quantity": "Failed to update quantity",
+    "cart.error_remove_item": "Failed to remove item",
+    "cart.success_checkout": "Purchase successful! Your cart has been cleared.",
+    "cart.error_checkout": "Failed to process purchase",
+    "cart.admin_cannot_checkout": "Administrators cannot place orders.",
     "discount_end_date": "Discount valid until: {date}"
 }

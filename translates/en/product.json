@@ -29,5 +29,8 @@
     "product.review_error": "Failed to submit review",
     "product.review_edit_error": "Failed to edit review",
     "product.review_delete_error": "Failed to delete review",
-    "product.discount_end_date": "Discount valid until: {date}"
+    "product.discount_end_date": "Discount valid until: {date}",
+    "product.image_not_found": "Image not found",
+    "product.edit_button": "Edit",
+    "product.delete_button": "Delete"
 }

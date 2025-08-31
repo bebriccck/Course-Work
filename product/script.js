@@ -3,9 +3,11 @@ const EXCHANGE_RATE = 80;
 
 async function fetchProduct(productId) {
     try {
+        console.log('Fetching product with ID:', productId);
         const response = await fetch(`${API_URL}/products/${productId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const product = await response.json();
+        console.log('Fetched product:', product);
         const reviewsResponse = await fetch(`${API_URL}/reviews?productId=${productId}`);
         if (!reviewsResponse.ok) throw new Error(`HTTP error! status: ${reviewsResponse.status}`);
         const reviews = await reviewsResponse.json();
@@ -21,6 +23,7 @@ async function fetchProduct(productId) {
 
 async function fetchReviews(productId) {
     try {
+        console.log('Fetching reviews for product:', productId);
         const response = await fetch(`${API_URL}/reviews?productId=${productId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const reviews = await response.json();
@@ -41,6 +44,7 @@ async function fetchReviews(productId) {
 
 async function hasPurchasedProduct(userId, productId) {
     try {
+        console.log('Checking if user', userId, 'has purchased product', productId);
         const response = await fetch(`${API_URL}/orders?userId=${userId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const orders = await response.json();
@@ -53,8 +57,8 @@ async function hasPurchasedProduct(userId, productId) {
 
 async function hasReviewedProduct(userId, productId) {
     try {
+        console.log('Checking if user', userId, 'has reviewed product', productId);
         const response = await fetch(`${API_URL}/reviews?userId=${userId}&productId=${productId}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const reviews = await response.json();
         return reviews.length > 0 ? reviews[0] : null;
     } catch (error) {
@@ -72,6 +76,7 @@ async function addToCart(productId) {
         return;
     }
     try {
+        console.log('Adding product', productId, 'to cart for user', userId);
         const responseCheck = await fetch(`${API_URL}/cart?userId=${userId}&productId=${productId}`);
         const existingCartItems = await responseCheck.json();
         if (existingCartItems.length > 0) {
@@ -103,6 +108,7 @@ async function toggleFavorite(productId, favoriteBtn) {
         return;
     }
     try {
+        console.log('Toggling favorite for product', productId, 'for user', userId);
         const responseCheck = await fetch(`${API_URL}/favorites?userId=${userId}&productId=${productId}`);
         const existingFavorites = await responseCheck.json();
         if (existingFavorites.length > 0) {
@@ -138,6 +144,7 @@ async function submitReview(productId, text, rating) {
     const lang = localStorage.getItem('lang') || 'en';
     const translations = await window.loadTranslations('product');
     try {
+        console.log('Submitting review for product', productId, 'by user', userId);
         const response = await fetch(`${API_URL}/reviews`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -151,7 +158,7 @@ async function submitReview(productId, text, rating) {
         });
         if (!response.ok) throw new Error('Failed to submit review');
         alert(translations['product.review_submitted'] || (lang === 'ru' ? 'Отзыв успешно отправлен!' : 'Review submitted successfully!'));
-        renderProductPage();
+        window.renderProductPage();
     } catch (error) {
         console.error('Error submitting review:', error);
         alert(translations['product.review_error'] || (lang === 'ru' ? 'Ошибка отправки отзыва' : 'Failed to submit review'));
@@ -162,6 +169,7 @@ async function editReview(reviewId, text, rating) {
     const lang = localStorage.getItem('lang') || 'en';
     const translations = await window.loadTranslations('product');
     try {
+        console.log('Editing review', reviewId);
         const response = await fetch(`${API_URL}/reviews/${reviewId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -173,7 +181,7 @@ async function editReview(reviewId, text, rating) {
         });
         if (!response.ok) throw new Error('Failed to edit review');
         alert(translations['product.review_updated'] || (lang === 'ru' ? 'Отзыв успешно обновлен!' : 'Review updated successfully!'));
-        renderProductPage();
+        window.renderProductPage();
     } catch (error) {
         console.error('Error editing review:', error);
         alert(translations['product.review_edit_error'] || (lang === 'ru' ? 'Ошибка редактирования отзыва' : 'Failed to edit review'));
@@ -184,24 +192,34 @@ async function deleteReview(reviewId, productId) {
     const lang = localStorage.getItem('lang') || 'en';
     const translations = await window.loadTranslations('product');
     try {
+        console.log('Deleting review', reviewId);
         const response = await fetch(`${API_URL}/reviews/${reviewId}`, {
             method: 'DELETE'
         });
         if (!response.ok) throw new Error('Failed to delete review');
         alert(translations['product.review_deleted'] || (lang === 'ru' ? 'Отзыв успешно удален!' : 'Review deleted successfully!'));
-        renderProductPage();
+        window.renderProductPage();
     } catch (error) {
         console.error('Error deleting review:', error);
         alert(translations['product.review_delete_error'] || (lang === 'ru' ? 'Ошибка удаления отзыва' : 'Failed to delete review'));
     }
 }
 
-async function renderProductPage() {
+window.renderProductPage = async function renderProductPage() {
     const userId = localStorage.getItem('userId');
-    const role = localStorage.getItem('role');
+    const role = localStorage.getItem('userRole');
     const lang = localStorage.getItem('lang') || 'en';
+
+    // Check if window.loadTranslations is available
+    if (!window.loadTranslations) {
+        console.error('window.loadTranslations is not defined');
+        throw new Error('Translation module not loaded');
+    }
+
     const translations = await window.loadTranslations('product');
+
     if (!userId) {
+        console.log('No userId, redirecting to login');
         window.location.href = '../login/index.html';
         return;
     }
@@ -209,22 +227,51 @@ async function renderProductPage() {
     const params = new URLSearchParams(window.location.search);
     const productId = params.get('id');
     if (!productId) {
-        document.querySelector('.content').innerHTML = `<p data-i18n="product.not_found">${translations['product.not_found'] || 'Product not found.'}</p>`;
-        await window.reapplyTranslations('product');
+        console.log('No productId found in URL');
+        const content = document.querySelector('.content');
+        if (content) {
+            content.innerHTML = `<p data-i18n="product.not_found">${translations['product.not_found'] || 'Product not found.'}</p>`;
+            await window.reapplyTranslations('product');
+        }
         return;
     }
 
     const product = await fetchProduct(productId);
     if (!product) {
-        document.querySelector('.content').innerHTML = `<p data-i18n="product.not_found">${translations['product.not_found'] || 'Product not found.'}</p>`;
-        await window.reapplyTranslations('product');
+        console.log('Product not found:', productId);
+        const content = document.querySelector('.content');
+        if (content) {
+            content.innerHTML = `<p data-i18n="product.not_found">${translations['product.not_found'] || 'Product not found.'}</p>`;
+            await window.reapplyTranslations('product');
+        }
         return;
     }
 
-    document.getElementById('productImage').src = `../img/shop/${productId}.png`;
-    document.getElementById('productImage').alt = lang === 'ru' ? product.ru_name || product.name : product.name || 'Product';
-    document.getElementById('productName').textContent = lang === 'ru' ? product.ru_name || product.name : product.name || 'Unknown Product';
-    document.getElementById('productDescription').textContent = lang === 'ru' ? product.ru_description || product.description : product.description || '';
+    const productImage = document.getElementById('productImage');
+    if (productImage) {
+        productImage.src = `../img/shop/${productId}.png`;
+        productImage.alt = lang === 'ru' ? product.ru_name || product.name || 'Product' : product.name || 'Product';
+        productImage.onerror = () => {
+            console.warn(`Image not found for product ${productId}, using placeholder`);
+            productImage.src = '../img/placeholder.png';
+        };
+    } else {
+        console.error('productImage element not found');
+    }
+
+    const productName = document.getElementById('productName');
+    if (productName) {
+        productName.textContent = lang === 'ru' ? product.ru_name || product.name || 'Unknown Product' : product.name || 'Unknown Product';
+    } else {
+        console.error('productName element not found');
+    }
+
+    const productDescription = document.getElementById('productDescription');
+    if (productDescription) {
+        productDescription.textContent = lang === 'ru' ? product.ru_description || product.description || '' : product.description || '';
+    } else {
+        console.error('productDescription element not found');
+    }
 
     const currentDate = new Date();
     const discountEndDate = product.discountEndDate ? new Date(product.discountEndDate) : null;
@@ -243,55 +290,90 @@ async function renderProductPage() {
             <span class="discount-label">${product.discount}% ${lang === 'ru' ? 'СКИДКА' : 'OFF'}</span>
         `;
         if (discountEndDate) {
-            discountEndDateDisplay = translations['product.discount_end_date'].replace('{date}', discountEndDate.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            }));
+            discountEndDateDisplay = `<span data-i18n="discount_end_date" data-date="${discountEndDate.toISOString()}">${
+                translations['product.discount_end_date'].replace('{date}', discountEndDate.toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                }))
+            }</span>`;
         }
     }
-    document.getElementById('productPrice').innerHTML = priceDisplay;
-    document.getElementById('discountEndDate').textContent = discountEndDateDisplay;
+    const productPrice = document.getElementById('productPrice');
+    if (productPrice) {
+        productPrice.innerHTML = priceDisplay;
+    } else {
+        console.error('productPrice element not found');
+    }
 
-    document.getElementById('productRating').innerHTML = `<i class="fas fa-star"></i> ${product.rating || '0'}`;
+    const discountEndDateElement = document.getElementById('discountEndDate');
+    if (discountEndDateElement) {
+        discountEndDateElement.innerHTML = discountEndDateDisplay;
+    } else {
+        console.error('discountEndDate element not found');
+    }
+
+    const productRating = document.getElementById('productRating');
+    if (productRating) {
+        productRating.innerHTML = `<i class="fas fa-star"></i> ${product.rating || '0'}`;
+    } else {
+        console.error('productRating element not found');
+    }
+
+    const productCategory = document.getElementById('productCategory');
+    if (productCategory) {
+        const category = lang === 'ru' ? (product.ru_category || product.category || 'Без категории') : (product.category || 'No Category');
+        productCategory.textContent = translations['product.category'].replace('{category}', category);
+        console.log(`Set product category: ${productCategory.textContent}`);
+    } else {
+        console.error('productCategory element not found');
+    }
 
     const favoriteBtn = document.getElementById('favoriteBtn');
-    const responseCheck = await fetch(`${API_URL}/favorites?userId=${userId}&productId=${productId}`);
-    const existingFavorites = await responseCheck.json();
-    if (existingFavorites.length > 0) {
-        favoriteBtn.classList.add('filled');
-        favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
-        favoriteBtn.setAttribute('data-i18n', 'product.remove_from_favorites');
+    if (favoriteBtn) {
+        const responseCheck = await fetch(`${API_URL}/favorites?userId=${userId}&productId=${productId}`);
+        const existingFavorites = await responseCheck.json();
+        if (existingFavorites.length > 0) {
+            favoriteBtn.classList.add('filled');
+            favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+            favoriteBtn.setAttribute('data-i18n', 'product.remove_from_favorites');
+        } else {
+            favoriteBtn.classList.remove('filled');
+            favoriteBtn.innerHTML = '<i class="far fa-heart"></i>';
+            favoriteBtn.setAttribute('data-i18n', 'product.add_to_favorites');
+        }
     } else {
-        favoriteBtn.classList.remove('filled');
-        favoriteBtn.innerHTML = '<i class="far fa-heart"></i>';
-        favoriteBtn.setAttribute('data-i18n', 'product.add_to_favorites');
+        console.error('favoriteBtn element not found');
     }
 
     const reviews = await fetchReviews(productId);
     const reviewsList = document.getElementById('reviewsList');
-    if (reviews.length === 0) {
-        reviewsList.innerHTML = `<p data-i18n="product.no_reviews">${translations['product.no_reviews'] || 'No reviews yet.'}</p>`;
-    } else {
-        reviewsList.innerHTML = reviews.map(review => `
-            <div class="review-item">
-                <div class="review-header">
-                    <span class="user">${review.user.nickname || (lang === 'ru' ? 'Неизвестный' : 'Unknown')}</span>
-                    <span class="date">${new Date(review.date).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB')}</span>
-                </div>
-                <div class="review-rating">
-                    ${'<i class="fas fa-star"></i>'.repeat(review.rating)}
-                    ${'<i class="far fa-star"></i>'.repeat(5 - review.rating)}
-                </div>
-                <p class="review-text">${review.text}</p>
-                ${review.userId === Number(userId) ? `
-                    <div class="review-actions">
-                        <button class="edit-btn" data-review-id="${review.id}" data-text="${review.text}" data-rating="${review.rating}" data-i18n="product.edit_button">Edit</button>
-                        <button class="delete-btn" data-review-id="${review.id}" data-i18n="product.delete_button">Delete</button>
+    if (reviewsList) {
+        if (reviews.length === 0) {
+            reviewsList.innerHTML = `<p data-i18n="product.no_reviews">${translations['product.no_reviews'] || 'No reviews yet.'}</p>`;
+        } else {
+            reviewsList.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="user">${review.user.nickname || (lang === 'ru' ? 'Неизвестный' : 'Unknown')}</span>
+                        <span class="date">${new Date(review.date).toLocaleDateString(lang === 'ru' ? 'ru-RU' : 'en-GB')}</span>
                     </div>
-                ` : ''}
-            </div>
-        `).join('');
+                    <div class="review-rating">
+                        ${'<i class="fas fa-star"></i>'.repeat(review.rating)}
+                        ${'<i class="far fa-star"></i>'.repeat(5 - review.rating)}
+                    </div>
+                    <p class="review-text">${review.text}</p>
+                    ${review.userId === Number(userId) ? `
+                        <div class="review-actions">
+                            <button class="edit-btn" data-review-id="${review.id}" data-text="${review.text}" data-rating="${review.rating}" data-i18n="product.edit_button">Edit</button>
+                            <button class="delete-btn" data-review-id="${review.id}" data-i18n="product.delete_button">Delete</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+    } else {
+        console.error('reviewsList element not found');
     }
 
     const reviewForm = document.getElementById('reviewForm');
@@ -304,12 +386,13 @@ async function renderProductPage() {
     let editingReviewId = null;
 
     if (role === 'admin') {
-        reviewForm.style.display = 'none';
-        reviewMessage.style.display = 'block';
-        reviewMessage.setAttribute('data-i18n', 'product.admin_cannot_review');
-        reviewMessage.textContent = translations['product.admin_cannot_review'] || (lang === 'ru' ? 'Администраторы не могут оставлять или редактировать отзывы.' : 'Administrators cannot leave or edit reviews.');
+        if (reviewForm) reviewForm.style.display = 'none';
+        if (reviewMessage) {
+            reviewMessage.style.display = 'block';
+            reviewMessage.setAttribute('data-i18n', 'product.admin_cannot_review');
+            reviewMessage.textContent = translations['product.admin_cannot_review'] || (lang === 'ru' ? 'Администраторы не могут оставлять или редактировать отзывы.' : 'Administrators cannot leave or edit reviews.');
+        }
         await window.reapplyTranslations('product');
-        document.getElementById('productCategory').textContent = translations['product.category'].replace('{category}', lang === 'ru' ? product.ru_category || product.category || 'N/A' : product.category || 'N/A');
         return;
     }
 
@@ -317,92 +400,114 @@ async function renderProductPage() {
     const existingReview = await hasReviewedProduct(userId, productId);
 
     if (!hasPurchased) {
-        reviewForm.style.display = 'none';
-        reviewMessage.style.display = 'block';
-        reviewMessage.setAttribute('data-i18n', 'product.must_purchase');
-        reviewMessage.textContent = translations['product.must_purchase'] || (lang === 'ru' ? 'Вы можете оставить отзыв только после покупки этого товара.' : 'You can only leave a review after purchasing this product.');
+        if (reviewForm) reviewForm.style.display = 'none';
+        if (reviewMessage) {
+            reviewMessage.style.display = 'block';
+            reviewMessage.setAttribute('data-i18n', 'product.must_purchase');
+            reviewMessage.textContent = translations['product.must_purchase'] || (lang === 'ru' ? 'Вы можете оставить отзыв только после покупки этого товара.' : 'You can only leave a review after purchasing this product.');
+        }
         await window.reapplyTranslations('product');
-        document.getElementById('productCategory').textContent = translations['product.category'].replace('{category}', lang === 'ru' ? product.ru_category || product.category || 'N/A' : product.category || 'N/A');
         return;
     }
 
     if (existingReview && !isEditing) {
-        reviewForm.style.display = 'none';
-        reviewMessage.style.display = 'block';
-        reviewMessage.setAttribute('data-i18n', 'product.already_reviewed');
-        reviewMessage.textContent = translations['product.already_reviewed'] || (lang === 'ru' ? 'Вы уже оставили отзыв для этого товара.' : 'You have already submitted a review for this product.');
+        if (reviewForm) reviewForm.style.display = 'none';
+        if (reviewMessage) {
+            reviewMessage.style.display = 'block';
+            reviewMessage.setAttribute('data-i18n', 'product.already_reviewed');
+            reviewMessage.textContent = translations['product.already_reviewed'] || (lang === 'ru' ? 'Вы уже оставили отзыв для этого товара.' : 'You have already submitted a review for this product.');
+        }
         await window.reapplyTranslations('product');
-        document.getElementById('productCategory').textContent = translations['product.category'].replace('{category}', lang === 'ru' ? product.ru_category || product.category || 'N/A' : product.category || 'N/A');
+        return;
     } else {
-        reviewForm.style.display = 'block';
-        reviewMessage.style.display = 'none';
-        document.getElementById('productCategory').textContent = translations['product.category'].replace('{category}', lang === 'ru' ? product.ru_category || product.category || 'N/A' : product.category || 'N/A');
+        if (reviewForm) reviewForm.style.display = 'block';
+        if (reviewMessage) reviewMessage.style.display = 'none';
         await window.reapplyTranslations('product');
     }
 
     const updateRatingDisplay = () => {
-        ratingSelect.querySelectorAll('i').forEach((star, index) => {
-            star.className = index < selectedRating ? 'fas fa-star' : 'far fa-star';
-        });
-        submitReviewBtn.disabled = reviewText.value.length < 10 || selectedRating === 0;
+        if (ratingSelect) {
+            ratingSelect.querySelectorAll('i').forEach((star, index) => {
+                star.className = index < selectedRating ? 'fas fa-star' : 'far fa-star';
+            });
+        }
+        if (submitReviewBtn && reviewText) {
+            submitReviewBtn.disabled = reviewText.value.length < 10 || selectedRating === 0;
+        }
     };
 
-    ratingSelect.querySelectorAll('i').forEach(star => {
-        star.addEventListener('click', () => {
-            selectedRating = Number(star.dataset.value);
-            updateRatingDisplay();
+    if (ratingSelect) {
+        ratingSelect.querySelectorAll('i').forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = Number(star.dataset.value);
+                updateRatingDisplay();
+            });
         });
-    });
+    }
 
-    reviewText.addEventListener('input', updateRatingDisplay);
+    if (reviewText) {
+        reviewText.addEventListener('input', updateRatingDisplay);
+    }
 
-    submitReviewBtn.addEventListener('click', () => {
-        if (reviewText.value.length >= 10 && selectedRating > 0) {
-            if (isEditing) {
-                editReview(editingReviewId, reviewText.value, selectedRating);
-            } else {
-                submitReview(productId, reviewText.value, selectedRating);
+    if (submitReviewBtn) {
+        submitReviewBtn.addEventListener('click', () => {
+            if (reviewText && reviewText.value.length >= 10 && selectedRating > 0) {
+                if (isEditing) {
+                    editReview(editingReviewId, reviewText.value, selectedRating);
+                } else {
+                    submitReview(productId, reviewText.value, selectedRating);
+                }
             }
-        }
-    });
+        });
+    }
 
     const formActions = document.querySelector('.form-actions');
-    const cancelBtn = document.createElement('button');
-    cancelBtn.classList.add('cancel-btn');
-    cancelBtn.setAttribute('data-i18n', 'product.cancel_review');
-    formActions.appendChild(cancelBtn);
+    if (formActions) {
+        const cancelBtn = document.createElement('button');
+        cancelBtn.classList.add('cancel-btn');
+        cancelBtn.setAttribute('data-i18n', 'product.cancel_review');
+        formActions.appendChild(cancelBtn);
 
-    cancelBtn.addEventListener('click', () => {
-        isEditing = false;
-        editingReviewId = null;
-        reviewText.value = '';
-        selectedRating = 0;
-        updateRatingDisplay();
-        submitReviewBtn.setAttribute('data-i18n', 'product.submit_review');
-        cancelBtn.style.display = 'none';
-        renderProductPage();
-    });
-
-    document.getElementById('cartBtn').addEventListener('click', () => addToCart(productId));
-    favoriteBtn.addEventListener('click', () => toggleFavorite(productId, favoriteBtn));
-
-    reviewsList.addEventListener('click', (e) => {
-        if (e.target.classList.contains('edit-btn')) {
-            isEditing = true;
-            editingReviewId = e.target.dataset.reviewId;
-            reviewText.value = e.target.dataset.text;
-            selectedRating = Number(e.target.dataset.rating);
+        cancelBtn.addEventListener('click', () => {
+            isEditing = false;
+            editingReviewId = null;
+            if (reviewText) reviewText.value = '';
+            selectedRating = 0;
             updateRatingDisplay();
-            submitReviewBtn.setAttribute('data-i18n', 'product.save_review');
-            cancelBtn.style.display = 'block';
-            reviewForm.style.display = 'block';
-            reviewMessage.style.display = 'none';
-            window.reapplyTranslations('product');
-            document.getElementById('productCategory').textContent = translations['product.category'].replace('{category}', lang === 'ru' ? product.ru_category || product.category || 'N/A' : product.category || 'N/A');
-        } else if (e.target.classList.contains('delete-btn')) {
-            deleteReview(e.target.dataset.reviewId, productId);
-        }
-    });
+            if (submitReviewBtn) submitReviewBtn.setAttribute('data-i18n', 'product.submit_review');
+            cancelBtn.style.display = 'none';
+            window.renderProductPage();
+        });
+    }
+
+    const cartBtn = document.getElementById('cartBtn');
+    if (cartBtn) {
+        cartBtn.addEventListener('click', () => addToCart(productId));
+    }
+
+    if (favoriteBtn) {
+        favoriteBtn.addEventListener('click', () => toggleFavorite(productId, favoriteBtn));
+    }
+
+    if (reviewsList) {
+        reviewsList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('edit-btn')) {
+                isEditing = true;
+                editingReviewId = e.target.dataset.reviewId;
+                if (reviewText) reviewText.value = e.target.dataset.text;
+                selectedRating = Number(e.target.dataset.rating);
+                updateRatingDisplay();
+                if (submitReviewBtn) submitReviewBtn.setAttribute('data-i18n', 'product.save_review');
+                const cancelBtn = document.querySelector('.cancel-btn');
+                if (cancelBtn) cancelBtn.style.display = 'block';
+                if (reviewForm) reviewForm.style.display = 'block';
+                if (reviewMessage) reviewMessage.style.display = 'none';
+                window.reapplyTranslations('product');
+            } else if (e.target.classList.contains('delete-btn')) {
+                deleteReview(e.target.dataset.reviewId, productId);
+            }
+        });
+    }
 
     console.log('Translations for product.category:', translations['product.category']);
     console.log('Product category:', product.category, 'ru_category:', product.ru_category);
@@ -411,6 +516,9 @@ async function renderProductPage() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Initializing product page');
     window.initTranslations('product').then(() => {
-        renderProductPage();
+        console.log('i18n initialized, rendering product page');
+        window.renderProductPage();
+    }).catch(error => {
+        console.error('Failed to initialize translations:', error);
     });
 });

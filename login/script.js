@@ -1,3 +1,5 @@
+const API_URL = 'http://localhost:3000'; // Define API_URL directly
+
 const touched = { login: false, password: false };
 
 function validateLoginFormat(login) {
@@ -13,12 +15,14 @@ function validateLoginFormat(login) {
 async function validateLoginExists(login) {
     try {
         const response = await fetch(`${API_URL}/users?phone=${encodeURIComponent(login)}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const usersByPhone = await response.json();
         if (usersByPhone.length > 0) {
             return { isValid: true, user: usersByPhone[0] };
         }
 
         const responseEmail = await fetch(`${API_URL}/users?email=${encodeURIComponent(login)}`);
+        if (!responseEmail.ok) throw new Error(`HTTP error! status: ${responseEmail.status}`);
         const usersByEmail = await responseEmail.json();
         if (usersByEmail.length > 0) {
             return { isValid: true, user: usersByEmail[0] };
@@ -29,7 +33,7 @@ async function validateLoginExists(login) {
     } catch (error) {
         console.error('Error checking login:', error);
         const lang = localStorage.getItem('lang') || 'en';
-        return { isValid: false, message: lang === 'ru' ? 'Ошибка сервера' : 'Server error' };
+        return { isValid: false, message: lang === 'ru' ? 'Ошибка сервера. Пожалуйста, попробуйте позже.' : 'Server error. Please try again later.' };
     }
 }
 
@@ -75,10 +79,6 @@ async function validateForm() {
     }
 
     submitButton.disabled = !isValid || !loginInput.value || !passwordInput.value;
-
-    const lang = localStorage.getItem('lang') || 'en';
-    console.log('Applying translations for login form');
-    window.applyTranslations && window.applyTranslations(await window.loadTranslations('login', lang), document);
 }
 
 async function validateFormOnSubmit() {
@@ -154,9 +154,9 @@ async function initLoginForm() {
                 submitButton.disabled = true;
                 window.location.href = '../home/index.html';
             } catch (error) {
-                console.error('Server error:', error);
+                console.error('Unexpected error during login:', error);
                 const lang = localStorage.getItem('lang') || 'en';
-                alert(lang === 'ru' ? 'Ошибка сервера' : 'Server error');
+                alert(lang === 'ru' ? 'Ошибка сервера. Пожалуйста, попробуйте позже.' : 'Server error. Please try again later.');
             }
         }
     });
@@ -164,7 +164,7 @@ async function initLoginForm() {
     const lang = localStorage.getItem('lang') || 'en';
     console.log('Applying initial translations for login form');
     window.applyTranslations && window.applyTranslations(await window.loadTranslations('login', lang), document);
-    submitButton.disabled = true; 
+    submitButton.disabled = true;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

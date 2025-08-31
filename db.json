@@ -512,21 +512,15 @@
   "cart": [
     {
       "userId": 1,
-      "productId": 1,
+      "productId": 29,
       "quantity": 1,
       "id": 1
     },
     {
       "userId": 1,
-      "productId": 10,
+      "productId": 5,
       "quantity": 1,
       "id": 2
-    },
-    {
-      "userId": 2,
-      "productId": 10,
-      "quantity": 2,
-      "id": 3
     }
   ],
   "orders": [
@@ -555,6 +549,52 @@
         }
       ],
       "id": 2
+    },
+    {
+      "userId": 2,
+      "date": "2025-08-29T07:55:50.724Z",
+      "items": [
+        {
+          "productId": 10,
+          "quantity": 2,
+          "price": "9600.00"
+        }
+      ],
+      "id": 3
+    },
+    {
+      "userId": 1,
+      "date": "2025-08-29T07:56:45.665Z",
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 1,
+          "price": "36000.00"
+        },
+        {
+          "productId": 10,
+          "quantity": 1,
+          "price": "9600.00"
+        }
+      ],
+      "id": 4
+    },
+    {
+      "userId": 1,
+      "date": "2025-08-31T09:43:18.126Z",
+      "items": [
+        {
+          "productId": 29,
+          "quantity": 1,
+          "price": "70.00"
+        },
+        {
+          "productId": 5,
+          "quantity": 1,
+          "price": "480.00"
+        }
+      ],
+      "id": 5
     }
   ],
   "reviews": [

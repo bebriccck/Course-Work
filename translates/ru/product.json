@@ -10,7 +10,7 @@
     "product.review_placeholder": "Ваш отзыв (минимум 10 символов)",
     "product.submit_review": "Отправить отзыв",
     "product.save_review": "Сохранить отзыв",
-    "product.cancel_review": "Отмена",
+    "product.cancel_review": "Отменить",
     "product.review_message": "",
     "product.no_reviews": "Отзывов пока нет.",
     "product.admin_cannot_review": "Администраторы не могут оставлять или редактировать отзывы.",
@@ -29,5 +29,8 @@
     "product.review_error": "Ошибка отправки отзыва",
     "product.review_edit_error": "Ошибка редактирования отзыва",
     "product.review_delete_error": "Ошибка удаления отзыва",
-    "product.discount_end_date": "Скидка до: {date}"
+    "product.discount_end_date": "Скидка до: {date}",
+    "product.image_not_found": "Изображение не найдено",
+    "product.edit_button": "Редактировать",
+    "product.delete_button": "Удалить"
 }
