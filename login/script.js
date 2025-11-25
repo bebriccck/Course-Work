@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000'; // Define API_URL directly
+const API_URL = 'http://localhost:3000'; 
 
 const touched = { login: false, password: false };
 

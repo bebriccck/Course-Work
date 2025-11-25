@@ -609,12 +609,12 @@
   ],
   "specialOffers": [
     {
-      "productId": 1,
-      "id": 1
-    },
-    {
       "productId": 19,
       "id": 2
+    },
+    {
+      "productId": 5,
+      "id": 3
     }
   ],
   "requests": [
